@@ -9,7 +9,6 @@ from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow
 class ChannelHub(QMainWindow):
 
     LIST_WIDGETS = ["list_ch1", "list_ch2", "list_ch3", "list_ch4"]
-    GROUP_BOXES = ["gb1", "gb2", "gb3", "gb4"]
 
     def __init__(self):
         super().__init__()
@@ -26,8 +25,9 @@ class ChannelHub(QMainWindow):
         self.last_selection = None
         self.original_viewer_channel = self.viewer_manager.get_viewer_channel()
 
-        self._initial_window_setup()
+        self._setup_window()
         self._setup_group_titles()
+        self._setup_info_labels()
         self._setup_channel_lists()
         self._setup_filter()
 
@@ -38,7 +38,7 @@ class ChannelHub(QMainWindow):
 
     # --- Window setup ---
 
-    def _initial_window_setup(self):
+    def _setup_window(self):
         """Loads the UI file and configures the main window's properties."""
         loadUi(self.settings.UI_PATH, self)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -53,6 +53,11 @@ class ChannelHub(QMainWindow):
         self.gb2.setTitle(self.settings.GROUP2_TITLE)
         self.gb3.setTitle(self.settings.GROUP3_TITLE)
         self.gb4.setTitle(self.settings.GROUP4_TITLE)
+
+    def _setup_info_labels(self):
+        """Sets the version/author and hotkey labels from settings."""
+        self.author.setText(self.settings.get_version_line())
+        self.l_hotkeys.setText(self.settings.get_hotkey_line())
 
     def _setup_channel_lists(self):
         """Connects selection-change handling for all 4 channel lists."""

@@ -316,7 +316,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Rebuild beauty</string>
+           <string>Start live channel sampler (filters channels by sampling the viewer)</string>
           </property>
           <property name="text">
            <string>S</string>
@@ -334,7 +334,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="b_split_substractive">
+         <widget class="QPushButton" name="b_split_subtractive">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -351,7 +351,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Rebuild beauty</string>
+           <string>Subtractive channel rebuild</string>
           </property>
           <property name="text">
            <string>Spl</string>
@@ -379,7 +379,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Rebuild beauty</string>
+           <string>Additive channel rebuild</string>
           </property>
           <property name="text">
            <string>Spl</string>
@@ -426,7 +426,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Rebuild beauty</string>
+           <string>Open settings window</string>
           </property>
           <property name="text">
            <string>Spl</string>
@@ -498,7 +498,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="gb_rebuild_beauty">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -728,7 +728,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QGroupBox" name="gb_rebuild_settings">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -1228,7 +1228,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="author_3">
+       <widget class="QLabel" name="l_multiselect_hint">
         <property name="font">
          <font>
           <pointsize>8</pointsize>

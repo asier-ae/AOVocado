@@ -12,6 +12,7 @@ class Settings:
         self.UI_PATH = os.path.join(MAIN_FOLDER_PATH, "ui_files", "channelHubUI.ui")
         self.my_settings = self.load_settings(settings_filepath)
         self.CHANNELHUB_VERSION = "0.5"
+        self.AUTHOR = "Asier Aparicio"
         self.HOTKEY = "Ctrl+`"
         self.GROUP1_SEARCH = self.my_settings["GROUP1_SEARCH"]
         self.GROUP2_SEARCH = self.my_settings["GROUP2_SEARCH"]
@@ -28,3 +29,9 @@ class Settings:
         with filepath.open("r", encoding="utf-8") as f:
             data = json.load(f)
         return data
+
+    def get_version_line(self):
+        return f"channelHub v{self.CHANNELHUB_VERSION}, {self.AUTHOR}"
+
+    def get_hotkey_line(self):
+        return f"{self.HOTKEY}: open and close panel"

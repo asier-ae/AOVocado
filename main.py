@@ -1,7 +1,7 @@
 import nuke
-from PySide6.QtWidgets import QApplication
 
 from . import constants
+from ._vendor.Qt.QtWidgets import QApplication
 from .channelHub import ChannelHub
 
 

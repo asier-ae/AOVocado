@@ -12,25 +12,20 @@ class ChannelGroups:
         self.group_ch3 = []
         self.group_ch4 = []
 
-    def clear(self):
-
-        self.group_ch1.clear()
-        self.group_ch2.clear()
-        self.group_ch3.clear()
-        self.group_ch4.clear()
-
 
 class ChannelManager:
 
-    def __init__(self, config):
+    def __init__(self, settings):
         """Initializes the ChannelManager with application settings.
 
         Args:
-            config (Settings): The application settings object.
+            settings (Settings): The application settings object.
         """
-        self.settings = config
+        self.settings = settings
         self.group1_set = {x.lower() for x in self.settings.GROUP1_SEARCH}
-        # Prefixes need to be a tuple for .startswith()
+        # Prefixes need to be a tuple for .startswith(). Intentionally
+        # case-sensitive, unlike groups 1/3 - group 2 prefixes are matched
+        # exactly as authored in global_settings.json.
         self.group2_prefixes = tuple(self.settings.GROUP2_SEARCH)
         self.group3_set = {x.lower() for x in self.settings.GROUP3_SEARCH}
 
