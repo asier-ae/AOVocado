@@ -1,5 +1,7 @@
 import nuke
 
+from ._vendor.Qt.QtCore import Qt
+
 
 class ChannelGroups:
 

@@ -16,7 +16,6 @@ def run():
         return
 
     is_panel_open = getattr(nuke, constants.NUKE_PANEL_NAME, False)
-    print(is_panel_open)
     if is_panel_open:
         for widget in QApplication.topLevelWidgets():
             if widget.windowTitle() == constants.QWINDOW_TITLE:
