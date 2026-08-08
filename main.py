@@ -16,14 +16,14 @@ def run():
         return
 
     is_panel_open = getattr(nuke, constants.NUKE_PANEL_NAME, False)
-
+    print(is_panel_open)
     if is_panel_open:
         for widget in QApplication.topLevelWidgets():
             if widget.windowTitle() == constants.QWINDOW_TITLE:
                 widget.close()
                 break
     else:
-        nuke.viewAOVspanel = True
+        setattr(nuke, constants.NUKE_PANEL_NAME, True)
         panel_instance = ChannelHub()
         constants.GC_PROTECT.append(panel_instance)
         panel_instance.show()
