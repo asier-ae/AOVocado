@@ -1,0 +1,9 @@
+.DS_Store
+.vscode/settings.json
+__pycache__/__init__.cpython-311.pyc
+__pycache__/channelHub.cpython-311.pyc
+__pycache__/config.cpython-311.pyc
+__pycache__/constants.cpython-311.pyc
+__pycache__/main.cpython-311.pyc
+_vendor/__pycache__/__init__.cpython-311.pyc
+_vendor/__pycache__/Qt.cpython-311.pyc
