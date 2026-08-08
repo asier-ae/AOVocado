@@ -51,7 +51,7 @@ class Settings:
         self.my_settings = self.load_settings(settings_filepath)
         self.CHANNELHUB_VERSION = "0.5"
         self.AUTHOR = "Asier Aparicio"
-        self.HOTKEY = "Ctrl+`"
+        self.HOTKEY = self.my_settings["HOTKEY"]
         self.GROUP1_SEARCH = self.my_settings["GROUP1_SEARCH"]
         self.GROUP2_SEARCH = self.my_settings["GROUP2_SEARCH"]
         self.GROUP3_SEARCH = self.my_settings["GROUP3_SEARCH"]
