@@ -13,13 +13,13 @@ class Settings:
         self.my_settings = self.load_settings(settings_filepath)
         self.CHANNELHUB_VERSION = "0.5"
         self.HOTKEY = "Ctrl+`"
-        self.LIST1_SEARCH = self.my_settings["LIST1_SEARCH"]
-        self.LIST2_SEARCH = self.my_settings["LIST2_SEARCH"]
-        self.LIST3_SEARCH = self.my_settings["LIST3_SEARCH"]
-        self.LIST1_TITLE = self.my_settings["LIST1_TITLE"]
-        self.LIST2_TITLE = self.my_settings["LIST2_TITLE"]
-        self.LIST3_TITLE = self.my_settings["LIST3_TITLE"]
-        self.LIST4_TITLE = self.my_settings["LIST4_TITLE"]
+        self.GROUP1_SEARCH = self.my_settings["GROUP1_SEARCH"]
+        self.GROUP2_SEARCH = self.my_settings["GROUP2_SEARCH"]
+        self.GROUP3_SEARCH = self.my_settings["GROUP3_SEARCH"]
+        self.GROUP1_TITLE = self.my_settings["GROUP1_TITLE"]
+        self.GROUP2_TITLE = self.my_settings["GROUP2_TITLE"]
+        self.GROUP3_TITLE = self.my_settings["GROUP3_TITLE"]
+        self.GROUP4_TITLE = self.my_settings["GROUP4_TITLE"]
 
     def load_settings(self, filepath):
         filepath = Path(filepath)

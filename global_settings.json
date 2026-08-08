@@ -1,7 +1,7 @@
 {
-    "LIST1_TITLE": "AOVs",
+    "GROUP1_TITLE": "AOVs",
 
-    "LIST1_SEARCH": [
+    "GROUP1_SEARCH": [
         "albedo",
         "diffuse",
         "diffuseDirect",
@@ -49,13 +49,13 @@
         "VRayVelocity"
     ],
 
-    "LIST2_TITLE": "PLOs",
+    "GROUP2_TITLE": "PLOs",
 
-    "LIST2_SEARCH": ["lgt_", "plo_", "RGBA_"],
+    "GROUP2_SEARCH": ["lgt_", "plo_", "RGBA_"],
 
-    "LIST3_TITLE": "GEOM",
+    "GROUP3_TITLE": "GEOM",
 
-    "LIST3_SEARCH": [
+    "GROUP3_SEARCH": [
         "depth",
         "depth_extra",
         "facingRatio",
@@ -73,7 +73,7 @@
         "z",
         "zMin"
     ],
-    "LIST4_TITLE": "OTHER",
+    "GROUP4_TITLE": "OTHER",
     "user_settings": {
         "BUTTON1_CLASS": "Shuffle2",
         "BUTTON1_ICONMODE": true,
