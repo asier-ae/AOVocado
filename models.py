@@ -1,11 +1,31 @@
+"""Data models and Nuke-facing helpers for channelHub.
+
+Contains the plain data container for categorized channels
+(`ChannelGroups`), the logic that collects and categorizes viewer channels
+(`ChannelManager`), the thin wrapper around Nuke's active viewer
+(`ViewerManager`), and the modifier-key tracker that drives multi-select
+(`KeyboardState`).
+
+Author: Asier Aparicio
+"""
+
 import nuke
 
 from ._vendor.Qt.QtCore import Qt
 
 
 class ChannelGroups:
+    """A plain container for the 4 categorized channel-name groups.
+
+    Attributes:
+        group_ch1 (list[str]): Channels matching group 1 (exact name match).
+        group_ch2 (list[str]): Channels matching group 2 (prefix match).
+        group_ch3 (list[str]): Channels matching group 3 (exact name match).
+        group_ch4 (list[str]): Everything else - the catch-all group.
+    """
 
     def __init__(self):
+        """Initializes all 4 groups as empty lists."""
 
         self.group_ch1 = []
         self.group_ch2 = []
@@ -14,6 +34,13 @@ class ChannelGroups:
 
 
 class ChannelManager:
+    """Collects channels from the viewer and categorizes them into groups.
+
+    Matching rules come from `global_settings.json` via `Settings`: groups 1
+    and 3 match by exact channel name (case-insensitive), group 2 matches by
+    prefix (case-sensitive - see the comment on group2_prefixes below), and
+    group 4 is whatever doesn't match any of the above.
+    """
 
     def __init__(self, settings):
         """Initializes the ChannelManager with application settings.
@@ -31,6 +58,11 @@ class ChannelManager:
 
     def categorize_channels(self, channel_list):
         """Categorizes a list of channels into predefined groups.
+
+        The if/elif chain order below *is* the matching priority: group 1
+        exact match, then group 3 exact match, then group 2 prefix match,
+        else group 4. A channel that happens to satisfy more than one rule
+        takes the first match, not the "best" one.
 
         Args:
             channel_list (list[str]): A list of full channel names (e.g., 'rgba.red').
@@ -66,6 +98,8 @@ class ChannelManager:
 
         Returns:
             ChannelGroups: An object containing the categorized channels.
+            Always a valid (possibly empty) instance, never None - callers
+            rely on this and iterate its 4 lists unconditionally.
         """
         viewer_input_node = ViewerManager.get_viewer_input_node()
         if not viewer_input_node:
@@ -124,6 +158,12 @@ class ViewerManager:
     @staticmethod
     def add_callback(callback_code):
         """Adds a Python callback to the active viewer's knobChanged knob.
+
+        Not called anywhere yet - this exists as scaffolding for the
+        not-yet-built live-refresh-on-graph-change feature (see
+        CLAUDE.md's "Current scope"). This fully overwrites the viewer's
+        knobChanged value rather than composing with anything already set,
+        so whatever eventually calls this needs to own that knob exclusively.
 
         Args:
             callback_code (str): The Python code to execute as the callback.
