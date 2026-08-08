@@ -49,11 +49,11 @@
         "VRayVelocity"
     ],
 
-    "GROUP2_TITLE": "PLOs",
+    "GROUP2_TITLE": "LIGHT GROUPS",
 
     "GROUP2_SEARCH": ["lgt_", "plo_", "RGBA_"],
 
-    "GROUP3_TITLE": "GEOM",
+    "GROUP3_TITLE": "TECH",
 
     "GROUP3_SEARCH": [
         "depth",
