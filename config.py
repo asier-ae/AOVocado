@@ -56,6 +56,8 @@ class Settings:
         ICON_SAMPLE (str): Path to the live-sampler button icon (idle state).
         ICON_SAMPLE_WHITE (str): Path to the live-sampler button icon
             (active/sampling state).
+        ICON_SPLIT_SUBTRACTIVE (str): Path to the subtractive-rebuild
+            button icon.
     """
 
     def __init__(self):
@@ -70,6 +72,10 @@ class Settings:
                 users won't have customized anything yet) and its absence is
                 not an error.
         """
+        self.CHANNELHUB_VERSION = "0.5"
+        self.AUTHOR = "Asier Aparicio"
+        # self.HOTKEY = self.my_settings["HOTKEY"]
+        self.HOTKEY = "hotkey"
         base_filepath = os.path.join(
             MAIN_FOLDER_PATH, "channelHub_global_settings.json"
         )
@@ -82,12 +88,12 @@ class Settings:
         )
 
         self.my_settings = self.load_settings(base_filepath)
-        self._apply_user_overrides()
 
-        self.CHANNELHUB_VERSION = "0.5"
-        self.AUTHOR = "Asier Aparicio"
-        # self.HOTKEY = self.my_settings["HOTKEY"]
-        self.HOTKEY = "hotkey"
+        self._apply_user_overrides()
+        self._load_groups()
+        self._load_icons()
+
+    def _load_groups(self):
         self.GROUP1_SEARCH = self.my_settings["GROUP1_SEARCH"]
         self.GROUP2_SEARCH = self.my_settings["GROUP2_SEARCH"]
         self.GROUP3_SEARCH = self.my_settings["GROUP3_SEARCH"]
@@ -96,6 +102,7 @@ class Settings:
         self.GROUP3_TITLE = self.my_settings["GROUP3_TITLE"]
         self.GROUP4_TITLE = self.my_settings["GROUP4_TITLE"]
 
+    def _load_icons(self):
         self.ICON_H_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "h_mode.png")
         self.ICON_V_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "v_mode.png")
         self.ICON_SETTINGS = os.path.join(MAIN_FOLDER_PATH, "icons", "cogs.png")
@@ -103,6 +110,9 @@ class Settings:
         self.ICON_SAMPLE = os.path.join(MAIN_FOLDER_PATH, "icons", "sample.png")
         self.ICON_SAMPLE_WHITE = os.path.join(
             MAIN_FOLDER_PATH, "icons", "sample_white.png"
+        )
+        self.ICON_SPLIT_SUBTRACTIVE = os.path.join(
+            MAIN_FOLDER_PATH, "icons", "splitlayers_subtractive.png"
         )
 
     def load_settings(self, filepath):

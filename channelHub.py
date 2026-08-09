@@ -14,6 +14,7 @@ from . import (
     constants,
     keyboard_state,
     node_creation,
+    rebuild_subtractive,
     sampler_controller,
     utils,
     viewer,
@@ -90,6 +91,7 @@ class ChannelHub(QMainWindow):
         self._setup_node_creation_buttons()
         self._setup_settings_button()
         self._setup_copy_button()
+        self._setup_split_subtractive_button()
         self._setup_sampler()
         self._setup_viewer_callback()
 
@@ -194,6 +196,12 @@ class ChannelHub(QMainWindow):
         self.b_copy.setIcon(QIcon(self.settings.ICON_COPY))
         self.b_copy.setToolTip("Copy selected channel names to clipboard")
         self.b_copy.clicked.connect(self._on_copy_to_clipboard)
+
+    def _setup_split_subtractive_button(self):
+        """Configures the subtractive-rebuild button's icon and click handler."""
+        self.b_split_subtractive.setText("")
+        self.b_split_subtractive.setIcon(QIcon(self.settings.ICON_SPLIT_SUBTRACTIVE))
+        self.b_split_subtractive.clicked.connect(self._on_split_subtractive_clicked)
 
     def _setup_sampler(self):
         """Creates the live sampler and wires it to this panel (see sampler_controller.py)."""
@@ -538,6 +546,19 @@ class ChannelHub(QMainWindow):
             )
         else:
             node_creation.create_node_vertical(node_class, node_knob, channel_names)
+
+    def _on_split_subtractive_clicked(self):
+        """Builds a subtractive rebuild network from the selected channels."""
+        if not self.all_selected_items:
+            return
+
+        channel_names = list(
+            dict.fromkeys(item.text() for item in self.all_selected_items)
+        )
+        rebuild_subtractive.create_subtractive_rebuild(
+            channel_names, self.settings.my_settings["user_settings"]
+        )
+        self.close()
 
     def _on_show_settings(self):
         """Opens the Settings window and closes this panel.
