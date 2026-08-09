@@ -53,6 +53,9 @@ class Settings:
         ICON_V_MODE (str): Path to the vertical node-creation-mode icon.
         ICON_SETTINGS (str): Path to the settings-button icon.
         ICON_COPY (str): Path to the copy-to-clipboard button icon.
+        ICON_SAMPLE (str): Path to the live-sampler button icon (idle state).
+        ICON_SAMPLE_WHITE (str): Path to the live-sampler button icon
+            (active/sampling state).
     """
 
     def __init__(self):
@@ -97,6 +100,10 @@ class Settings:
         self.ICON_V_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "v_mode.png")
         self.ICON_SETTINGS = os.path.join(MAIN_FOLDER_PATH, "icons", "cogs.png")
         self.ICON_COPY = os.path.join(MAIN_FOLDER_PATH, "icons", "copy.png")
+        self.ICON_SAMPLE = os.path.join(MAIN_FOLDER_PATH, "icons", "sample.png")
+        self.ICON_SAMPLE_WHITE = os.path.join(
+            MAIN_FOLDER_PATH, "icons", "sample_white.png"
+        )
 
     def load_settings(self, filepath):
         """Reads and parses a JSON settings file.

@@ -8,7 +8,16 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import channels, config, constants, keyboard_state, node_creation, utils, viewer
+from . import (
+    channels,
+    config,
+    constants,
+    keyboard_state,
+    node_creation,
+    sampler_controller,
+    utils,
+    viewer,
+)
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
 from ._vendor.Qt.QtGui import QIcon
@@ -47,6 +56,8 @@ class ChannelHub(QMainWindow):
             right group. Also a live Qt object reference, not a string.
         original_viewer_channel (str): The channel the viewer was showing
             before this panel opened, restored on close.
+        sampler_controller (sampler_controller.SamplerController): Owns the
+            live channel sampler and its UI reactions - see that module.
     """
 
     def __init__(self):
@@ -79,6 +90,7 @@ class ChannelHub(QMainWindow):
         self._setup_node_creation_buttons()
         self._setup_settings_button()
         self._setup_copy_button()
+        self._setup_sampler()
         self._setup_viewer_callback()
 
         self._populate_channel_lists()
@@ -183,6 +195,10 @@ class ChannelHub(QMainWindow):
         self.b_copy.setToolTip("Copy selected channel names to clipboard")
         self.b_copy.clicked.connect(self._on_copy_to_clipboard)
 
+    def _setup_sampler(self):
+        """Creates the live sampler and wires it to this panel (see sampler_controller.py)."""
+        self.sampler_controller = sampler_controller.SamplerController(self)
+
     def _setup_viewer_callback(self):
         """Registers the viewer-input-change callback (see viewer.py)."""
         self.viewer_manager.enable_reload_callback()
@@ -191,15 +207,26 @@ class ChannelHub(QMainWindow):
 
     def _populate_channel_lists(self):
         """Loads channels from the viewer input and fills the 4 lists."""
-        # Reset first: the list_widget.clear() calls below destroy the
-        # QListWidgetItem objects these might still be referencing (see the
-        # gotcha note on these attributes in __init__) - reload_channels()
-        # is exactly the "channel-list refresh feature" that note warned
-        # about, so this can no longer only run once, at construction.
+        # Reset first: refresh_list_widgets()'s list_widget.clear() calls
+        # destroy the QListWidgetItem objects these might still be
+        # referencing (see the gotcha note on these attributes in
+        # __init__) - reload_channels() is exactly the "channel-list
+        # refresh feature" that note warned about, so this can no longer
+        # only run once, at construction.
         self.all_selected_items = []
         self.last_selection = None
 
         self.channel_groups = self.channel_manager.collect_channels_from_viewer()
+        self.refresh_list_widgets()
+
+    def refresh_list_widgets(self):
+        """Redraws the 4 lists from the current `channel_groups`.
+
+        Doesn't re-fetch from the viewer - used to restore the full
+        alphabetical list after the live sampler's filtered view
+        (`sampler_controller.py`), where `channel_groups` hasn't changed,
+        just what's currently displayed.
+        """
         for list_widget, channel_names in zip(
             self.list_widgets,
             (
@@ -211,6 +238,29 @@ class ChannelHub(QMainWindow):
         ):
             list_widget.clear()
             list_widget.addItems(channel_names)
+
+    def show_detected_channels(self, detected_names):
+        """Redisplays only the given channels, in their given order.
+
+        Used by the live sampler to show just the channels it detected,
+        strongest first (see `sampler_controller.py`) - iterates
+        `detected_names` filtered by each group's set, not each group's own
+        list filtered by a detected-set, specifically to preserve that
+        value-sorted order rather than silently reverting to alphabetical.
+
+        Args:
+            detected_names (list[str]): Channel names to display, in the
+                order they should appear.
+        """
+        group_sets = (
+            set(self.channel_groups.group_ch1),
+            set(self.channel_groups.group_ch2),
+            set(self.channel_groups.group_ch3),
+            set(self.channel_groups.group_ch4),
+        )
+        for list_widget, group_set in zip(self.list_widgets, group_sets):
+            list_widget.clear()
+            list_widget.addItems([name for name in detected_names if name in group_set])
 
     def _select_current_viewer_channel(self):
         """Selects whichever channel the viewer is already showing, if listed.
@@ -252,14 +302,30 @@ class ChannelHub(QMainWindow):
         if filter_text:
             self._filter_channels()
 
+        if not self.select_channels_by_name(previous_channels):
+            self._select_current_viewer_channel()
+
+    def select_channels_by_name(self, names):
+        """Selects the given channel names across the 4 lists, if found.
+
+        Used by `reload_channels()` above and by the live sampler
+        (`sampler_controller.py`) to restore a selection by name rather
+        than by item reference - both cases repopulate the lists first,
+        which destroys the old `QListWidgetItem`s.
+
+        Args:
+            names (list[str]): Channel names to select.
+
+        Returns:
+            bool: True if at least one name was found and selected.
+        """
         found_items = []
-        for name in previous_channels:
+        for name in names:
             for list_widget in self.list_widgets:
                 found_items.extend(list_widget.findItems(name, Qt.MatchExactly))
 
         if not found_items:
-            self._select_current_viewer_channel()
-            return
+            return False
 
         # Bulk-restore with signals blocked, then sync state once at the
         # end - otherwise _on_selection_changed's single-select
@@ -275,6 +341,7 @@ class ChannelHub(QMainWindow):
             list_widget.blockSignals(False)
         self._set_selection_mode(self.keyboard_state.multi_selection_active)
         self._store_selected_items()
+        return True
 
     # --- Selection & viewing ---
 
@@ -506,11 +573,21 @@ class ChannelHub(QMainWindow):
     # --- Qt event overrides ---
 
     def closeEvent(self, event):
-        """Restores the original viewer channel and cleans up panel state.
+        """Stops the sampler, restores the original viewer channel, and
+        cleans up panel state.
 
         Args:
             event (QCloseEvent): The close event.
         """
+        # Only if actually active: LiveSampler.stop() unconditionally sets
+        # the viewer channel and emits samplingStopped with its pre-sample
+        # state, which - if sampling was never started - is still the
+        # constructor's (None, []) defaults. That would make
+        # sampler_controller's handler try to set the viewer channel to
+        # None. The very next line here would still overwrite it with the
+        # correct value regardless, but there's no reason to risk it.
+        if self.sampler_controller.live_sampler.is_active:
+            self.sampler_controller.live_sampler.stop()
         self.viewer_manager.set_viewer_channel(self.original_viewer_channel)
         self.viewer_manager.remove_callback()
         setattr(nuke, constants.NUKE_PANEL_NAME, False)
