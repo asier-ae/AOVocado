@@ -55,7 +55,7 @@
     "GROUP2_TITLE": "LIGHT GROUPS",
 
     "GROUP2_SEARCH_COMMENT": "For GROUP2, it will search for the prefix, case sensitive.",
-    "GROUP2_SEARCH": ["lgt_", "plo_", "RGBA_"],
+    "GROUP2_SEARCH": ["lgt_", "RGBA_"],
 
     "GROUP3_TITLE_COMMENT": "Title to show for GROUP3 (lower left corner) channel list.",
     "GROUP3_TITLE": "TECH",

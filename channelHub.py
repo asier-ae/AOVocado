@@ -524,7 +524,9 @@ class ChannelHub(QMainWindow):
 
         # Deduplicated, order preserved - all_selected_items can contain the
         # same channel twice if it somehow got selected in more than one list.
-        channel_names = list(dict.fromkeys(item.text() for item in self.all_selected_items))
+        channel_names = list(
+            dict.fromkeys(item.text() for item in self.all_selected_items)
+        )
 
         if mode_button.isChecked():
             node_creation.create_nodes_horizontal(
