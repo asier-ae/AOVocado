@@ -79,6 +79,10 @@ class Settings:
         """
         self.CHANNELHUB_VERSION = "0.5"
         self.AUTHOR = "Asier Aparicio"
+        # Not JSON-driven yet - channelHub_global_settings.json has no
+        # HOTKEY key currently (the line below would KeyError if
+        # uncommented). Placeholder value only; addViewerMenu.py still reads
+        # this attribute to register the Viewer-menu hotkey.
         # self.HOTKEY = self.my_settings["HOTKEY"]
         self.HOTKEY = "hotkey"
         base_filepath = os.path.join(
@@ -100,6 +104,7 @@ class Settings:
         self._load_backdrop_style()
 
     def _load_groups(self):
+        """Sets the 4 channel-group search lists/titles from `my_settings`."""
         self.GROUP1_SEARCH = self.my_settings["GROUP1_SEARCH"]
         self.GROUP2_SEARCH = self.my_settings["GROUP2_SEARCH"]
         self.GROUP3_SEARCH = self.my_settings["GROUP3_SEARCH"]
@@ -109,6 +114,11 @@ class Settings:
         self.GROUP4_TITLE = self.my_settings["GROUP4_TITLE"]
 
     def _load_icons(self):
+        """Builds one `ICON_*` path attribute per icon in `icons/`.
+
+        Not JSON-sourced - these are fixed paths next to this module, unlike
+        the JSON-driven attributes in `_load_groups()`/`_load_backdrop_style()`.
+        """
         self.ICON_H_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "h_mode.png")
         self.ICON_V_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "v_mode.png")
         self.ICON_SETTINGS = os.path.join(MAIN_FOLDER_PATH, "icons", "cogs.png")
@@ -122,6 +132,12 @@ class Settings:
         )
 
     def _load_backdrop_style(self):
+        """Sets the rebuild-backdrop style attributes from `my_settings`.
+
+        Base keys (not `user_settings`) - no Settings-window widget backs
+        these, see the `BACKDROP_*_COMMENT` entries in
+        `channelHub_global_settings.json` for what each one controls.
+        """
         self.BACKDROP_TILE_COLOR = self.my_settings["BACKDROP_TILE_COLOR"]
         self.BACKDROP_APPEARANCE = self.my_settings["BACKDROP_APPEARANCE"]
         self.BACKDROP_BORDER_WIDTH = self.my_settings["BACKDROP_BORDER_WIDTH"]

@@ -98,7 +98,7 @@
     "BACKDROP_FONT_SIZE_COMMENT": "Backdrop label text size (BackdropNode's note_font_size knob).",
     "BACKDROP_FONT_SIZE": 40,
 
-    "user_settings_COMMENT": "Editable via the Settings window (preferencesUI.ui) - keys match the widget object names they're saved/loaded from. Saving OVERWRITES this whole block with a fresh snapshot of every widget's value (see preferences.py), so don't add hand-written keys here that aren't backed by a widget - they won't survive the first save. BUTTON1-4_* and cfg_main_*_sep (direct pixel values, no hidden multiplier - see node_creation.py) drive node creation; cfg_sp_sampler_threshold seeds the main panel's live sampler (see sampler_controller.py); cfg_rs_* drive the subtractive rebuild (see rebuild_subtractive.py) - these are base units scaled x10 into actual pixel spacing, unlike cfg_main_*_sep; cfg_cb_rebuild_layout and cfg_chk_orphan_pixels are inert until the additive rebuild panel is built, but load/save generically either way.",
+    "user_settings_COMMENT": "Editable via the Settings window (preferencesUI.ui) - keys match the widget object names they're saved/loaded from. Saving OVERWRITES this whole block with a fresh snapshot of every widget's value (see preferences.py), so don't add hand-written keys here that aren't backed by a widget - they won't survive the first save. BUTTON1-4_* and cfg_main_*_sep (direct pixel values, no hidden multiplier - see node_creation.py) drive node creation; cfg_sp_sampler_threshold seeds the main panel's live sampler (see sampler_controller.py); cfg_rs_* drive the subtractive rebuild (see rebuild_subtractive.py) - these are base units scaled x10 into actual pixel spacing, unlike cfg_main_*_sep.",
     "user_settings": {
         "BUTTON1_CLASS": "Shuffle2",
         "BUTTON1_ICONMODE": true,
@@ -116,8 +116,6 @@
         "BUTTON4_ICONMODE": false,
         "BUTTON4_KNOB": "channels",
         "BUTTON4_TITLE": "ExposureMultAOV",
-        "cfg_cb_rebuild_layout": "Right",
-        "cfg_chk_orphan_pixels": true,
         "cfg_rs_cb_rebuild_layout": "Right",
         "cfg_rs_spb_bd_sep_bottom": 5,
         "cfg_rs_spb_bd_sep_left": 5,
@@ -127,17 +125,6 @@
         "cfg_rs_spb_v_sep_base": 5,
         "cfg_rs_spb_v_sep_grade": 40,
         "cfg_sp_sampler_threshold": 0.005,
-        "cfg_spb_bd_sep_bottom": 30,
-        "cfg_spb_bd_sep_left": 30,
-        "cfg_spb_bd_sep_right": 30,
-        "cfg_spb_bd_sep_top": 30,
-        "cfg_spb_h_sep_main": 30,
-        "cfg_spb_v_sep_base": 5,
-        "cfg_spb_v_sep_copy": 30,
-        "cfg_spb_v_sep_grade": 40,
-        "cfg_spb_v_sep_orphan": 5,
-        "cfg_spb_v_sep_channelmerge": 5,
-        "cfg_spb_v_sep_premult": 5,
         "cfg_main_h_sep": 100,
         "cfg_main_v_sep": 100
     }

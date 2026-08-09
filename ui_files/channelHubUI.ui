@@ -1263,7 +1263,7 @@
          <string notr="true">color: rgb(94, 94, 94);</string>
         </property>
         <property name="text">
-         <string>viewAOVs v0.50, Asier Aparicio</string>
+         <string>channelHub, Asier Aparicio</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

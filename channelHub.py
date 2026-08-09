@@ -21,7 +21,6 @@ from . import (
 )
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
-from ._vendor.Qt.QtGui import QIcon
 from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow
 from .settings_window import SettingsWindow
 
@@ -181,26 +180,27 @@ class ChannelHub(QMainWindow):
 
     def _setup_settings_button(self):
         """Configures the settings button's icon and click handler."""
-        # The .ui file's placeholder text ("Spl", left over from a
-        # copy-pasted button) needs clearing explicitly - an icon alone
-        # doesn't replace existing button text.
-        self.b_show_settings.setText("")
-        self.b_show_settings.setIcon(QIcon(self.settings.ICON_SETTINGS))
+        utils.set_button_icon(
+            self.b_show_settings, self.settings.ICON_SETTINGS, size=21
+        )
         self.b_show_settings.clicked.connect(self._on_show_settings)
 
     def _setup_copy_button(self):
         """Configures the copy-to-clipboard button's icon and click handler."""
-        # Same as b_show_settings - the .ui placeholder text ("c") needs
-        # clearing explicitly, an icon alone doesn't replace existing text.
-        self.b_copy.setText("")
-        self.b_copy.setIcon(QIcon(self.settings.ICON_COPY))
-        self.b_copy.setToolTip("Copy selected channel names to clipboard")
+        utils.set_button_icon(
+            self.b_copy,
+            self.settings.ICON_COPY,
+            tooltip="Copy selected channel names to clipboard",
+        )
         self.b_copy.clicked.connect(self._on_copy_to_clipboard)
 
     def _setup_split_subtractive_button(self):
         """Configures the subtractive-rebuild button's icon and click handler."""
-        self.b_split_subtractive.setText("")
-        self.b_split_subtractive.setIcon(QIcon(self.settings.ICON_SPLIT_SUBTRACTIVE))
+        # 27px fills the button without touching its edges - Qt's default
+        # button icon size looks tiny/off-center at this button's 30x30.
+        utils.set_button_icon(
+            self.b_split_subtractive, self.settings.ICON_SPLIT_SUBTRACTIVE, size=27
+        )
         self.b_split_subtractive.clicked.connect(self._on_split_subtractive_clicked)
 
     def _setup_sampler(self):

@@ -53,9 +53,10 @@ class SubtractiveLayoutConfig:
         """Builds a config from the cfg_rs_* block of user_settings.
 
         Settings store base units and get scaled x10 into actual pixel
-        spacing here - this matches the old tool's tuned defaults (e.g.
-        cfg_rs_spb_h_sep_main: 30 -> 300px); dropping the multiplier would
-        leave the rebuilt network extremely cramped.
+        spacing here, keeping the JSON's default values small, easy-to-read
+        round numbers (e.g. cfg_rs_spb_h_sep_main: 30 -> 300px) while still
+        producing sensible spacing; dropping the multiplier would leave the
+        rebuilt network extremely cramped.
 
         Args:
             user_settings (dict): `settings.my_settings["user_settings"]`.

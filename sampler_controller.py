@@ -9,7 +9,7 @@ self-contained feature with a fair amount of UI-reaction logic of its own.
 Author: Asier Aparicio
 """
 
-from . import live_sampler
+from . import live_sampler, utils
 from ._vendor.Qt.QtCore import Qt
 from ._vendor.Qt.QtGui import QIcon
 from ._vendor.Qt.QtWidgets import QMessageBox
@@ -52,11 +52,16 @@ class SamplerController:
         """Configures the sampler toggle button's icon, tooltip, and click handler."""
         button = self.panel.b_live_sampler
         button.setCheckable(True)
-        button.setText("")
-        button.setIcon(QIcon(self.panel.settings.ICON_SAMPLE))
-        button.setToolTip(
-            "Start viewer sampler. This will filter the channels.\n"
-            "Just Ctrl+click on the image"
+        # 25px fills the button without touching its edges - Qt's default
+        # button icon size looks tiny/off-center at this button's 30x30.
+        utils.set_button_icon(
+            button,
+            self.panel.settings.ICON_SAMPLE,
+            size=25,
+            tooltip=(
+                "Start viewer sampler. This will filter the channels.\n"
+                "Just Ctrl+click on the image"
+            ),
         )
         button.toggled.connect(self._on_toggled)
 

@@ -7,6 +7,7 @@ from functools import wraps
 
 import nuke
 
+from ._vendor.Qt.QtCore import QSize
 from ._vendor.Qt.QtGui import QCursor, QIcon
 from ._vendor.Qt.QtWidgets import QApplication
 
@@ -92,6 +93,30 @@ def copy_to_clipboard(text):
         text (str): The text to place on the clipboard.
     """
     QApplication.clipboard().setText(text)
+
+
+def set_button_icon(button, icon_path, size=None, tooltip=None):
+    """Configures a button's static icon, clearing its placeholder text.
+
+    Shared by every icon-only button's one-time setup (settings, copy,
+    subtractive rebuild, live sampler) - without an explicit `size`, Qt
+    falls back to its default button icon size (commonly ~16px), which
+    looks tiny and off-center inside this panel's 30x30 buttons.
+
+    Args:
+        button (QPushButton): The button to configure.
+        icon_path (str): Path to the icon image.
+        size (int, optional): Square icon size in pixels. Omit to leave
+            Qt's default button icon size in place.
+        tooltip (str, optional): Tooltip text. Omit to leave the button's
+            existing tooltip (e.g. one already set in the `.ui` file).
+    """
+    button.setText("")
+    button.setIcon(QIcon(icon_path))
+    if size is not None:
+        button.setIconSize(QSize(size, size))
+    if tooltip is not None:
+        button.setToolTip(tooltip)
 
 
 def update_mode_button_visuals(button, icon_h_path, icon_v_path):
