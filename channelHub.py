@@ -78,6 +78,7 @@ class ChannelHub(QMainWindow):
         self._setup_filter()
         self._setup_node_creation_buttons()
         self._setup_settings_button()
+        self._setup_copy_button()
 
         self._populate_channel_lists()
         self._select_current_viewer_channel()
@@ -171,6 +172,15 @@ class ChannelHub(QMainWindow):
         self.b_show_settings.setText("")
         self.b_show_settings.setIcon(QIcon(self.settings.ICON_SETTINGS))
         self.b_show_settings.clicked.connect(self._on_show_settings)
+
+    def _setup_copy_button(self):
+        """Configures the copy-to-clipboard button's icon and click handler."""
+        # Same as b_show_settings - the .ui placeholder text ("c") needs
+        # clearing explicitly, an icon alone doesn't replace existing text.
+        self.b_copy.setText("")
+        self.b_copy.setIcon(QIcon(self.settings.ICON_COPY))
+        self.b_copy.setToolTip("Copy selected channel names to clipboard")
+        self.b_copy.clicked.connect(self._on_copy_to_clipboard)
 
     # --- Channel population ---
 
@@ -411,6 +421,11 @@ class ChannelHub(QMainWindow):
         constants.GC_PROTECT.append(settings_window)
         settings_window.show()
         self.close()
+
+    def _on_copy_to_clipboard(self):
+        """Copies the selected channel names to the clipboard, one per line."""
+        channels = dict.fromkeys(item.text() for item in self.all_selected_items)
+        utils.copy_to_clipboard("\n".join(channels))
 
     # --- Filtering ---
 

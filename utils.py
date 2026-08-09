@@ -8,6 +8,7 @@ from functools import wraps
 import nuke
 
 from ._vendor.Qt.QtGui import QCursor, QIcon
+from ._vendor.Qt.QtWidgets import QApplication
 
 
 def _move_to_cursor(main_window):
@@ -62,6 +63,20 @@ def undo_block(func):
             nuke.Undo.end()
 
     return wrapper
+
+
+def copy_to_clipboard(text):
+    """Copies text to the system clipboard.
+
+    Uses Qt's own QClipboard rather than shelling out to a platform tool
+    QApplication.clipboard() works the same way on Windows, macOS,
+    and Linux, since it's Qt's own cross-platform abstraction over each
+    platform's native clipboard.
+
+    Args:
+        text (str): The text to place on the clipboard.
+    """
+    QApplication.clipboard().setText(text)
 
 
 def update_mode_button_visuals(button, icon_h_path, icon_v_path):

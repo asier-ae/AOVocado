@@ -52,6 +52,7 @@ class Settings:
         ICON_H_MODE (str): Path to the horizontal node-creation-mode icon.
         ICON_V_MODE (str): Path to the vertical node-creation-mode icon.
         ICON_SETTINGS (str): Path to the settings-button icon.
+        ICON_COPY (str): Path to the copy-to-clipboard button icon.
     """
 
     def __init__(self):
@@ -95,6 +96,7 @@ class Settings:
         self.ICON_H_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "h_mode.png")
         self.ICON_V_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "v_mode.png")
         self.ICON_SETTINGS = os.path.join(MAIN_FOLDER_PATH, "icons", "cogs.png")
+        self.ICON_COPY = os.path.join(MAIN_FOLDER_PATH, "icons", "copy.png")
 
     def load_settings(self, filepath):
         """Reads and parses a JSON settings file.
