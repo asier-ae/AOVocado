@@ -1,17 +1,13 @@
-"""Data models and Nuke-facing helpers for channelHub.
+"""Channel data models and categorization logic for channelHub.
 
 Contains the plain data container for categorized channels
-(`ChannelGroups`), the logic that collects and categorizes viewer channels
-(`ChannelManager`), the thin wrapper around Nuke's active viewer
-(`ViewerManager`), and the modifier-key tracker that drives multi-select
-(`KeyboardState`).
+(`ChannelGroups`) and the logic that collects and categorizes viewer
+channels into it (`ChannelManager`).
 
 Author: Asier Aparicio
 """
 
-import nuke
-
-from ._vendor.Qt.QtCore import Qt
+from .viewer import ViewerManager
 
 
 class ChannelGroups:
@@ -107,123 +103,3 @@ class ChannelManager:
 
         all_channels = viewer_input_node.channels()
         return self.categorize_channels(all_channels)
-
-
-class ViewerManager:
-    """Provides an interface for interacting with the Nuke viewer.
-
-    This class contains static methods to get and set viewer properties and
-    to manage viewer callbacks.
-    """
-
-    @staticmethod
-    def get_active_viewer():
-        """Gets the active viewer node in Nuke.
-
-        Returns:
-            nuke.Node or None: The active viewer node, or None if not found.
-        """
-        return nuke.activeViewer().node()
-
-    @staticmethod
-    def get_viewer_channel():
-        """Gets the channel currently displayed in the active viewer.
-
-        Returns:
-            str: The name of the currently displayed channel.
-        """
-        return nuke.activeViewer().node()["channels"].value()
-
-    @staticmethod
-    def set_viewer_channel(channel):
-        """Sets the active viewer to display a specific channel.
-
-        Args:
-            channel (str): The name of the channel to display.
-        """
-        ViewerManager.get_active_viewer().knob("channels").setValue(channel)
-
-    @staticmethod
-    def get_viewer_input_node():
-        """Gets the node connected to the active viewer input.
-
-        Returns:
-            nuke.Node or None: The node connected to the viewer, or None.
-        """
-        viewer = nuke.activeViewer()
-        viewer_node = viewer.node()
-        active_buffer = viewer.activeInput()
-        return viewer_node.input(active_buffer)
-
-    @staticmethod
-    def add_callback(callback_code):
-        """Adds a Python callback to the active viewer's knobChanged knob.
-
-        Called by `ChannelHub._setup_viewer_callback()` so the panel reloads
-        when the viewer's connected input changes (see `main.viewer_updated()`).
-        This fully overwrites the viewer's knobChanged value rather than
-        composing with anything already set there, so whatever calls this
-        needs to own that knob exclusively - which is why `remove_callback()`
-        below is called on panel close, not left set indefinitely.
-
-        Args:
-            callback_code (str): The Python code to execute as the callback.
-        """
-        viewer_node = ViewerManager.get_active_viewer()
-        viewer_node["knobChanged"].setValue(callback_code)
-
-    @staticmethod
-    def remove_callback():
-        """Removes the knobChanged callback from the active viewer."""
-        viewer_node = ViewerManager.get_active_viewer()
-        viewer_node["knobChanged"].setValue("")
-
-
-class KeyboardState:
-    """Manages the state of modifier keys for multi-selection.
-
-    Attributes:
-        ctrl_pressed (bool): True if the Control key is currently pressed.
-        shift_pressed (bool): True if the Shift key is currently pressed.
-    """
-
-    def __init__(self):
-        """Initializes the KeyboardState with keys in the released state."""
-        self.ctrl_pressed = False
-        self.shift_pressed = False
-
-    @property
-    def multi_selection_active(self):
-        """Checks if multi-selection keys (Ctrl or Shift) are active.
-
-        Returns:
-            bool: True if either Ctrl or Shift is pressed, False otherwise.
-        """
-        return self.ctrl_pressed or self.shift_pressed
-
-    def update_key_press(self, key):
-        """Updates the state when a key is pressed.
-
-        Args:
-            key (Qt.Key): The key that was pressed.
-        """
-        if key == Qt.Key_Control:
-            self.ctrl_pressed = True
-        elif key == Qt.Key_Shift:
-            self.shift_pressed = True
-
-    def update_key_release(self, key):
-        """Updates the state when a key is released.
-
-        Args:
-            key (Qt.Key): The key that was released.
-        """
-        if key == Qt.Key_Control:
-            self.ctrl_pressed = False
-        elif key == Qt.Key_Shift:
-            self.shift_pressed = False
-
-    def reset(self):
-        """Resets all key states to released."""
-        self.ctrl_pressed = False
-        self.shift_pressed = False

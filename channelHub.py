@@ -8,7 +8,7 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import config, constants, models, node_creation, utils
+from . import channels, config, constants, keyboard_state, node_creation, utils, viewer
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
 from ._vendor.Qt.QtGui import QIcon
@@ -26,13 +26,13 @@ class ChannelHub(QMainWindow):
 
     Attributes:
         settings (config.Settings): Loaded app/user settings.
-        channel_groups (models.ChannelGroups): The channels currently
+        channel_groups (channels.ChannelGroups): The channels currently
             populated into the 4 lists, categorized by group.
-        keyboard_state (models.KeyboardState): Tracks whether Ctrl/Shift is
-            currently held, driving single- vs multi-select mode.
-        viewer_manager (models.ViewerManager): Interface to the active Nuke
+        keyboard_state (keyboard_state.KeyboardState): Tracks whether
+            Ctrl/Shift is currently held, driving single- vs multi-select mode.
+        viewer_manager (viewer.ViewerManager): Interface to the active Nuke
             viewer (get/set displayed channel, etc.).
-        channel_manager (models.ChannelManager): Collects and categorizes
+        channel_manager (channels.ChannelManager): Collects and categorizes
             channels from the viewer's input node.
         list_widgets (list[QListWidget]): The 4 channel-group list widgets,
             built once in `_setup_window()` after `loadUi()` runs.
@@ -55,10 +55,10 @@ class ChannelHub(QMainWindow):
         self.settings = config.Settings()
 
         # Core components
-        self.channel_groups = models.ChannelGroups()
-        self.keyboard_state = models.KeyboardState()
-        self.viewer_manager = models.ViewerManager()
-        self.channel_manager = models.ChannelManager(self.settings)
+        self.channel_groups = channels.ChannelGroups()
+        self.keyboard_state = keyboard_state.KeyboardState()
+        self.viewer_manager = viewer.ViewerManager()
+        self.channel_manager = channels.ChannelManager(self.settings)
 
         # Selection state. Both hold QListWidgetItem objects, not strings
         # (e.g. current_item.text() is used to read the channel name out of
@@ -184,14 +184,8 @@ class ChannelHub(QMainWindow):
         self.b_copy.clicked.connect(self._on_copy_to_clipboard)
 
     def _setup_viewer_callback(self):
-        """Registers a knobChanged callback so the panel reloads when the
-        viewer's connected input changes.
-
-        Uses an absolute import in the callback string (not a relative one)
-        since Nuke executes knobChanged callback code in its own scope, not
-        as part of this package - see main.viewer_updated().
-        """
-        self.viewer_manager.add_callback("from channelHub import main; main.viewer_updated()")
+        """Registers the viewer-input-change callback (see viewer.py)."""
+        self.viewer_manager.enable_reload_callback()
 
     # --- Channel population ---
 
@@ -206,7 +200,7 @@ class ChannelHub(QMainWindow):
         self.last_selection = None
 
         self.channel_groups = self.channel_manager.collect_channels_from_viewer()
-        for list_widget, channels in zip(
+        for list_widget, channel_names in zip(
             self.list_widgets,
             (
                 self.channel_groups.group_ch1,
@@ -216,7 +210,7 @@ class ChannelHub(QMainWindow):
             ),
         ):
             list_widget.clear()
-            list_widget.addItems(channels)
+            list_widget.addItems(channel_names)
 
     def _select_current_viewer_channel(self):
         """Selects whichever channel the viewer is already showing, if listed.
@@ -238,7 +232,7 @@ class ChannelHub(QMainWindow):
     def reload_channels(self):
         """Repopulates the 4 lists from the viewer's (possibly new) input.
 
-        Called by `main.viewer_updated()` when the viewer's connected input
+        Called by `viewer.viewer_updated()` when the viewer's connected input
         changes. Re-selects whichever channel(s) were selected before the
         reload, by name, if they still exist in the new channel set - the
         viewer's displayed channel doesn't change on its own when its input
@@ -463,18 +457,18 @@ class ChannelHub(QMainWindow):
 
         # Deduplicated, order preserved - all_selected_items can contain the
         # same channel twice if it somehow got selected in more than one list.
-        channels = list(dict.fromkeys(item.text() for item in self.all_selected_items))
+        channel_names = list(dict.fromkeys(item.text() for item in self.all_selected_items))
 
         if mode_button.isChecked():
             node_creation.create_nodes_horizontal(
                 node_class,
                 node_knob,
-                channels,
+                channel_names,
                 user_settings["cfg_main_h_sep"],
                 user_settings["cfg_main_v_sep"],
             )
         else:
-            node_creation.create_node_vertical(node_class, node_knob, channels)
+            node_creation.create_node_vertical(node_class, node_knob, channel_names)
 
     def _on_show_settings(self):
         """Opens the Settings window and closes this panel.
@@ -490,8 +484,8 @@ class ChannelHub(QMainWindow):
 
     def _on_copy_to_clipboard(self):
         """Copies the selected channel names to the clipboard, one per line."""
-        channels = dict.fromkeys(item.text() for item in self.all_selected_items)
-        utils.copy_to_clipboard("\n".join(channels))
+        channel_names = dict.fromkeys(item.text() for item in self.all_selected_items)
+        utils.copy_to_clipboard("\n".join(channel_names))
 
     # --- Filtering ---
 

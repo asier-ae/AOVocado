@@ -65,6 +65,21 @@ def undo_block(func):
     return wrapper
 
 
+def find_window_by_title(title):
+    """Finds a top-level Qt widget by its window title.
+
+    Args:
+        title (str): The window title to search for.
+
+    Returns:
+        QWidget or None: The matching top-level widget, if any.
+    """
+    for widget in QApplication.topLevelWidgets():
+        if widget.windowTitle() == title:
+            return widget
+    return None
+
+
 def copy_to_clipboard(text):
     """Copies text to the system clipboard.
 
