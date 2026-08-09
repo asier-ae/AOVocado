@@ -17,15 +17,8 @@ from . import config, main
 SETTINGS = config.Settings()
 
 
-def add_menu(menu, toolbar):
-    """Adds a "channelHub" submenu with a hotkey command under Nuke's Viewer menu.
-
-    Args:
-        menu: Unused - kept for a consistent call signature with other
-            menu-registration hooks. The Viewer menu is looked up directly
-            via nuke.menu("Viewer") instead.
-        toolbar: Unused, same reason as `menu`.
-    """
+def add_menu():
+    """Adds a "channelHub" submenu with a hotkey command under Nuke's Viewer menu."""
     viewer_menu = nuke.menu("Viewer")
     viewer_menu = viewer_menu.addMenu("channelHub")
     viewer_menu.addCommand("channelHub", main.run, SETTINGS.HOTKEY)

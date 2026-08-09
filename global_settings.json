@@ -1,7 +1,4 @@
 {
-    "HOTKEY_COMMENT": "Keyboard shortcut that opens/closes the channelHub panel. Must be a valid Nuke QKeySequence string, e.g. 'Ctrl+`'.",
-    "HOTKEY": "Ctrl+`",
-
     "GROUP1_TITLE_COMMENT": "Title to show for GROUP1 (upper left corner) channel list.",
     "GROUP1_TITLE": "AOVs",
 
