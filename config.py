@@ -58,6 +58,11 @@ class Settings:
             (active/sampling state).
         ICON_SPLIT_SUBTRACTIVE (str): Path to the subtractive-rebuild
             button icon.
+        BACKDROP_TILE_COLOR (int): Rebuild-backdrop fill color.
+        BACKDROP_APPEARANCE (str): Rebuild-backdrop appearance style.
+        BACKDROP_BORDER_WIDTH (int): Rebuild-backdrop border thickness.
+        BACKDROP_FONT_COLOR (int): Rebuild-backdrop label text color.
+        BACKDROP_FONT_SIZE (int): Rebuild-backdrop label text size.
     """
 
     def __init__(self):
@@ -92,6 +97,7 @@ class Settings:
         self._apply_user_overrides()
         self._load_groups()
         self._load_icons()
+        self._load_backdrop_style()
 
     def _load_groups(self):
         self.GROUP1_SEARCH = self.my_settings["GROUP1_SEARCH"]
@@ -114,6 +120,13 @@ class Settings:
         self.ICON_SPLIT_SUBTRACTIVE = os.path.join(
             MAIN_FOLDER_PATH, "icons", "splitlayers_subtractive.png"
         )
+
+    def _load_backdrop_style(self):
+        self.BACKDROP_TILE_COLOR = self.my_settings["BACKDROP_TILE_COLOR"]
+        self.BACKDROP_APPEARANCE = self.my_settings["BACKDROP_APPEARANCE"]
+        self.BACKDROP_BORDER_WIDTH = self.my_settings["BACKDROP_BORDER_WIDTH"]
+        self.BACKDROP_FONT_COLOR = self.my_settings["BACKDROP_FONT_COLOR"]
+        self.BACKDROP_FONT_SIZE = self.my_settings["BACKDROP_FONT_SIZE"]
 
     def load_settings(self, filepath):
         """Reads and parses a JSON settings file.

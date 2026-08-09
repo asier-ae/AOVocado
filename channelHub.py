@@ -555,9 +555,7 @@ class ChannelHub(QMainWindow):
         channel_names = list(
             dict.fromkeys(item.text() for item in self.all_selected_items)
         )
-        rebuild_subtractive.create_subtractive_rebuild(
-            channel_names, self.settings.my_settings["user_settings"]
-        )
+        rebuild_subtractive.create_subtractive_rebuild(channel_names, self.settings)
         self.close()
 
     def _on_show_settings(self):

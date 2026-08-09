@@ -83,6 +83,21 @@
     "GROUP4_TITLE_COMMENT": "Title to show for GROUP4 (lower right corner) channel list. Catch-all group - has no matching _SEARCH list; anything not matched by groups 1-3 lands here.",
     "GROUP4_TITLE": "OTHER",
 
+    "BACKDROP_TILE_COLOR_COMMENT": "Backdrop fill color for rebuild backdrops (BackdropNode's tile_color knob, packed RGBA as a decimal int). Default is cyan.",
+    "BACKDROP_TILE_COLOR": 1062692607,
+
+    "BACKDROP_APPEARANCE_COMMENT": "Backdrop appearance style (BackdropNode's appearance knob).",
+    "BACKDROP_APPEARANCE": "Border",
+
+    "BACKDROP_BORDER_WIDTH_COMMENT": "Backdrop border thickness in pixels (BackdropNode's border_width knob).",
+    "BACKDROP_BORDER_WIDTH": 25,
+
+    "BACKDROP_FONT_COLOR_COMMENT": "Backdrop label text color (BackdropNode's note_font_color knob, packed RGBA as a decimal int). Default is white.",
+    "BACKDROP_FONT_COLOR": 4294967295,
+
+    "BACKDROP_FONT_SIZE_COMMENT": "Backdrop label text size (BackdropNode's note_font_size knob).",
+    "BACKDROP_FONT_SIZE": 40,
+
     "user_settings_COMMENT": "Editable via the Settings window (preferencesUI.ui) - keys match the widget object names they're saved/loaded from. Saving OVERWRITES this whole block with a fresh snapshot of every widget's value (see preferences.py), so don't add hand-written keys here that aren't backed by a widget - they won't survive the first save. BUTTON1-4_* and cfg_main_*_sep (direct pixel values, no hidden multiplier - see node_creation.py) drive node creation; cfg_sp_sampler_threshold seeds the main panel's live sampler (see sampler_controller.py); cfg_rs_* drive the subtractive rebuild (see rebuild_subtractive.py) - these are base units scaled x10 into actual pixel spacing, unlike cfg_main_*_sep; cfg_cb_rebuild_layout and cfg_chk_orphan_pixels are inert until the additive rebuild panel is built, but load/save generically either way.",
     "user_settings": {
         "BUTTON1_CLASS": "Shuffle2",

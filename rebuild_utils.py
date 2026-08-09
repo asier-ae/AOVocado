@@ -11,12 +11,6 @@ import random
 
 import nuke
 
-BACKDROP_TILE_COLOR = 1062692607  # Cyan
-BACKDROP_APPEARANCE = "Border"
-BACKDROP_BORDER_WIDTH = 25
-BACKDROP_FONT_COLOR = 4294967295  # White
-BACKDROP_FONT_SIZE = 40
-
 
 def is_node_inside_backdrop(node, backdrop_node):
     """Checks whether a node is geometrically inside a backdrop node.

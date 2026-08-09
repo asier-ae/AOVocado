@@ -80,19 +80,20 @@ class SubtractiveLayoutConfig:
         )
 
 
-def _style_backdrop(backdrop_node, label):
+def _style_backdrop(backdrop_node, label, settings):
     """Applies consistent styling to a backdrop node.
 
     Args:
         backdrop_node (nuke.Node): The backdrop node to style.
         label (str): The label to show on the backdrop.
+        settings (config.Settings): Supplies the `BACKDROP_*` style values.
     """
     backdrop_node["label"].setValue(label)
-    backdrop_node["tile_color"].setValue(rebuild_utils.BACKDROP_TILE_COLOR)
-    backdrop_node["appearance"].setValue(rebuild_utils.BACKDROP_APPEARANCE)
-    backdrop_node["border_width"].setValue(rebuild_utils.BACKDROP_BORDER_WIDTH)
-    backdrop_node["note_font_color"].setValue(rebuild_utils.BACKDROP_FONT_COLOR)
-    backdrop_node["note_font_size"].setValue(rebuild_utils.BACKDROP_FONT_SIZE)
+    backdrop_node["tile_color"].setValue(settings.BACKDROP_TILE_COLOR)
+    backdrop_node["appearance"].setValue(settings.BACKDROP_APPEARANCE)
+    backdrop_node["border_width"].setValue(settings.BACKDROP_BORDER_WIDTH)
+    backdrop_node["note_font_color"].setValue(settings.BACKDROP_FONT_COLOR)
+    backdrop_node["note_font_size"].setValue(settings.BACKDROP_FONT_SIZE)
 
 
 # --- Node network ---
@@ -164,7 +165,7 @@ def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
 
 
 @utils.undo_block
-def create_subtractive_rebuild(channels, user_settings):
+def create_subtractive_rebuild(channels, settings):
     """Builds a subtractive rebuild network for the given channels.
 
     For each channel, builds a subtract-and-reshuffle node group chained
@@ -173,10 +174,13 @@ def create_subtractive_rebuild(channels, user_settings):
 
     Args:
         channels (list[str]): Channel names to build a network for, in order.
-        user_settings (dict): `settings.my_settings["user_settings"]`,
-            supplying the `cfg_rs_*` layout/spacing values.
+        settings (config.Settings): Supplies the `cfg_rs_*` layout/spacing
+            values (via `settings.my_settings["user_settings"]`) and the
+            `BACKDROP_*` style values.
     """
-    config = SubtractiveLayoutConfig.from_user_settings(user_settings)
+    config = SubtractiveLayoutConfig.from_user_settings(
+        settings.my_settings["user_settings"]
+    )
     all_created_nodes = []
 
     pos_x = int(nuke.center()[0])
@@ -206,7 +210,7 @@ def create_subtractive_rebuild(channels, user_settings):
             margin_right=config.bd_sep_right,
             margin_bottom=config.bd_sep_bottom,
         )
-        _style_backdrop(backdrop, channel)
+        _style_backdrop(backdrop, channel, settings)
         backdrop["selected"].setValue(True)
 
         nodes_in_group.append(backdrop)
