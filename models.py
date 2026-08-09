@@ -159,11 +159,12 @@ class ViewerManager:
     def add_callback(callback_code):
         """Adds a Python callback to the active viewer's knobChanged knob.
 
-        Not called anywhere yet - this exists as scaffolding for the
-        not-yet-built live-refresh-on-graph-change feature (see
-        CLAUDE.md's "Current scope"). This fully overwrites the viewer's
-        knobChanged value rather than composing with anything already set,
-        so whatever eventually calls this needs to own that knob exclusively.
+        Called by `ChannelHub._setup_viewer_callback()` so the panel reloads
+        when the viewer's connected input changes (see `main.viewer_updated()`).
+        This fully overwrites the viewer's knobChanged value rather than
+        composing with anything already set there, so whatever calls this
+        needs to own that knob exclusively - which is why `remove_callback()`
+        below is called on panel close, not left set indefinitely.
 
         Args:
             callback_code (str): The Python code to execute as the callback.

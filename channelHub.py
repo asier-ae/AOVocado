@@ -65,8 +65,8 @@ class ChannelHub(QMainWindow):
         # one). These are live references into the list widgets, not copies
         # - if a list is ever cleared/repopulated while something still
         # holds one of its old items here, that reference would point to a
-        # deleted item. Nothing currently does that at the wrong time, but
-        # watch for it if a channel-list refresh feature gets added later.
+        # deleted item. _populate_channel_lists() resets both before
+        # clearing the lists, for exactly this reason - see reload_channels().
         self.all_selected_items = []
         self.last_selection = None
         self.original_viewer_channel = self.viewer_manager.get_viewer_channel()
@@ -79,6 +79,7 @@ class ChannelHub(QMainWindow):
         self._setup_node_creation_buttons()
         self._setup_settings_button()
         self._setup_copy_button()
+        self._setup_viewer_callback()
 
         self._populate_channel_lists()
         self._select_current_viewer_channel()
@@ -182,10 +183,28 @@ class ChannelHub(QMainWindow):
         self.b_copy.setToolTip("Copy selected channel names to clipboard")
         self.b_copy.clicked.connect(self._on_copy_to_clipboard)
 
+    def _setup_viewer_callback(self):
+        """Registers a knobChanged callback so the panel reloads when the
+        viewer's connected input changes.
+
+        Uses an absolute import in the callback string (not a relative one)
+        since Nuke executes knobChanged callback code in its own scope, not
+        as part of this package - see main.viewer_updated().
+        """
+        self.viewer_manager.add_callback("from channelHub import main; main.viewer_updated()")
+
     # --- Channel population ---
 
     def _populate_channel_lists(self):
         """Loads channels from the viewer input and fills the 4 lists."""
+        # Reset first: the list_widget.clear() calls below destroy the
+        # QListWidgetItem objects these might still be referencing (see the
+        # gotcha note on these attributes in __init__) - reload_channels()
+        # is exactly the "channel-list refresh feature" that note warned
+        # about, so this can no longer only run once, at construction.
+        self.all_selected_items = []
+        self.last_selection = None
+
         self.channel_groups = self.channel_manager.collect_channels_from_viewer()
         for list_widget, channels in zip(
             self.list_widgets,
@@ -215,6 +234,53 @@ class ChannelHub(QMainWindow):
                 items[0].setSelected(True)
                 self._store_selected_items()
                 return
+
+    def reload_channels(self):
+        """Repopulates the 4 lists from the viewer's (possibly new) input.
+
+        Called by `main.viewer_updated()` when the viewer's connected input
+        changes. Re-selects whichever channel(s) were selected before the
+        reload, by name, if they still exist in the new channel set - the
+        viewer's displayed channel doesn't change on its own when its input
+        does, but the QListWidgetItem it pointed to gets destroyed by
+        _populate_channel_lists(), so it has to be re-found by name rather
+        than reusing the old item reference. Falls back to selecting
+        whatever the viewer is currently showing if none of the previous
+        selection is found (e.g. the new input doesn't have that channel).
+        The search filter text is preserved either way.
+        """
+        previous_channels = list(
+            dict.fromkeys(item.text() for item in self.all_selected_items)
+        )
+        filter_text = self.lineFilter.text()
+
+        self._populate_channel_lists()
+        if filter_text:
+            self._filter_channels()
+
+        found_items = []
+        for name in previous_channels:
+            for list_widget in self.list_widgets:
+                found_items.extend(list_widget.findItems(name, Qt.MatchExactly))
+
+        if not found_items:
+            self._select_current_viewer_channel()
+            return
+
+        # Bulk-restore with signals blocked, then sync state once at the
+        # end - otherwise _on_selection_changed's single-select
+        # cross-list-clearing logic would fire per item and undo earlier
+        # items in this same restore. ExtendedSelection first so Qt itself
+        # doesn't also reject multiple selected items within one list.
+        self._set_selection_mode(True)
+        for list_widget in self.list_widgets:
+            list_widget.blockSignals(True)
+        for item in found_items:
+            item.setSelected(True)
+        for list_widget in self.list_widgets:
+            list_widget.blockSignals(False)
+        self._set_selection_mode(self.keyboard_state.multi_selection_active)
+        self._store_selected_items()
 
     # --- Selection & viewing ---
 
@@ -446,10 +512,11 @@ class ChannelHub(QMainWindow):
     # --- Qt event overrides ---
 
     def closeEvent(self, event):
-        """Restores the original viewer channel and resets the Nuke panel flag.
+        """Restores the original viewer channel and cleans up panel state.
 
         Args:
             event (QCloseEvent): The close event.
         """
         self.viewer_manager.set_viewer_channel(self.original_viewer_channel)
+        self.viewer_manager.remove_callback()
         setattr(nuke, constants.NUKE_PANEL_NAME, False)
