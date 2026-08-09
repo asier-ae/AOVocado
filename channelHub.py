@@ -8,10 +8,12 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import config, constants, models, utils
+from . import config, constants, models, node_creation, utils
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
+from ._vendor.Qt.QtGui import QIcon
 from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow
+from .settings_window import SettingsWindow
 
 
 class ChannelHub(QMainWindow):
@@ -19,7 +21,8 @@ class ChannelHub(QMainWindow):
 
     Loads its UI from `ui_files/channelHubUI.ui` and wires up channel
     population, selection/viewing, multi-select, and search filtering
-    across the 4 channel-group list widgets.
+    across the 4 channel-group list widgets, plus the 4 node-creation
+    buttons and the settings button that opens `SettingsWindow`.
 
     Attributes:
         settings (config.Settings): Loaded app/user settings.
@@ -73,6 +76,8 @@ class ChannelHub(QMainWindow):
         self._setup_info_labels()
         self._setup_channel_lists()
         self._setup_filter()
+        self._setup_node_creation_buttons()
+        self._setup_settings_button()
 
         self._populate_channel_lists()
         self._select_current_viewer_channel()
@@ -93,13 +98,16 @@ class ChannelHub(QMainWindow):
         self.installEventFilter(self)
         utils._move_to_cursor(self)
 
-        # UI widget list object names
+        # Built once, here, since the widgets don't exist until loadUi()
+        # has run above, and never change after this - every other method
+        # that needs "all 4 lists" just reads this instead of re-resolving
+        # the widgets each time.
         self.list_widgets = [self.list_ch1, self.list_ch2, self.list_ch3, self.list_ch4]
 
     def _setup_group_titles(self):
         """Sets the 4 group box titles from settings, not the .ui defaults.
 
-        global_settings.json is the runtime source of truth for these
+        channelHub_global_settings.json is the runtime source of truth for these
         titles - whatever text is baked into the .ui file is just a
         Designer placeholder.
         """
@@ -121,6 +129,48 @@ class ChannelHub(QMainWindow):
     def _setup_filter(self):
         """Connects the channel search box."""
         self.lineFilter.textChanged.connect(self._filter_channels)
+
+    def _setup_node_creation_buttons(self):
+        """Configures the 4 node-creation buttons and their mode toggles.
+
+        Button text and each mode toggle's initial checked state come from
+        settings (BUTTON1..4_TITLE / _ICONMODE) - the .ui file's own text is
+        just a Designer placeholder, same convention as the group titles.
+        """
+        user_settings = self.settings.my_settings["user_settings"]
+        for i in range(1, 5):
+            prefix = f"BUTTON{i}"
+            button = getattr(self, f"b{i}")
+            mode_button = getattr(self, f"b{i}_mode")
+
+            button.setText(user_settings[f"{prefix}_TITLE"])
+            button.clicked.connect(self._on_create_node_clicked)
+
+            mode_button.setText("")
+            mode_button.setChecked(user_settings[f"{prefix}_ICONMODE"])
+            mode_button.toggled.connect(
+                lambda checked, b=mode_button: self._update_mode_button(b)
+            )
+            self._update_mode_button(mode_button)
+
+    def _update_mode_button(self, button):
+        """Refreshes one mode button's icon/tooltip to match its checked state.
+
+        Args:
+            button (QPushButton): The mode button that changed.
+        """
+        utils.update_mode_button_visuals(
+            button, self.settings.ICON_H_MODE, self.settings.ICON_V_MODE
+        )
+
+    def _setup_settings_button(self):
+        """Configures the settings button's icon and click handler."""
+        # The .ui file's placeholder text ("Spl", left over from a
+        # copy-pasted button) needs clearing explicitly - an icon alone
+        # doesn't replace existing button text.
+        self.b_show_settings.setText("")
+        self.b_show_settings.setIcon(QIcon(self.settings.ICON_SETTINGS))
+        self.b_show_settings.clicked.connect(self._on_show_settings)
 
     # --- Channel population ---
 
@@ -313,6 +363,54 @@ class ChannelHub(QMainWindow):
             self.keyboard_state.reset()
             self._set_selection_mode(False)
         return False
+
+    # --- Node creation & settings ---
+
+    def _on_create_node_clicked(self):
+        """Creates nodes from the selected channels using the clicked button's settings.
+
+        Reads the node class/knob and the corresponding mode toggle's
+        checked state (horizontal vs vertical) from settings, keyed off
+        which button (b1..b4) was clicked - e.g. clicking `b2` uses
+        `BUTTON2_CLASS`/`BUTTON2_KNOB`/`b2_mode`.
+        """
+        if not self.all_selected_items:
+            return
+
+        sender_name = self.sender().objectName()
+        prefix = "BUTTON" + sender_name[1:]
+        mode_button = getattr(self, f"{sender_name}_mode")
+
+        user_settings = self.settings.my_settings["user_settings"]
+        node_class = user_settings[f"{prefix}_CLASS"]
+        node_knob = user_settings[f"{prefix}_KNOB"]
+
+        # Deduplicated, order preserved - all_selected_items can contain the
+        # same channel twice if it somehow got selected in more than one list.
+        channels = list(dict.fromkeys(item.text() for item in self.all_selected_items))
+
+        if mode_button.isChecked():
+            node_creation.create_nodes_horizontal(
+                node_class,
+                node_knob,
+                channels,
+                user_settings["cfg_main_h_sep"],
+                user_settings["cfg_main_v_sep"],
+            )
+        else:
+            node_creation.create_node_vertical(node_class, node_knob, channels)
+
+    def _on_show_settings(self):
+        """Opens the Settings window and closes this panel.
+
+        Closed rather than left open alongside the Settings window because
+        this panel reads settings once at construction - it wouldn't reflect
+        any changes made in the Settings window until reopened anyway.
+        """
+        settings_window = SettingsWindow()
+        constants.GC_PROTECT.append(settings_window)
+        settings_window.show()
+        self.close()
 
     # --- Filtering ---
 

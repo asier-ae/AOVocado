@@ -1,9 +1,13 @@
-"""Small standalone UI helpers for channelHub.
+"""Small standalone helpers shared across channelHub's UI modules.
 
 Author: Asier Aparicio
 """
 
-from ._vendor.Qt.QtGui import QCursor
+from functools import wraps
+
+import nuke
+
+from ._vendor.Qt.QtGui import QCursor, QIcon
 
 
 def _move_to_cursor(main_window):
@@ -20,3 +24,62 @@ def _move_to_cursor(main_window):
         cursor_pos.x() - window_size.width() // 2,
         cursor_pos.y() - window_size.height() // 2,
     )
+
+
+def deselect_all_nodes():
+    """Deselects every node in the current Nuke script.
+
+    Used before/between node-graph creation steps to stop Nuke's default
+    `createNode()` auto-connect behavior from chaining a new node onto
+    whatever happens to still be selected from a previous step.
+    """
+    for node in nuke.selectedNodes():
+        node["selected"].setValue(False)
+
+
+def undo_block(func):
+    """Decorator that wraps a function's node-graph edits in one Nuke undo step.
+
+    Lets the whole decorated call be undone with a single Ctrl+Z instead of
+    once per individual node operation. Uses try/finally so `nuke.Undo.end()`
+    always runs, even if `func` raises - an unclosed undo block would leave
+    Nuke's undo stack stuck merging every subsequent action into this one
+    until Nuke is restarted.
+
+    Args:
+        func (Callable): The function to wrap.
+
+    Returns:
+        Callable: The wrapped function.
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        nuke.Undo.begin("channelHub function undo")
+        try:
+            return func(*args, **kwargs)
+        finally:
+            nuke.Undo.end()
+
+    return wrapper
+
+
+def update_mode_button_visuals(button, icon_h_path, icon_v_path):
+    """Sets a checkable mode button's icon/tooltip to match its checked state.
+
+    Shared between `channelHub.py`'s per-button mode toggles (b1_mode..b4_mode)
+    and `settings_window.py`'s equivalents (BUTTON1_ICONMODE..BUTTON4_ICONMODE)
+    - both use the same checked-means-horizontal convention.
+
+    Args:
+        button (QPushButton): The checkable button to update. Checked means
+            horizontal node creation, unchecked means vertical.
+        icon_h_path (str): Path to the horizontal-mode icon.
+        icon_v_path (str): Path to the vertical-mode icon.
+    """
+    if button.isChecked():
+        button.setIcon(QIcon(icon_h_path))
+        button.setToolTip("Creating nodes in a horizontal stack")
+    else:
+        button.setIcon(QIcon(icon_v_path))
+        button.setToolTip("Creating nodes in a vertical stack")

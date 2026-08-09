@@ -36,7 +36,7 @@ class ChannelGroups:
 class ChannelManager:
     """Collects channels from the viewer and categorizes them into groups.
 
-    Matching rules come from `global_settings.json` via `Settings`: groups 1
+    Matching rules come from `channelHub_global_settings.json` via `Settings`: groups 1
     and 3 match by exact channel name (case-insensitive), group 2 matches by
     prefix (case-sensitive - see the comment on group2_prefixes below), and
     group 4 is whatever doesn't match any of the above.
@@ -52,7 +52,7 @@ class ChannelManager:
         self.group1_set = {x.lower() for x in self.settings.GROUP1_SEARCH}
         # Prefixes need to be a tuple for .startswith(). Intentionally
         # case-sensitive, unlike groups 1/3 - group 2 prefixes are matched
-        # exactly as authored in global_settings.json.
+        # exactly as authored in channelHub_global_settings.json.
         self.group2_prefixes = tuple(self.settings.GROUP2_SEARCH)
         self.group3_set = {x.lower() for x in self.settings.GROUP3_SEARCH}
 

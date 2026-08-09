@@ -12,8 +12,8 @@ import nuke
 from . import config, main
 
 # Module-level singleton, read once at import time. Changing
-# global_settings.json's HOTKEY requires restarting Nuke (or re-importing
-# this module) for the registered menu command below to pick it up.
+# channelHub_global_settings.json's HOTKEY requires restarting Nuke (or
+# re-importing this module) for the registered menu command below to pick it up.
 SETTINGS = config.Settings()
 
 
