@@ -23,6 +23,13 @@ def run():
     to the panel between separate hotkey presses without this, since each
     press is a fresh call to this function.
     """
+    if nuke.NUKE_VERSION_MAJOR < constants.MIN_NUKE_VERSION:
+        nuke.message(
+            f"channelHub requires Nuke {constants.MIN_NUKE_VERSION}+ "
+            f"(this is Nuke {nuke.NUKE_VERSION_MAJOR})."
+        )
+        return
+
     if not nuke.allNodes("Viewer"):
         nuke.message("Please create a viewer first.")
         return

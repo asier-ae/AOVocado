@@ -50,7 +50,7 @@ class SubtractiveLayoutConfig:
 
     @classmethod
     def from_user_settings(cls, user_settings):
-        """Builds a config from the cfg_rs_* block of user_settings.
+        """Builds a layout_config from the cfg_rs_* block of user_settings.
 
         Settings store base units and get scaled x10 into actual pixel
         spacing here, keeping the JSON's default values small, easy-to-read
@@ -100,7 +100,7 @@ def _style_backdrop(backdrop_node, label, settings):
 # --- Node network ---
 
 
-def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
+def _create_channel_nodes(channel, start_node, pos_x, pos_y, layout_config):
     """Creates the subtract-and-reshuffle node network for one channel.
 
     Args:
@@ -108,13 +108,13 @@ def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
         start_node (nuke.Node): The upstream node to branch off of.
         pos_x (int): X position for the group.
         pos_y (int): Y position for the group.
-        config (SubtractiveLayoutConfig): Layout/spacing settings.
+        layout_config (SubtractiveLayoutConfig): Layout/spacing settings.
 
     Returns:
         tuple[list[nuke.Node], nuke.Node]: The created nodes, and the
             group's final output node.
     """
-    side_branch_x = pos_x + (config.h_sep * config.layout_multiplier)
+    side_branch_x = pos_x + (layout_config.h_sep * layout_config.layout_multiplier)
 
     dot1 = nuke.nodes.Dot(inputs=[start_node], xpos=side_branch_x, ypos=pos_y)
 
@@ -123,7 +123,7 @@ def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
         label=channel,
         inputs=[dot1],
         xpos=dot1.xpos(),
-        ypos=dot1.ypos() + config.v_sep_base,
+        ypos=dot1.ypos() + layout_config.v_sep_base,
     )
 
     merge_node = nuke.nodes.Merge2(
@@ -131,13 +131,13 @@ def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
         output=OUTPUT_RGB,
         inputs=[start_node, shuffle_node],
         xpos=pos_x,
-        ypos=pos_y + config.v_sep_base,
+        ypos=pos_y + layout_config.v_sep_base,
     )
 
     dot2 = nuke.nodes.Dot(
         inputs=[shuffle_node],
         xpos=dot1.xpos(),
-        ypos=merge_node.ypos() + config.v_sep_grade,
+        ypos=merge_node.ypos() + layout_config.v_sep_grade,
     )
 
     merge_node2 = nuke.nodes.Merge2(
@@ -145,11 +145,11 @@ def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
         output=OUTPUT_RGB,
         inputs=[merge_node, dot2],
         xpos=merge_node.xpos(),
-        ypos=merge_node.ypos() + config.v_sep_grade,
+        ypos=merge_node.ypos() + layout_config.v_sep_grade,
     )
 
     dot3 = nuke.nodes.Dot(
-        inputs=[dot2], xpos=dot2.xpos(), ypos=dot2.ypos() + config.v_sep_base
+        inputs=[dot2], xpos=dot2.xpos(), ypos=dot2.ypos() + layout_config.v_sep_base
     )
 
     shuffle_node2 = nuke.nodes.Shuffle2(
@@ -157,7 +157,7 @@ def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
         out1=channel,
         inputs=[merge_node2, dot3],
         xpos=merge_node2.xpos(),
-        ypos=merge_node2.ypos() + config.v_sep_base,
+        ypos=merge_node2.ypos() + layout_config.v_sep_base,
     )
     shuffle_node2["fromInput1"].setValue(FROM_INPUT_VALUE)
 
@@ -166,7 +166,7 @@ def _create_channel_nodes(channel, start_node, pos_x, pos_y, config):
 
 
 @utils.undo_block
-def create_subtractive_rebuild(channels, settings):
+def create_subtractive_rebuild(channel_names, settings):
     """Builds a subtractive rebuild network for the given channels.
 
     For each channel, builds a subtract-and-reshuffle node group chained
@@ -174,12 +174,13 @@ def create_subtractive_rebuild(channels, settings):
     backdrop.
 
     Args:
-        channels (list[str]): Channel names to build a network for, in order.
+        channel_names (list[str]): Channel names to build a network for,
+            in order.
         settings (config.Settings): Supplies the `cfg_rs_*` layout/spacing
             values (via `settings.my_settings["user_settings"]`) and the
             `BACKDROP_*` style values.
     """
-    config = SubtractiveLayoutConfig.from_user_settings(
+    layout_config = SubtractiveLayoutConfig.from_user_settings(
         settings.my_settings["user_settings"]
     )
     all_created_nodes = []
@@ -188,7 +189,7 @@ def create_subtractive_rebuild(channels, settings):
     pos_y = int(nuke.center()[1])
     previous_output_node = None
 
-    for channel in channels:
+    for channel in channel_names:
         utils.deselect_all_nodes()
 
         dot0 = nuke.nodes.Dot(xpos=pos_x, ypos=pos_y)
@@ -196,7 +197,7 @@ def create_subtractive_rebuild(channels, settings):
             dot0.setInput(0, previous_output_node)
 
         channel_nodes, last_node = _create_channel_nodes(
-            channel, dot0, pos_x, pos_y, config
+            channel, dot0, pos_x, pos_y, layout_config
         )
 
         nodes_in_group = [dot0] + channel_nodes
@@ -206,10 +207,10 @@ def create_subtractive_rebuild(channels, settings):
             node["selected"].setValue(True)
 
         backdrop = rebuild_utils.create_auto_backdrop(
-            margin_left=-config.bd_sep_left,
-            margin_top=-config.bd_sep_top,
-            margin_right=config.bd_sep_right,
-            margin_bottom=config.bd_sep_bottom,
+            margin_left=-layout_config.bd_sep_left,
+            margin_top=-layout_config.bd_sep_top,
+            margin_right=layout_config.bd_sep_right,
+            margin_bottom=layout_config.bd_sep_bottom,
         )
         _style_backdrop(backdrop, channel, settings)
         backdrop["selected"].setValue(True)
@@ -220,9 +221,9 @@ def create_subtractive_rebuild(channels, settings):
         pos_y = int(
             last_node.ypos()
             + last_node.screenHeight()
-            + config.bd_sep_bottom
+            + layout_config.bd_sep_bottom
             + 100  # Extra static padding between channel groups
-            + config.bd_sep_top
+            + layout_config.bd_sep_top
         )
         previous_output_node = last_node
 

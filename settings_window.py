@@ -1,10 +1,9 @@
 """The Settings window for channelHub.
 
 Loads `ui_files/preferencesUI.ui` and wires it to the generic load/save/
-restore functions in `preferences.py`. Everything on the "General" tab is
-functional (node-creation buttons, node creation spacing); the sampler
-threshold and "Rebuild Substractive" tab fields load/save like everything
-else here, but nothing consumes their values yet - see `CLAUDE.md`.
+restore functions in `preferences.py`. Every field here is functional -
+node-creation buttons/spacing, the live sampler threshold
+(`live_sampler.py`), and the "Rebuild Substractive" tab (`rebuild_subtractive.py`).
 
 Author: Asier Aparicio
 """

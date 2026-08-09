@@ -14,7 +14,7 @@ from . import utils
 
 
 @utils.undo_block
-def create_node_vertical(node_class, node_knob, channels):
+def create_node_vertical(node_class, node_knob, channel_names):
     """Creates one node per channel, each chained below the previous one.
 
     Relies entirely on Nuke's default `createNode()` behavior (auto-connect
@@ -26,10 +26,10 @@ def create_node_vertical(node_class, node_knob, channels):
     Args:
         node_class (str): The Nuke node class to create (e.g. "Shuffle2").
         node_knob (str): The knob on each created node to set with its channel name.
-        channels (list[str]): Channel names to create one node per, in order.
+        channel_names (list[str]): Channel names to create one node per, in order.
     """
     created_nodes = []
-    for channel in channels:
+    for channel in channel_names:
         node = nuke.createNode(node_class, inpanel=False)
         node[node_knob].setValue(channel)
         created_nodes.append(node)
@@ -39,26 +39,26 @@ def create_node_vertical(node_class, node_knob, channels):
 
 
 @utils.undo_block
-def create_nodes_horizontal(node_class, node_knob, channels, h_sep, v_sep):
+def create_nodes_horizontal(node_class, node_knob, channel_names, h_sep, v_sep):
     """Creates one node per channel in a horizontal row branching off a Dot.
 
     Args:
         node_class (str): The Nuke node class to create (e.g. "Shuffle2").
         node_knob (str): The knob on each created node to set with its channel name.
-        channels (list[str]): Channel names to create one node per, in order.
+        channel_names (list[str]): Channel names to create one node per, in order.
         h_sep (int): Horizontal pixel spacing between adjacent nodes in the row.
         v_sep (int): Vertical pixel gap between the Dot's actual bottom edge
             and the node row (not from the Dot's xpos/ypos corner).
     """
-    if not channels:
+    if not channel_names:
         return
 
-    if len(channels) == 1:
+    if len(channel_names) == 1:
         # A "row" of one node doesn't need a shared branch point - skip the
         # Dot and create the node directly, same as create_node_vertical()
         # would for a single channel.
         node = nuke.createNode(node_class, inpanel=False)
-        node[node_knob].setValue(channels[0])
+        node[node_knob].setValue(channel_names[0])
         node["selected"].setValue(True)
         return
 
@@ -72,7 +72,7 @@ def create_nodes_horizontal(node_class, node_knob, channels, h_sep, v_sep):
     created_nodes = [dot]
     node_ypos = dot_y + dot_height + v_sep
     node_xpos = None
-    for channel in channels:
+    for channel in channel_names:
         node = nuke.createNode(node_class, inpanel=False)
         node[node_knob].setValue(channel)
         if node_xpos is None:

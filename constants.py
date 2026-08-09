@@ -18,3 +18,7 @@ QWINDOW_TITLE = "channelHub"
 # it and the window would vanish or crash unpredictably. main.py appends to
 # this before calling panel_instance.show().
 GC_PROTECT = []
+
+# Oldest Nuke major version this tool supports. Checked against
+# nuke.NUKE_VERSION_MAJOR by main.run() and addViewerMenu.add_menu().
+MIN_NUKE_VERSION = 16

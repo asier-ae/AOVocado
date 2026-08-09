@@ -9,7 +9,7 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import config, main
+from . import config, constants, main
 
 # Module-level singleton, read once at import time. Changing
 # channelHub_global_settings.json's HOTKEY requires restarting Nuke (or
@@ -18,7 +18,15 @@ SETTINGS = config.Settings()
 
 
 def add_menu():
-    """Adds a "channelHub" submenu with a hotkey command under Nuke's Viewer menu."""
+    """Adds a "channelHub" submenu with a hotkey command under Nuke's Viewer menu.
+
+    No-ops on Nuke versions below `constants.MIN_NUKE_VERSION` - nothing to
+    click into if the tool can't actually launch there anyway (see
+    `main.run()`'s own guard for the interactive-launch side of this).
+    """
+    if nuke.NUKE_VERSION_MAJOR < constants.MIN_NUKE_VERSION:
+        return
+
     viewer_menu = nuke.menu("Viewer")
     viewer_menu = viewer_menu.addMenu("channelHub")
     viewer_menu.addCommand("channelHub", main.run, SETTINGS.HOTKEY)
