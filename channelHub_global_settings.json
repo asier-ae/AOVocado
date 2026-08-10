@@ -1,4 +1,7 @@
 {
+    "HOTKEY_COMMENT": "Keyboard shortcut that opens/closes the panel - Nuke hotkey-string format (lowercase, + separated, e.g. \"ctrl+`\"). Read by __init__.py to register the channelHub menu command, and by ChannelHub itself to close on its own hotkey while focused.",
+    "HOTKEY": "ctrl+`",
+
     "GROUP1_TITLE_COMMENT": "Title to show for GROUP1 (upper left corner) channel list.",
     "GROUP1_TITLE": "AOVS",
 

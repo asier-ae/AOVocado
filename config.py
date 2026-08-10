@@ -83,12 +83,6 @@ class Settings:
         """
         self.CHANNELHUB_VERSION = "0.5"
         self.AUTHOR = "Asier Aparicio"
-        # Not JSON-driven yet - channelHub_global_settings.json has no
-        # HOTKEY key currently (the line below would KeyError if
-        # uncommented). Placeholder value only; addViewerMenu.py still reads
-        # this attribute to register the Viewer-menu hotkey.
-        # self.HOTKEY = self.my_settings["HOTKEY"]
-        self.HOTKEY = "hotkey"
         base_filepath = os.path.join(
             MAIN_FOLDER_PATH, "channelHub_global_settings.json"
         )
@@ -102,6 +96,10 @@ class Settings:
 
         self.my_settings = self.load_settings(base_filepath)
         _log.debug("loaded base settings from %s", base_filepath)
+
+        # Base-file-only, like GROUP*/*_TITLE - not part of the
+        # user_settings overlay (see _apply_user_overrides()).
+        self.HOTKEY = self.my_settings["HOTKEY"]
 
         self._apply_user_overrides()
         self._load_groups()

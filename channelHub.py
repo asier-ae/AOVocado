@@ -22,6 +22,7 @@ from . import (
 )
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
+from ._vendor.Qt.QtGui import QKeySequence
 from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow
 from .settings_window import SettingsWindow
 
@@ -472,16 +473,43 @@ class ChannelHub(QMainWindow):
                 return True
         return super().event(event)
 
-    def keyPressEvent(self, event):
-        """Handles Ctrl+A select-all and tracks Ctrl/Shift for multi-select.
+    def _matches_hotkey(self, event):
+        """Checks whether a key event matches the configured open/close hotkey.
 
-        Ctrl+A is handled directly here (in cooperation with the `event()`
-        override above) rather than via a QShortcut, since a QShortcut for
-        this combo loses to Nuke's own Node Graph "Select All" on macOS.
+        Args:
+            event (QKeyEvent): The key event to check.
+
+        Returns:
+            bool: True if `event` matches `self.settings.HOTKEY`.
+        """
+        try:
+            modifiers = int(event.modifiers())
+        except TypeError:
+            # PySide6's Qt.KeyboardModifier isn't directly int()-able like
+            # PySide2's was - .value is the escape hatch there.
+            modifiers = int(event.modifiers().value)
+        pressed = QKeySequence(event.key() | modifiers)
+        return pressed == QKeySequence(self.settings.HOTKEY)
+
+    def keyPressEvent(self, event):
+        """Handles the close hotkey, Ctrl+A select-all, and Ctrl/Shift tracking.
+
+        The hotkey is checked here (not just via Nuke's own menu dispatch)
+        because Nuke's hotkey system only fires while a Nuke window has OS
+        focus - pressing the same combo while this floating panel itself is
+        focused would otherwise do nothing, since the keypress goes to this
+        widget instead. Ctrl+A is handled directly here (in cooperation with
+        the `event()` override above) rather than via a QShortcut, since a
+        QShortcut for this combo loses to Nuke's own Node Graph "Select All"
+        on macOS.
 
         Args:
             event (QKeyEvent): The key press event.
         """
+        if self._matches_hotkey(event):
+            self.close()
+            return
+
         if event.key() == Qt.Key_A and event.modifiers() == Qt.ControlModifier:
             self._select_all_in_active_group()
             return
