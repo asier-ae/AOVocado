@@ -9,7 +9,9 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import config, constants, main
+from . import config, constants, logger, main
+
+_log = logger.get_logger(__name__)
 
 # Module-level singleton, read once at import time. Changing
 # channelHub_global_settings.json's HOTKEY requires restarting Nuke (or
@@ -25,8 +27,14 @@ def add_menu():
     `main.run()`'s own guard for the interactive-launch side of this).
     """
     if nuke.NUKE_VERSION_MAJOR < constants.MIN_NUKE_VERSION:
+        _log.debug(
+            "skipped registering menu: Nuke %s < MIN_NUKE_VERSION %s",
+            nuke.NUKE_VERSION_MAJOR,
+            constants.MIN_NUKE_VERSION,
+        )
         return
 
     viewer_menu = nuke.menu("Viewer")
     viewer_menu = viewer_menu.addMenu("channelHub")
     viewer_menu.addCommand("channelHub", main.run, SETTINGS.HOTKEY)
+    _log.debug("registered Viewer menu entry with hotkey %s", SETTINGS.HOTKEY)

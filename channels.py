@@ -7,7 +7,10 @@ channels into it (`ChannelManager`).
 Author: Asier Aparicio
 """
 
+from . import logger
 from .viewer import ViewerManager
+
+_log = logger.get_logger(__name__)
 
 
 class ChannelGroups:
@@ -87,6 +90,14 @@ class ChannelManager:
             else:
                 groups.group_ch4.append(channel)
 
+        _log.debug(
+            "categorized %s channels: group1=%s group2=%s group3=%s group4=%s",
+            len(unique_channels),
+            len(groups.group_ch1),
+            len(groups.group_ch2),
+            len(groups.group_ch3),
+            len(groups.group_ch4),
+        )
         return groups
 
     def collect_channels_from_viewer(self):

@@ -11,7 +11,9 @@ from dataclasses import dataclass
 
 import nuke
 
-from . import rebuild_utils, utils
+from . import logger, rebuild_utils, utils
+
+_log = logger.get_logger(__name__)
 
 LAYOUT_RIGHT = "Right"
 LAYOUT_LEFT = "Left"
@@ -182,6 +184,11 @@ def create_subtractive_rebuild(channel_names, settings):
     """
     layout_config = SubtractiveLayoutConfig.from_user_settings(
         settings.my_settings["user_settings"]
+    )
+    _log.debug(
+        "create_subtractive_rebuild: channels=%s layout=%s",
+        len(channel_names),
+        layout_config,
     )
     all_created_nodes = []
 

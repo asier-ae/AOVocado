@@ -9,10 +9,12 @@ self-contained feature with a fair amount of UI-reaction logic of its own.
 Author: Asier Aparicio
 """
 
-from . import live_sampler, utils
+from . import live_sampler, logger, utils
 from ._vendor.Qt.QtCore import Qt
 from ._vendor.Qt.QtGui import QIcon
 from ._vendor.Qt.QtWidgets import QMessageBox
+
+_log = logger.get_logger(__name__)
 
 
 class SamplerController:
@@ -78,6 +80,7 @@ class SamplerController:
         Args:
             checked (bool): The button's new checked state.
         """
+        _log.debug("sampler button toggled: %s", checked)
         if checked:
             self.live_sampler.start(self.panel.all_selected_items)
         else:
@@ -86,6 +89,10 @@ class SamplerController:
     def _on_threshold_changed(self):
         """Forces an immediate re-sample when the threshold changes mid-sample."""
         if self.live_sampler.is_active:
+            _log.debug(
+                "threshold changed to %s - forcing re-sample",
+                self.panel.sp_sampler_thresh.value(),
+            )
             self.live_sampler.last_sampled_bbox = None  # Force an update
             self.live_sampler._update_loop()
 

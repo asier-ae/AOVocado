@@ -10,7 +10,9 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import utils
+from . import logger, utils
+
+_log = logger.get_logger(__name__)
 
 
 @utils.undo_block
@@ -28,6 +30,9 @@ def create_node_vertical(node_class, node_knob, channel_names):
         node_knob (str): The knob on each created node to set with its channel name.
         channel_names (list[str]): Channel names to create one node per, in order.
     """
+    _log.debug(
+        "create_node_vertical: class=%s channels=%s", node_class, len(channel_names)
+    )
     created_nodes = []
     for channel in channel_names:
         node = nuke.createNode(node_class, inpanel=False)
@@ -50,6 +55,9 @@ def create_nodes_horizontal(node_class, node_knob, channel_names, h_sep, v_sep):
         v_sep (int): Vertical pixel gap between the Dot's actual bottom edge
             and the node row (not from the Dot's xpos/ypos corner).
     """
+    _log.debug(
+        "create_nodes_horizontal: class=%s channels=%s", node_class, len(channel_names)
+    )
     if not channel_names:
         return
 

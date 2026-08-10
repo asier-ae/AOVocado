@@ -8,10 +8,12 @@ node-creation buttons/spacing, the live sampler threshold
 Author: Asier Aparicio
 """
 
-from . import config, preferences, utils
+from . import config, logger, preferences, utils
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import Qt
 from ._vendor.Qt.QtWidgets import QMainWindow, QMessageBox
+
+_log = logger.get_logger(__name__)
 
 
 class SettingsWindow(QMainWindow):
@@ -39,6 +41,7 @@ class SettingsWindow(QMainWindow):
 
     def __init__(self):
         """Loads settings, builds the window, and populates it from them."""
+        _log.debug("SettingsWindow opening")
         super().__init__()
         self.settings = config.Settings()
 
@@ -91,6 +94,7 @@ class SettingsWindow(QMainWindow):
 
     def _on_save_preferences(self):
         """Saves preferences and confirms, without closing the window."""
+        _log.debug("Save Settings clicked")
         self._save_preferences()
         QMessageBox.information(
             self,
@@ -105,6 +109,7 @@ class SettingsWindow(QMainWindow):
         No confirmation dialog here (unlike `_on_save_preferences`) - the
         window closing is itself the feedback that the save went through.
         """
+        _log.debug("Save & Close clicked")
         self._on_save_preferences()
         self.close()
 
@@ -119,6 +124,7 @@ class SettingsWindow(QMainWindow):
         if confirm != QMessageBox.Yes:
             return
 
+        _log.debug("Restore Defaults confirmed")
         preferences.restore_default_preferences(self.settings.USER_SETTINGS_PATH)
         self.settings = config.Settings()
         self._load_settings_to_ui()

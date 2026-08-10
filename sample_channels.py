@@ -10,9 +10,14 @@ arithmetic even if it looks like it could be tidied up.
 Author: Asier Aparicio
 """
 
+import logging
+
 import nuke
 
+from . import logger
 from .viewer import ViewerManager
+
+_log = logger.get_logger(__name__)
 
 
 def sample_viewer_channels(threshold=0.005):
@@ -40,13 +45,30 @@ def sample_viewer_channels(threshold=0.005):
         if sample_position is None:
             return []
 
+        if _log.isEnabledFor(logging.DEBUG):
+            img_width, img_height = _get_effective_image_dimensions(input_node)
+            viewer_node = nuke.activeViewer().node()
+            _log.debug(
+                "input=%s position=%s image_dims=%s downrez=%s proxy=%s/%s",
+                input_node.name(),
+                sample_position,
+                (img_width, img_height),
+                viewer_node["downrez"].value(),
+                nuke.root()["proxy"].value(),
+                nuke.root()["proxy_scale"].value(),
+            )
+
         detected_channels = _sample_channels_at_position(
             input_node, sample_position, threshold
+        )
+        _log.debug(
+            "threshold=%s detected_channels=%s", threshold, detected_channels
         )
 
         return _sort_channels_by_value(detected_channels)
 
     except Exception:
+        _log.exception("sample_viewer_channels failed")
         return []
 
 

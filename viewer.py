@@ -6,7 +6,9 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import constants, utils
+from . import constants, logger, utils
+
+_log = logger.get_logger(__name__)
 
 # Callback code Nuke executes via the viewer's knobChanged knob - an
 # absolute import since Nuke runs this in its own scope, not as part of
@@ -111,9 +113,12 @@ def viewer_updated():
         return
 
     knob = nuke.thisKnob()
-    if not knob or knob.name() not in ("inputChange", "input_number"):
+    knob_name = knob.name() if knob else None
+    if not knob or knob_name not in ("inputChange", "input_number"):
+        _log.debug("knobChanged fired for %s - ignored", knob_name)
         return
 
+    _log.debug("knobChanged fired for %s - reloading panel", knob_name)
     panel = utils.find_window_by_title(constants.QWINDOW_TITLE)
     if panel:
         panel.reload_channels()

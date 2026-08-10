@@ -11,6 +11,10 @@ import json
 import os
 from pathlib import Path
 
+from . import logger
+
+_log = logger.get_logger(__name__)
+
 MAIN_FOLDER_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -97,6 +101,7 @@ class Settings:
         )
 
         self.my_settings = self.load_settings(base_filepath)
+        _log.debug("loaded base settings from %s", base_filepath)
 
         self._apply_user_overrides()
         self._load_groups()
@@ -170,11 +175,13 @@ class Settings:
         or doesn't contain a `user_settings` block.
         """
         if not os.path.exists(self.USER_SETTINGS_PATH):
+            _log.debug("no user-override file at %s - using base defaults", self.USER_SETTINGS_PATH)
             return
         user_overrides = self.load_settings(self.USER_SETTINGS_PATH)
         self.my_settings.setdefault("user_settings", {}).update(
             user_overrides.get("user_settings", {})
         )
+        _log.debug("merged user-override settings from %s", self.USER_SETTINGS_PATH)
 
     def get_version_line(self):
         """Builds the version/author line shown in the panel's bottom bar.

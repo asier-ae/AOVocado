@@ -5,8 +5,10 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import sample_channels
+from . import logger, sample_channels
 from ._vendor.Qt.QtCore import QObject, QTimer, Signal
+
+_log = logger.get_logger(__name__)
 
 
 class LiveSampler(QObject):
@@ -66,6 +68,11 @@ class LiveSampler(QObject):
         # Store the state of the UI before starting
         self._pre_sample_viewer_channel = self.viewer_manager.get_viewer_channel()
         self._pre_sample_selected_items = [item.text() for item in current_selection]
+        _log.debug(
+            "start: pre_sample_channel=%s pre_sample_selection=%s",
+            self._pre_sample_viewer_channel,
+            self._pre_sample_selected_items,
+        )
 
         # Start the timer and update state
         self.is_active = True
@@ -85,6 +92,7 @@ class LiveSampler(QObject):
         Stops the timer and emits the `samplingStopped` signal with the
         pre-sample state to allow the UI to restore itself.
         """
+        _log.debug("stop")
         self._timer.stop()
         self.is_active = False
         self.viewer_manager.set_viewer_channel("rgba")
@@ -122,8 +130,8 @@ class LiveSampler(QObject):
 
             self.resultsReady.emit(detected_channels, new_viewer_channel)
 
-        except Exception as e:
-            print(f"Live sampling error: {e}")
+        except Exception:
+            _log.exception("Live sampling error")
             self.stop()  # Stop on error
 
     def _get_fallback_channel(self, detected_names):

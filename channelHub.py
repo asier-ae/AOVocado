@@ -13,6 +13,7 @@ from . import (
     config,
     constants,
     keyboard_state,
+    logger,
     node_creation,
     rebuild_subtractive,
     sampler_controller,
@@ -23,6 +24,8 @@ from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
 from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow
 from .settings_window import SettingsWindow
+
+_log = logger.get_logger(__name__)
 
 
 class ChannelHub(QMainWindow):
@@ -62,6 +65,7 @@ class ChannelHub(QMainWindow):
 
     def __init__(self):
         """Builds core components, loads the UI, and populates the panel."""
+        _log.debug("ChannelHub.__init__ starting")
         super().__init__()
         self.settings = config.Settings()
 
@@ -98,6 +102,7 @@ class ChannelHub(QMainWindow):
         self._select_current_viewer_channel()
 
         self.lineFilter.setFocus()
+        _log.debug("ChannelHub.__init__ complete")
 
     # --- Window setup ---
 
@@ -225,6 +230,13 @@ class ChannelHub(QMainWindow):
         self.last_selection = None
 
         self.channel_groups = self.channel_manager.collect_channels_from_viewer()
+        _log.debug(
+            "populated lists: group1=%s group2=%s group3=%s group4=%s",
+            len(self.channel_groups.group_ch1),
+            len(self.channel_groups.group_ch2),
+            len(self.channel_groups.group_ch3),
+            len(self.channel_groups.group_ch4),
+        )
         self.refresh_list_widgets()
 
     def refresh_list_widgets(self):
@@ -305,6 +317,7 @@ class ChannelHub(QMainWindow):
             dict.fromkeys(item.text() for item in self.all_selected_items)
         )
         filter_text = self.lineFilter.text()
+        _log.debug("reload_channels: previous selection=%s", previous_channels)
 
         self._populate_channel_lists()
         if filter_text:
@@ -536,6 +549,15 @@ class ChannelHub(QMainWindow):
             dict.fromkeys(item.text() for item in self.all_selected_items)
         )
 
+        mode = "horizontal" if mode_button.isChecked() else "vertical"
+        _log.debug(
+            "_on_create_node_clicked: button=%s class=%s mode=%s channels=%s",
+            sender_name,
+            node_class,
+            mode,
+            len(channel_names),
+        )
+
         if mode_button.isChecked():
             node_creation.create_nodes_horizontal(
                 node_class,
@@ -555,6 +577,7 @@ class ChannelHub(QMainWindow):
         channel_names = list(
             dict.fromkeys(item.text() for item in self.all_selected_items)
         )
+        _log.debug("_on_split_subtractive_clicked: channels=%s", len(channel_names))
         rebuild_subtractive.create_subtractive_rebuild(channel_names, self.settings)
         self.close()
 
@@ -565,6 +588,7 @@ class ChannelHub(QMainWindow):
         this panel reads settings once at construction - it wouldn't reflect
         any changes made in the Settings window until reopened anyway.
         """
+        _log.debug("_on_show_settings: opening Settings window")
         settings_window = SettingsWindow()
         constants.GC_PROTECT.append(settings_window)
         settings_window.show()
@@ -600,6 +624,7 @@ class ChannelHub(QMainWindow):
         Args:
             event (QCloseEvent): The close event.
         """
+        _log.debug("closeEvent")
         # Only if actually active: LiveSampler.stop() unconditionally sets
         # the viewer channel and emits samplingStopped with its pre-sample
         # state, which - if sampling was never started - is still the
