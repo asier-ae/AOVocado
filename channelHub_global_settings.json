@@ -51,7 +51,15 @@
         "VRayShadow",
         "VRayShadows",
         "VRaySpecular",
-        "VRayVelocity"
+        "VRayVelocity",
+        "coat",
+        "coat_albedo",
+        "diffuse_albedo",
+        "emission",
+        "specular_albedo",
+        "sss",
+        "sss_albedo",
+        "transmission"
     ],
 
     "GROUP2_TITLE_COMMENT": "Title to show for GROUP2 (upper right corner) channel list.",
@@ -80,7 +88,9 @@
         "UV",
         "velMotion",
         "z",
-        "zMin"
+        "zMin",
+        "motionvector",
+        "Pref"
     ],
 
     "GROUP4_TITLE_COMMENT": "Title to show for GROUP4 (lower right corner) channel list. Catch-all group - has no matching _SEARCH list; anything not matched by groups 1-3 lands here.",

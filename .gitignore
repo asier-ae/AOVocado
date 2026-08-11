@@ -3,3 +3,5 @@
 __pycache__/
 CLAUDE.md
 HANDOFF.md
+ref/pixel_aspect_fix_instructions.md
+ref/sample_channels_from_selection.py

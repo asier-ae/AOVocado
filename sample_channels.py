@@ -2,10 +2,8 @@
 
 The math in `_get_sample_position()` and `_get_effective_image_dimensions()`
 converts the viewer's normalized sample-bbox coordinates into absolute
-pixel coordinates, correctly accounting for proxy mode and viewer downrez -
-getting this right across those settings took real effort to work out, so
-treat these two functions as fixed: don't "simplify" or restructure the
-arithmetic even if it looks like it could be tidied up.
+pixel coordinates, correctly accounting for proxy mode, viewer downrez,
+and anamorphic pixel aspect ratio.
 
 Author: Asier Aparicio
 """
@@ -49,21 +47,20 @@ def sample_viewer_channels(threshold=0.005):
             img_width, img_height = _get_effective_image_dimensions(input_node)
             viewer_node = nuke.activeViewer().node()
             _log.debug(
-                "input=%s position=%s image_dims=%s downrez=%s proxy=%s/%s",
+                "input=%s position=%s image_dims=%s downrez=%s proxy=%s/%s pixel_aspect=%s",
                 input_node.name(),
                 sample_position,
                 (img_width, img_height),
                 viewer_node["downrez"].value(),
                 nuke.root()["proxy"].value(),
                 nuke.root()["proxy_scale"].value(),
+                input_node.format().pixelAspect(),
             )
 
         detected_channels = _sample_channels_at_position(
             input_node, sample_position, threshold
         )
-        _log.debug(
-            "threshold=%s detected_channels=%s", threshold, detected_channels
-        )
+        _log.debug("threshold=%s detected_channels=%s", threshold, detected_channels)
 
         return _sort_channels_by_value(detected_channels)
 
@@ -107,7 +104,12 @@ def _get_sample_position(input_node):
 
     # Get image dimensions accounting for proxy mode
     img_width, img_height = _get_effective_image_dimensions(input_node)
-    aspect = img_width / img_height
+
+    # Account for non-square (anamorphic) pixels: the viewer's normalized
+    # coordinates are based on the image's displayed (square-pixel) aspect
+    # ratio, not its raw resolution ratio, so pixelAspect must be folded in.
+    pixel_aspect = input_node.format().pixelAspect()
+    aspect = (img_width * pixel_aspect) / img_height
 
     # Convert normalized viewer coordinates to pixel coordinates
     x_pos = (bbox_info[0] * 0.5 + 0.5) * img_width
