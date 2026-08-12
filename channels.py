@@ -54,6 +54,28 @@ class ChannelManager:
         # exactly as authored in channelHub_global_settings.json.
         self.group2_prefixes = tuple(self.settings.GROUP2_SEARCH)
         self.group3_set = {x.lower() for x in self.settings.GROUP3_SEARCH}
+        # Exclusion is case-insensitive on both exact and prefix match,
+        # unlike the group2 prefix convention above.
+        self.exclude_set = {x.lower() for x in self.settings.EXCLUDE_SEARCH}
+        self.exclude_prefixes = tuple(
+            x.lower() for x in self.settings.EXCLUDE_PREFIX_SEARCH
+        )
+
+    def is_channel_excluded(self, channel_name):
+        """Checks whether a channel name should never be shown anywhere.
+
+        Args:
+            channel_name (str): A channel layer name (no ".red"/".green"/etc
+                suffix - e.g. "crypto_object00", not "crypto_object00.red").
+
+        Returns:
+            bool: True if `channel_name` matches `EXCLUDE_SEARCH` (exact) or
+                `EXCLUDE_PREFIX_SEARCH` (prefix), both case-insensitive.
+        """
+        name_lower = channel_name.lower()
+        if name_lower in self.exclude_set:
+            return True
+        return name_lower.startswith(self.exclude_prefixes)
 
     def categorize_channels(self, channel_list):
         """Categorizes a list of channels into predefined groups.
@@ -71,10 +93,15 @@ class ChannelManager:
         """
         groups = ChannelGroups()
 
-        # Extract unique channel names (before the dot)
+        # Extract unique channel names (before the dot), dropping anything
+        # excluded via EXCLUDE_SEARCH/EXCLUDE_PREFIX_SEARCH - treated as if
+        # it doesn't exist, so it never reaches any of the 4 groups.
         unique_channels = sorted(
             set(c.split(".")[0] for c in channel_list), key=lambda v: v.upper()
         )
+        unique_channels = [
+            c for c in unique_channels if not self.is_channel_excluded(c)
+        ]
 
         # Categorize channels based on configuration
         for channel in unique_channels:

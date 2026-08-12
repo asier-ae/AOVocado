@@ -28,7 +28,10 @@ _logger = logging.getLogger("channelHub")
 _logger.setLevel(logging.DEBUG if _debug_enabled else logging.WARNING)
 _logger.propagate = False
 
-_formatter = logging.Formatter("[channelHub] %(levelname)s %(name)s: %(message)s")
+_formatter = logging.Formatter(
+    "[channelHub] %(asctime)s %(levelname)s %(name)s: %(message)s",
+    datefmt="%H:%M:%S",
+)
 
 _console_handler = logging.StreamHandler()
 _console_handler.setFormatter(_formatter)

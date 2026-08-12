@@ -18,7 +18,7 @@ from .viewer import ViewerManager
 _log = logger.get_logger(__name__)
 
 
-def sample_viewer_channels(threshold=0.005):
+def sample_viewer_channels(threshold=0.005, channel_manager=None):
     """Samples all channels at the viewer's current mouse position.
 
     Finds the active viewer input, calculates the correct sampling
@@ -28,6 +28,10 @@ def sample_viewer_channels(threshold=0.005):
     Args:
         threshold (float, optional): The minimum pixel value for a channel
             to be considered active. Defaults to 0.005.
+        channel_manager (channels.ChannelManager, optional): If given,
+            channels it reports as excluded (`is_channel_excluded()`) are
+            skipped entirely - never sampled, never returned. Defaults to
+            None (no exclusion).
 
     Returns:
         list[tuple]: A list of (channel_name, value) tuples for channels
@@ -49,7 +53,7 @@ def sample_viewer_channels(threshold=0.005):
             _log.debug(
                 "input=%s position=%s image_dims=%s downrez=%s proxy=%s/%s pixel_aspect=%s",
                 input_node.name(),
-                sample_position,
+                tuple(round(p, 2) for p in sample_position),
                 (img_width, img_height),
                 viewer_node["downrez"].value(),
                 nuke.root()["proxy"].value(),
@@ -58,7 +62,7 @@ def sample_viewer_channels(threshold=0.005):
             )
 
         detected_channels = _sample_channels_at_position(
-            input_node, sample_position, threshold
+            input_node, sample_position, threshold, channel_manager
         )
         _log.debug("threshold=%s detected_channels=%s", threshold, detected_channels)
 
@@ -146,13 +150,18 @@ def _get_effective_image_dimensions(input_node):
     return img_width, img_height
 
 
-def _sample_channels_at_position(input_node, position, threshold):
+def _sample_channels_at_position(input_node, position, threshold, channel_manager=None):
     """Samples all channels at a specific pixel and filters by a threshold.
 
     Args:
         input_node (nuke.Node): The node to sample from.
         position (tuple): The (x, y) pixel coordinates to sample.
         threshold (float): The minimum value for a channel to be kept.
+        channel_manager (channels.ChannelManager, optional): If given,
+            excluded channels (`is_channel_excluded()`) are skipped before
+            `input_node.sample()` is called on them - that call is the
+            expensive part of this loop, so excluded channels never pay
+            for it. Defaults to None (no exclusion).
 
     Returns:
         dict: A dictionary of {channel_layer: max_value} for all channels
@@ -163,12 +172,14 @@ def _sample_channels_at_position(input_node, position, threshold):
     all_channels = input_node.channels()
 
     for channel_name in all_channels:
+        base_name = channel_name.split(".")[0]
+        if channel_manager and channel_manager.is_channel_excluded(base_name):
+            continue
+
         try:
             pixel_value = input_node.sample(channel_name, x_pos, y_pos)
 
             if pixel_value > threshold:
-                base_name = channel_name.split(".")[0]
-
                 # Keep only the highest value for each channel layer
                 if (
                     base_name not in detected_channels

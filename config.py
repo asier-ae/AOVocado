@@ -53,6 +53,10 @@ class Settings:
         GROUP2_TITLE (str): Group 2 display title.
         GROUP3_TITLE (str): Group 3 display title.
         GROUP4_TITLE (str): Group 4 (catch-all) display title.
+        EXCLUDE_SEARCH (list[str]): Exact-match channel names never shown
+            anywhere in the panel.
+        EXCLUDE_PREFIX_SEARCH (list[str]): Prefix-match strings never shown
+            anywhere in the panel (e.g. "crypto_").
         ICON_H_MODE (str): Path to the horizontal node-creation-mode icon.
         ICON_V_MODE (str): Path to the vertical node-creation-mode icon.
         ICON_SETTINGS (str): Path to the settings-button icon.
@@ -103,6 +107,7 @@ class Settings:
 
         self._apply_user_overrides()
         self._load_groups()
+        self._load_excludes()
         self._load_icons()
         self._load_backdrop_style()
 
@@ -115,6 +120,11 @@ class Settings:
         self.GROUP2_TITLE = self.my_settings["GROUP2_TITLE"]
         self.GROUP3_TITLE = self.my_settings["GROUP3_TITLE"]
         self.GROUP4_TITLE = self.my_settings["GROUP4_TITLE"]
+
+    def _load_excludes(self):
+        """Sets the never-shown channel exact/prefix match lists from `my_settings`."""
+        self.EXCLUDE_SEARCH = self.my_settings["EXCLUDE_SEARCH"]
+        self.EXCLUDE_PREFIX_SEARCH = self.my_settings["EXCLUDE_PREFIX_SEARCH"]
 
     def _load_icons(self):
         """Builds one `ICON_*` path attribute per icon in `icons/`.

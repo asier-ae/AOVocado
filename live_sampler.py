@@ -123,7 +123,7 @@ class LiveSampler(QObject):
             threshold = self.parent().sp_sampler_thresh.value()
 
             detected_channels = sample_channels.sample_viewer_channels(
-                threshold=threshold
+                threshold=threshold, channel_manager=self.parent().channel_manager
             )
             detected_names = [ch for ch, val in detected_channels]
             new_viewer_channel = self._get_fallback_channel(detected_names)
