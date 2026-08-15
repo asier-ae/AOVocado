@@ -13,6 +13,13 @@ from ._vendor.Qt.QtCore import QSize
 from ._vendor.Qt.QtGui import QCursor, QIcon
 from ._vendor.Qt.QtWidgets import QApplication
 
+# Shared square icon size (pixels) for every icon-only button - all of
+# them are 30x30 in the .ui files. A single default here, rather than each
+# call site picking its own number, is what keeps every icon the same
+# visual size; the icons themselves also all have consistent padding
+# baked in for the same reason (see icons/ generation notes).
+STANDARD_ICON_SIZE = 25
+
 # Nuke writes each top-level node in a .nk file as an unindented
 # "SomeClass {" block; nested/internal nodes (e.g. inside a Group) are
 # indented. Matching only unindented lines counts top-level nodes without
@@ -103,26 +110,27 @@ def copy_to_clipboard(text):
     QApplication.clipboard().setText(text)
 
 
-def set_button_icon(button, icon_path, size=None, tooltip=None):
+def set_button_icon(button, icon_path, size=STANDARD_ICON_SIZE, tooltip=None):
     """Configures a button's static icon, clearing its placeholder text.
 
     Shared by every icon-only button's one-time setup (settings, copy,
-    subtractive rebuild, live sampler) - without an explicit `size`, Qt
-    falls back to its default button icon size (commonly ~16px), which
-    looks tiny and off-center inside this panel's 30x30 buttons.
+    subtractive rebuild, live sampler). Defaults to `STANDARD_ICON_SIZE` -
+    without an explicit `size`, Qt falls back to its own default button
+    icon size (commonly ~16px), which looks tiny and inconsistent next to
+    every other icon button in this panel.
 
     Args:
         button (QPushButton): The button to configure.
         icon_path (str): Path to the icon image.
-        size (int, optional): Square icon size in pixels. Omit to leave
-            Qt's default button icon size in place.
+        size (int, optional): Square icon size in pixels. Defaults to
+            `STANDARD_ICON_SIZE`; override only for a button that's
+            deliberately a different size than the rest.
         tooltip (str, optional): Tooltip text. Omit to leave the button's
             existing tooltip (e.g. one already set in the `.ui` file).
     """
     button.setText("")
     button.setIcon(QIcon(icon_path))
-    if size is not None:
-        button.setIconSize(QSize(size, size))
+    button.setIconSize(QSize(size, size))
     if tooltip is not None:
         button.setToolTip(tooltip)
 
@@ -158,7 +166,7 @@ def validate_toolset_path(path):
     return None
 
 
-def update_mode_button_visuals(button, icon_h_path, icon_v_path):
+def update_mode_button_visuals(button, icon_h_path, icon_v_path, size=STANDARD_ICON_SIZE):
     """Sets a checkable mode button's icon/tooltip to match its checked state.
 
     Shared between `channelHub.py`'s per-button mode toggles (b1_mode..b4_mode)
@@ -170,7 +178,10 @@ def update_mode_button_visuals(button, icon_h_path, icon_v_path):
             horizontal node creation, unchecked means vertical.
         icon_h_path (str): Path to the horizontal-mode icon.
         icon_v_path (str): Path to the vertical-mode icon.
+        size (int, optional): Square icon size in pixels. Defaults to
+            `STANDARD_ICON_SIZE`, matching every other icon button.
     """
+    button.setIconSize(QSize(size, size))
     if button.isChecked():
         button.setIcon(QIcon(icon_h_path))
         button.setToolTip("Creating nodes in a horizontal stack")

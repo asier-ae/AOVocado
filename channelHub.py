@@ -186,9 +186,7 @@ class ChannelHub(QMainWindow):
 
     def _setup_settings_button(self):
         """Configures the settings button's icon and click handler."""
-        utils.set_button_icon(
-            self.b_show_settings, self.settings.ICON_SETTINGS, size=21
-        )
+        utils.set_button_icon(self.b_show_settings, self.settings.ICON_SETTINGS)
         self.b_show_settings.clicked.connect(self._on_show_settings)
 
     def _setup_copy_button(self):
@@ -202,11 +200,7 @@ class ChannelHub(QMainWindow):
 
     def _setup_split_subtractive_button(self):
         """Configures the subtractive-rebuild button's icon and click handler."""
-        # 27px fills the button without touching its edges - Qt's default
-        # button icon size looks tiny/off-center at this button's 30x30.
-        utils.set_button_icon(
-            self.b_split_subtractive, self.settings.ICON_SPLIT_SUBTRACTIVE, size=27
-        )
+        utils.set_button_icon(self.b_split_subtractive, self.settings.ICON_SPLIT_SUBTRACTIVE)
         self.b_split_subtractive.clicked.connect(self._on_split_subtractive_clicked)
 
     def _setup_sampler(self):

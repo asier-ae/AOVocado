@@ -94,19 +94,25 @@ def create_node_vertical(
 ):
     """Creates one node per channel, each positioned below the previous one.
 
-    Connection and X position still come entirely from Nuke's own
-    auto-connect (`nuke.createNode()` for SOURCE_CLASS, `nuke.loadToolset()`
-    for SOURCE_TOOLSET - both chain onto whatever's selected the same way)
-    - that part was never the problem. Y position is explicitly overridden
+    Connection still comes entirely from Nuke's own auto-connect
+    (`nuke.createNode()` for SOURCE_CLASS, `nuke.loadToolset()` for
+    SOURCE_TOOLSET - both chain onto whatever's selected the same way) -
+    that part was never the problem. Y position is explicitly overridden
     for every node after the first, as a flat offset from the previous
-    node's own Y: `nuke.loadToolset()`'s auto-position can end up using a
-    node's height from *before* its channel knob (and often a label tied
-    to it) was set, since nothing forces a redraw between one node's
-    creation and the next one's auto-position calculation in a tight
-    Python loop - a Group whose box grows once configured would then
-    overlap the next node, positioned assuming the smaller, pre-configure
-    size. A fixed per-node offset sidesteps this instead of chasing the
-    timing issue - no width/height queries, nothing X-related touched.
+    node's own Y, via `setXYpos()` - **not** `node["ypos"].setValue()`.
+    This matters: a node that just got auto-connected to a prior selection
+    has its position finalized by Nuke on some later idle/redraw pass, not
+    immediately - setting the `ypos` knob directly changes what
+    `.value()` reports right away, but doesn't stop that later pass from
+    silently overwriting it back to Nuke's own auto-connect position
+    moments afterward. `setXYpos()` is the same API Nuke's own UI uses
+    when a node is dragged, and calling it is what actually cancels that
+    pending auto-position finalization - confirmed by testing directly in
+    Nuke (a Script Editor snippet showed `ypos` reporting the overridden
+    value immediately after `setValue()`, then reverting on a second read
+    moments later with nothing else run in between). X position is passed
+    through unchanged (read from `previous_node`, not touched otherwise) -
+    `setXYpos()` needs both, but only Y is meant to change here.
 
     Args:
         node_class (str): The Nuke node class to create (SOURCE_CLASS) or
@@ -130,7 +136,6 @@ def create_node_vertical(
         node = _create_one_node(source, node_class, node_knob, channel)
         if previous_node is not None:
             prev_y = int(previous_node["ypos"].value())
-            # node["ypos"].setValue(prev_y + v_sep)
             node.setXYpos(int(previous_node.xpos()), int(prev_y + v_sep))
         previous_node = node
         created_nodes.append(node)
