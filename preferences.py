@@ -14,21 +14,24 @@ import json
 import os
 
 from . import logger
+from ._vendor.Qt.QtGui import QKeySequence
 from ._vendor.Qt.QtWidgets import (
     QCheckBox,
     QComboBox,
     QDoubleSpinBox,
+    QKeySequenceEdit,
     QLineEdit,
     QPushButton,
     QSpinBox,
     QWidget,
 )
 
-# Qt gives QSpinBox/QDoubleSpinBox an internal child QLineEdit with this
-# fixed object name. findChildren(QLineEdit) picks it up even though it
-# isn't one of our named preference widgets, so it must be filtered out
-# wherever QLineEdit values are gathered.
-_ROGUE_SPINBOX_LINEEDIT_NAME = "qt_spinbox_lineedit"
+# Some widgets embed their own internal QLineEdit child under a fixed
+# object name (QSpinBox/QDoubleSpinBox, QKeySequenceEdit) -
+# findChildren(QLineEdit) picks these up too, even though they aren't
+# named preference widgets in their own right, so they must be filtered
+# out wherever QLineEdit values are gathered.
+_ROGUE_INTERNAL_LINEEDIT_NAMES = ("qt_spinbox_lineedit", "qt_keysequenceedit_lineedit")
 
 _log = logger.get_logger(__name__)
 
@@ -41,6 +44,14 @@ _GETTERS = {
     QDoubleSpinBox: lambda w: w.value(),
     QSpinBox: lambda w: w.value(),
     QComboBox: lambda w: w.currentText(),
+    # PortableText (not the default NativeText) so this stays a plain ASCII
+    # string like "ctrl+alt+h" - NativeText would render platform symbols
+    # (e.g. macOS's Ctrl glyph) that neither Nuke's own hotkey format nor
+    # QKeySequence(settings.HOTKEY) round-trips would match. Lowercased to
+    # match the existing "ctrl+`" convention.
+    QKeySequenceEdit: lambda w: w.keySequence().toString(
+        QKeySequence.PortableText
+    ).lower(),
 }
 
 # Value setters, keyed by widget type, used when applying loaded settings.
@@ -51,6 +62,7 @@ _SETTERS = {
     QSpinBox: lambda w, v: w.setValue(v),
     QComboBox: lambda w, v: w.setCurrentText(v),
     QPushButton: lambda w, v: w.setChecked(v) if w.isCheckable() else None,
+    QKeySequenceEdit: lambda w, v: w.setKeySequence(QKeySequence(v)),
 }
 
 
@@ -93,7 +105,7 @@ def save_preferences(root_widget, filepath):
     for widget_type, getter in _GETTERS.items():
         for widget in root_widget.findChildren(widget_type):
             object_name = widget.objectName()
-            if not object_name or object_name == _ROGUE_SPINBOX_LINEEDIT_NAME:
+            if not object_name or object_name in _ROGUE_INTERNAL_LINEEDIT_NAMES:
                 continue
             user_settings[object_name] = getter(widget)
 

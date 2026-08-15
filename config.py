@@ -32,7 +32,9 @@ class Settings:
       with the user's other tools). If present, its `user_settings` keys are
       shallow-merged on top of the base file's `user_settings` block - keys
       it doesn't mention keep falling back to the base file's values. Only
-      `user_settings` is layered this way; GROUP*/HOTKEY are base-file-only.
+      `user_settings` is layered this way; GROUP*/*_TITLE are base-file-only.
+      HOTKEY lives inside `user_settings` (as `cfg_hotkey`), like every
+      other Settings-window-editable field - overridable the same way.
       Written by `preferences.save_preferences()` (see `settings_window.py`);
       deleting it (`preferences.restore_default_preferences()`) reverts
       everything in `user_settings` back to the base file's values.
@@ -46,6 +48,11 @@ class Settings:
         CHANNELHUB_VERSION (str): Current tool version, shown in the panel.
         AUTHOR (str): Tool author, shown in the panel.
         HOTKEY (str): Keyboard shortcut that opens/closes the panel.
+            Editable via the Settings window's `cfg_hotkey` key-capture
+            field (`QKeySequenceEdit`), like other `user_settings` values -
+            a change only takes effect the next time the main panel opens
+            (and, for Nuke's own registered menu shortcut, the next Nuke
+            launch, since `__init__.py` registers it once at import time).
         GROUP1_SEARCH (list[str]): Group 1 exact-match channel names.
         GROUP2_SEARCH (list[str]): Group 2 prefix-match strings.
         GROUP3_SEARCH (list[str]): Group 3 exact-match channel names.
@@ -101,11 +108,13 @@ class Settings:
         self.my_settings = self.load_settings(base_filepath)
         _log.debug("loaded base settings from %s", base_filepath)
 
-        # Base-file-only, like GROUP*/*_TITLE - not part of the
-        # user_settings overlay (see _apply_user_overrides()).
-        self.HOTKEY = self.my_settings["HOTKEY"]
-
         self._apply_user_overrides()
+
+        # Read after _apply_user_overrides() so a saved cfg_hotkey
+        # override is picked up, unlike GROUP*/*_TITLE which stay
+        # base-file-only.
+        self.HOTKEY = self.my_settings["user_settings"]["cfg_hotkey"]
+
         self._load_groups()
         self._load_excludes()
         self._load_icons()

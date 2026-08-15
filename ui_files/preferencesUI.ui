@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>566</width>
-    <height>679</height>
+    <width>587</width>
+    <height>746</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
     <item>
      <widget class="QTabWidget" name="tab_all_settings">
       <property name="autoFillBackground">
@@ -41,8 +44,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>479</width>
-             <height>842</height>
+             <width>515</width>
+             <height>972</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -65,6 +68,54 @@
              <layout class="QVBoxLayout" name="verticalLayout_14">
               <item>
                <widget class="QLabel" name="label_70">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Keyboard Shortcut</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <item>
+                 <widget class="QKeySequenceEdit" name="cfg_hotkey"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_2">
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                    <italic>true</italic>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>(restart nuke for this to take effect)</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_74">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
@@ -290,7 +341,7 @@
                  <widget class="QGroupBox" name="groupBox_5">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>220</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -376,7 +427,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLabel" name="label_36">
+                      <widget class="QLabel" name="label_63">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -395,8 +446,27 @@
                         </font>
                        </property>
                        <property name="text">
-                        <string>Node class to create:</string>
+                        <string>Create node from:</string>
                        </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QComboBox" name="BUTTON1_SOURCE">
+                       <property name="font">
+                        <font>
+                         <bold>false</bold>
+                        </font>
+                       </property>
+                       <item>
+                        <property name="text">
+                         <string>Node class</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Nuke script path</string>
+                        </property>
+                       </item>
                       </widget>
                      </item>
                      <item>
@@ -526,7 +596,7 @@
                  <widget class="QGroupBox" name="groupBox_6">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>220</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -625,8 +695,27 @@
                         </font>
                        </property>
                        <property name="text">
-                        <string>Node class to create:</string>
+                        <string>Create node from:</string>
                        </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QComboBox" name="BUTTON2_SOURCE">
+                       <property name="font">
+                        <font>
+                         <bold>false</bold>
+                        </font>
+                       </property>
+                       <item>
+                        <property name="text">
+                         <string>Node class</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>Nuke script path</string>
+                        </property>
+                       </item>
                       </widget>
                      </item>
                      <item>
@@ -752,19 +841,6 @@
                   </layout>
                  </widget>
                 </item>
-                <item>
-                 <spacer name="horizontalSpacer_21">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                </layout>
               </item>
              </layout>
@@ -791,7 +867,7 @@
                <widget class="QGroupBox" name="groupBox_11">
                 <property name="minimumSize">
                  <size>
-                  <width>0</width>
+                  <width>220</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -871,7 +947,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_61">
+                    <widget class="QLabel" name="label_65">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -890,8 +966,27 @@
                       </font>
                      </property>
                      <property name="text">
-                      <string>Node class to create:</string>
+                      <string>Create node from:</string>
                      </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="BUTTON3_SOURCE">
+                     <property name="font">
+                      <font>
+                       <bold>false</bold>
+                      </font>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Node class</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Nuke script path</string>
+                      </property>
+                     </item>
                     </widget>
                    </item>
                    <item>
@@ -1021,7 +1116,7 @@
                <widget class="QGroupBox" name="groupBox_12">
                 <property name="minimumSize">
                  <size>
-                  <width>0</width>
+                  <width>220</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -1101,7 +1196,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_74">
+                    <widget class="QLabel" name="label_64">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -1120,8 +1215,27 @@
                       </font>
                      </property>
                      <property name="text">
-                      <string>Node class to create:</string>
+                      <string>Create node from:</string>
                      </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="BUTTON4_SOURCE">
+                     <property name="font">
+                      <font>
+                       <bold>false</bold>
+                      </font>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Node class</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Nuke script path</string>
+                      </property>
+                     </item>
                     </widget>
                    </item>
                    <item>
@@ -1246,19 +1360,6 @@
                  </item>
                 </layout>
                </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_24">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
              </layout>
             </item>

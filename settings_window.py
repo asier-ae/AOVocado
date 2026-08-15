@@ -11,6 +11,7 @@ Author: Asier Aparicio
 from . import config, logger, preferences, utils
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import Qt
+from ._vendor.Qt.QtGui import QKeySequence
 from ._vendor.Qt.QtWidgets import QMainWindow, QMessageBox
 
 _log = logger.get_logger(__name__)
@@ -87,6 +88,25 @@ class SettingsWindow(QMainWindow):
         self.b_saveprefs.clicked.connect(self._on_save_preferences)
         self.b_saveprefsclose.clicked.connect(self._on_save_and_close)
         self.b_restoreprefs.clicked.connect(self._on_restore_preferences)
+        self.cfg_hotkey.keySequenceChanged.connect(self._on_hotkey_changed)
+
+    def _on_hotkey_changed(self, key_sequence):
+        """Keeps the hotkey field to a single key combo, not a multi-chord sequence.
+
+        QKeySequenceEdit accepts up to 4 chained key presses by default
+        (e.g. "Ctrl+K, Ctrl+D") - channelHub/Nuke hotkeys are always a
+        single combo, so anything past the first chord is dropped
+        immediately. String-based rather than indexing into the
+        QKeySequence, since that API differs between the Qt5/Qt6 bindings
+        this codebase supports.
+
+        Args:
+            key_sequence (QKeySequence): The field's new key sequence.
+        """
+        text = key_sequence.toString(QKeySequence.PortableText)
+        first_chord = text.split(",")[0].strip()
+        if first_chord != text:
+            self.cfg_hotkey.setKeySequence(QKeySequence(first_chord))
 
     def _save_preferences(self):
         """Writes every preference widget's current value to the user-override file."""

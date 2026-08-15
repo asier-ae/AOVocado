@@ -1,7 +1,4 @@
 {
-    "HOTKEY_COMMENT": "Keyboard shortcut that opens/closes the panel - Nuke hotkey-string format (lowercase, + separated, e.g. \"ctrl+`\"). Read by __init__.py to register the channelHub menu command, and by ChannelHub itself to close on its own hotkey while focused.",
-    "HOTKEY": "ctrl+`",
-
     "GROUP1_TITLE_COMMENT": "Title to show for GROUP1 (upper left corner) channel list.",
     "GROUP1_TITLE": "AOVS",
 
@@ -119,6 +116,7 @@
 
     "user_settings_COMMENT": "Editable via the Settings window (preferencesUI.ui) - keys match the widget object names they're saved/loaded from. Saving OVERWRITES this whole block with a fresh snapshot of every widget's value (see preferences.py), so don't add hand-written keys here that aren't backed by a widget - they won't survive the first save. BUTTON1-4_* and cfg_main_*_sep (direct pixel values, no hidden multiplier - see node_creation.py) drive node creation; cfg_sp_sampler_threshold seeds the main panel's live sampler (see sampler_controller.py); cfg_rs_* drive the subtractive rebuild (see rebuild_subtractive.py) - these are base units scaled x10 into actual pixel spacing, unlike cfg_main_*_sep.",
     "user_settings": {
+        "cfg_hotkey": "ctrl+`",
         "BUTTON1_CLASS": "Shuffle2",
         "BUTTON1_ICONMODE": true,
         "BUTTON1_KNOB": "in1",

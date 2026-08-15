@@ -618,6 +618,7 @@ class ChannelHub(QMainWindow):
         """
         _log.debug("_on_show_settings: opening Settings window")
         settings_window = SettingsWindow()
+        settings_window.move(self.pos())
         constants.GC_PROTECT.append(settings_window)
         settings_window.show()
         self.close()
