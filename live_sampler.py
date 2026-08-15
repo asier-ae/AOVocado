@@ -5,7 +5,7 @@ Author: Asier Aparicio
 
 import nuke
 
-from . import logger, sample_channels
+from . import live_sampler_channels, logger
 from ._vendor.Qt.QtCore import QObject, QTimer, Signal
 
 _log = logger.get_logger(__name__)
@@ -16,7 +16,7 @@ class LiveSampler(QObject):
 
     Encapsulates starting, stopping, and updating the live sampling. Uses a
     QTimer to periodically check the viewer and emits signals to communicate
-    with the main UI (see `sampler_controller.py`), keeping this state
+    with the main UI (see `live_sampler_controller.py`), keeping this state
     machine decoupled from any specific window's widgets.
 
     Attributes:
@@ -122,7 +122,7 @@ class LiveSampler(QObject):
 
             threshold = self.parent().sp_sampler_thresh.value()
 
-            detected_channels = sample_channels.sample_viewer_channels(
+            detected_channels = live_sampler_channels.sample_viewer_channels(
                 threshold=threshold, channel_manager=self.parent().channel_manager
             )
             detected_names = [ch for ch, val in detected_channels]

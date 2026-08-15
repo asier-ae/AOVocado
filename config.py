@@ -35,8 +35,8 @@ class Settings:
       `user_settings` is layered this way; GROUP*/*_TITLE are base-file-only.
       HOTKEY lives inside `user_settings` (as `cfg_hotkey`), like every
       other Settings-window-editable field - overridable the same way.
-      Written by `preferences.save_preferences()` (see `settings_window.py`);
-      deleting it (`preferences.restore_default_preferences()`) reverts
+      Written by `settings_io.save_preferences()` (see `settings_window.py`);
+      deleting it (`settings_io.restore_default_preferences()`) reverts
       everything in `user_settings` back to the base file's values.
 
     Attributes:

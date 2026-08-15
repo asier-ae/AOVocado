@@ -1,14 +1,14 @@
 """The Settings window for channelHub.
 
 Loads `ui_files/preferencesUI.ui` and wires it to the generic load/save/
-restore functions in `preferences.py`. Every field here is functional -
+restore functions in `settings_io.py`. Every field here is functional -
 node-creation buttons/spacing, the live sampler threshold
 (`live_sampler.py`), and the "Rebuild Substractive" tab (`rebuild_subtractive.py`).
 
 Author: Asier Aparicio
 """
 
-from . import config, logger, node_creation, preferences, tooltips, utils
+from . import config, logger, node_creation, settings_io, settings_tooltips, utils
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import Qt
 from ._vendor.Qt.QtGui import QKeySequence
@@ -57,7 +57,7 @@ class SettingsWindow(QMainWindow):
         self.setWindowTitle("channelHub Settings")
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_DeleteOnClose)
-        tooltips.apply_tooltips(self)
+        settings_tooltips.apply_tooltips(self)
 
     def _setup_mode_buttons(self):
         """Configures the 4 mode-toggle buttons' icon and text."""
@@ -80,7 +80,7 @@ class SettingsWindow(QMainWindow):
 
     def _load_settings_to_ui(self):
         """Applies the currently loaded settings onto every matching widget."""
-        preferences.load_preferences(self, self.settings.my_settings["user_settings"])
+        settings_io.load_preferences(self, self.settings.my_settings["user_settings"])
         for button_name in self.MODE_BUTTONS:
             self._update_mode_button(getattr(self, button_name))
 
@@ -150,7 +150,7 @@ class SettingsWindow(QMainWindow):
             )
             return False
 
-        preferences.save_preferences(self, self.settings.USER_SETTINGS_PATH)
+        settings_io.save_preferences(self, self.settings.USER_SETTINGS_PATH)
         return True
 
     def _on_save_preferences(self):
@@ -194,7 +194,7 @@ class SettingsWindow(QMainWindow):
             return
 
         _log.debug("Restore Defaults confirmed")
-        preferences.restore_default_preferences(self.settings.USER_SETTINGS_PATH)
+        settings_io.restore_default_preferences(self.settings.USER_SETTINGS_PATH)
         self.settings = config.Settings()
         self._load_settings_to_ui()
         QMessageBox.information(

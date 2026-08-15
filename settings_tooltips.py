@@ -1,10 +1,10 @@
 """Tooltip text for the Settings window's widgets.
 
 Plain `{object_name: tooltip text}` data, applied generically by
-`apply_tooltips()` - matches `preferences.py`'s own object-name-driven
+`apply_tooltips()` - matches `settings_io.py`'s own object-name-driven
 pattern. Scoped to `settings_window.py`/`preferencesUI.ui` only; the main
 panel sets its own tooltips inline where it has one (`utils.set_button_icon`'s
-`tooltip` param, `sampler_controller.py`).
+`tooltip` param, `live_sampler_controller.py`).
 
 Author: Asier Aparicio
 """

@@ -13,10 +13,10 @@ from . import (
     config,
     constants,
     keyboard_state,
+    live_sampler_controller,
     logger,
     node_creation,
     rebuild_subtractive,
-    sampler_controller,
     utils,
     viewer,
 )
@@ -66,7 +66,7 @@ class ChannelHub(QMainWindow):
             right group. Also a live Qt object reference, not a string.
         original_viewer_channel (str): The channel the viewer was showing
             before this panel opened, restored on close.
-        sampler_controller (sampler_controller.SamplerController): Owns the
+        sampler_controller (live_sampler_controller.SamplerController): Owns the
             live channel sampler and its UI reactions - see that module.
     """
 
@@ -220,8 +220,8 @@ class ChannelHub(QMainWindow):
         self.b_split_subtractive.clicked.connect(self._on_split_subtractive_clicked)
 
     def _setup_sampler(self):
-        """Creates the live sampler and wires it to this panel (see sampler_controller.py)."""
-        self.sampler_controller = sampler_controller.SamplerController(self)
+        """Creates the live sampler and wires it to this panel (see live_sampler_controller.py)."""
+        self.sampler_controller = live_sampler_controller.SamplerController(self)
 
     def _setup_viewer_callback(self):
         """Registers the viewer-input-change callback (see viewer.py)."""
@@ -255,7 +255,7 @@ class ChannelHub(QMainWindow):
 
         Doesn't re-fetch from the viewer - used to restore the full
         alphabetical list after the live sampler's filtered view
-        (`sampler_controller.py`), where `channel_groups` hasn't changed,
+        (`live_sampler_controller.py`), where `channel_groups` hasn't changed,
         just what's currently displayed.
         """
         for list_widget, channel_names in zip(
@@ -274,7 +274,7 @@ class ChannelHub(QMainWindow):
         """Redisplays only the given channels, in their given order.
 
         Used by the live sampler to show just the channels it detected,
-        strongest first (see `sampler_controller.py`) - iterates
+        strongest first (see `live_sampler_controller.py`) - iterates
         `detected_names` filtered by each group's set, not each group's own
         list filtered by a detected-set, specifically to preserve that
         value-sorted order rather than silently reverting to alphabetical.
@@ -341,7 +341,7 @@ class ChannelHub(QMainWindow):
         """Selects the given channel names across the 4 lists, if found.
 
         Used by `reload_channels()` above and by the live sampler
-        (`sampler_controller.py`) to restore a selection by name rather
+        (`live_sampler_controller.py`) to restore a selection by name rather
         than by item reference - both cases repopulate the lists first,
         which destroys the old `QListWidgetItem`s.
 
@@ -688,7 +688,7 @@ class ChannelHub(QMainWindow):
         # the viewer channel and emits samplingStopped with its pre-sample
         # state, which - if sampling was never started - is still the
         # constructor's (None, []) defaults. That would make
-        # sampler_controller's handler try to set the viewer channel to
+        # live_sampler_controller's handler try to set the viewer channel to
         # None. The very next line here would still overwrite it with the
         # correct value regardless, but there's no reason to risk it.
         if self.sampler_controller.live_sampler.is_active:
