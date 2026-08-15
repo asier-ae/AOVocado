@@ -28,6 +28,7 @@ from ._vendor.Qt.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QMessageBox,
+    QPushButton,
 )
 from .settings_window import SettingsWindow
 
@@ -123,6 +124,13 @@ class ChannelHub(QMainWindow):
         self.setWindowTitle(constants.QWINDOW_TITLE)
         self.installEventFilter(self)
         utils._move_to_cursor(self)
+
+        # Clickable but never focusable - Qt's default QPushButton focus
+        # policy (StrongFocus) is what makes a button visibly change color
+        # on click (Nuke's own Qt style highlights focused widgets); this
+        # doesn't affect clicking itself, only keyboard focus acceptance.
+        for button in self.findChildren(QPushButton):
+            button.setFocusPolicy(Qt.NoFocus)
 
         # Built once, here, since the widgets don't exist until loadUi()
         # has run above, and never change after this - every other method
