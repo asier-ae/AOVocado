@@ -73,6 +73,7 @@ class Settings:
             (active/sampling state).
         ICON_SPLIT_SUBTRACTIVE (str): Path to the subtractive-rebuild
             button icon.
+        ICON_SEARCH (str): Path to the channel-search box's leading icon.
         BACKDROP_TILE_COLOR (int): Rebuild-backdrop fill color.
         BACKDROP_APPEARANCE (str): Rebuild-backdrop appearance style.
         BACKDROP_BORDER_WIDTH (int): Rebuild-backdrop border thickness.
@@ -152,6 +153,7 @@ class Settings:
         self.ICON_SPLIT_SUBTRACTIVE = os.path.join(
             MAIN_FOLDER_PATH, "icons", "splitlayers_subtractive.png"
         )
+        self.ICON_SEARCH = os.path.join(MAIN_FOLDER_PATH, "icons", "lookingGlass.png")
 
     def _load_backdrop_style(self):
         """Sets the rebuild-backdrop style attributes from `my_settings`.

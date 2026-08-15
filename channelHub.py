@@ -23,7 +23,12 @@ from . import (
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
 from ._vendor.Qt.QtGui import QKeySequence
-from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow, QMessageBox
+from ._vendor.Qt.QtWidgets import (
+    QAbstractItemView,
+    QLineEdit,
+    QMainWindow,
+    QMessageBox,
+)
 from .settings_window import SettingsWindow
 
 _log = logger.get_logger(__name__)
@@ -148,7 +153,10 @@ class ChannelHub(QMainWindow):
             list_widget.itemSelectionChanged.connect(self._on_selection_changed)
 
     def _setup_filter(self):
-        """Connects the channel search box."""
+        """Adds the search icon and connects the channel search box."""
+        self.lineFilter.addAction(
+            utils.load_icon(self.settings.ICON_SEARCH), QLineEdit.LeadingPosition
+        )
         self.lineFilter.textChanged.connect(self._filter_channels)
 
     def _setup_node_creation_buttons(self):

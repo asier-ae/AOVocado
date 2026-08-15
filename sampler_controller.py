@@ -11,7 +11,6 @@ Author: Asier Aparicio
 
 from . import live_sampler, logger, utils
 from ._vendor.Qt.QtCore import Qt
-from ._vendor.Qt.QtGui import QIcon
 from ._vendor.Qt.QtWidgets import QMessageBox
 
 _log = logger.get_logger(__name__)
@@ -100,7 +99,7 @@ class SamplerController:
         panel.lineFilter.setEnabled(False)
         panel.sp_sampler_thresh.setVisible(True)
         panel.b_live_sampler.setStyleSheet("background-color: green;")
-        panel.b_live_sampler.setIcon(QIcon(panel.settings.ICON_SAMPLE_WHITE))
+        panel.b_live_sampler.setIcon(utils.load_icon(panel.settings.ICON_SAMPLE_WHITE))
         panel.b_live_sampler.setToolTip("Stop live channel filter")
 
     def _on_sampling_stopped(self, prev_selection_names, prev_channel):
@@ -115,7 +114,7 @@ class SamplerController:
         panel.lineFilter.setEnabled(True)
         panel.sp_sampler_thresh.setVisible(False)
         panel.b_live_sampler.setStyleSheet("")
-        panel.b_live_sampler.setIcon(QIcon(panel.settings.ICON_SAMPLE))
+        panel.b_live_sampler.setIcon(utils.load_icon(panel.settings.ICON_SAMPLE))
         panel.b_live_sampler.setToolTip(
             "Start viewer sampler. This will filter the channels.\n"
             "Just Ctrl+click on the image"

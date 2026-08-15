@@ -10,7 +10,7 @@ from functools import wraps
 import nuke
 
 from ._vendor.Qt.QtCore import QSize
-from ._vendor.Qt.QtGui import QCursor, QIcon
+from ._vendor.Qt.QtGui import QColor, QCursor, QIcon, QPainter, QPixmap
 from ._vendor.Qt.QtWidgets import QApplication
 
 # Shared square icon size (pixels) for every icon-only button - all of
@@ -19,6 +19,41 @@ from ._vendor.Qt.QtWidgets import QApplication
 # visual size; the icons themselves also all have consistent padding
 # baked in for the same reason (see icons/ generation notes).
 STANDARD_ICON_SIZE = 25
+
+# 85% white - every icon in this app is tinted to this via load_icon()
+# rather than baked into the PNG files, so the source assets stay pure
+# white/full quality and this stays one tunable value.
+STANDARD_ICON_TINT = QColor(217, 217, 217)
+
+
+def load_icon(icon_path, tint=STANDARD_ICON_TINT):
+    """Loads an icon file and recolors it to `tint`, preserving its alpha shape.
+
+    Draws the icon, then fills everywhere it drew something with `tint`
+    (`QPainter.CompositionMode_SourceIn` only paints inside existing
+    alpha) - so the icon's silhouette/antialiasing is unchanged, just its
+    color.
+
+    Args:
+        icon_path (str): Path to the icon image (expected: solid white on
+            transparent, like everything in `icons/`).
+        tint (QColor, optional): Color to recolor the icon to. Defaults to
+            `STANDARD_ICON_TINT`.
+
+    Returns:
+        QIcon: The tinted icon.
+    """
+    source = QPixmap(icon_path)
+    tinted = QPixmap(source.size())
+    tinted.fill(QColor(0, 0, 0, 0))
+
+    painter = QPainter(tinted)
+    painter.drawPixmap(0, 0, source)
+    painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+    painter.fillRect(tinted.rect(), tint)
+    painter.end()
+
+    return QIcon(tinted)
 
 # Nuke writes each top-level node in a .nk file as an unindented
 # "SomeClass {" block; nested/internal nodes (e.g. inside a Group) are
@@ -129,7 +164,7 @@ def set_button_icon(button, icon_path, size=STANDARD_ICON_SIZE, tooltip=None):
             existing tooltip (e.g. one already set in the `.ui` file).
     """
     button.setText("")
-    button.setIcon(QIcon(icon_path))
+    button.setIcon(load_icon(icon_path))
     button.setIconSize(QSize(size, size))
     if tooltip is not None:
         button.setToolTip(tooltip)
@@ -183,8 +218,8 @@ def update_mode_button_visuals(button, icon_h_path, icon_v_path, size=STANDARD_I
     """
     button.setIconSize(QSize(size, size))
     if button.isChecked():
-        button.setIcon(QIcon(icon_h_path))
+        button.setIcon(load_icon(icon_h_path))
         button.setToolTip("Creating nodes in a horizontal stack")
     else:
-        button.setIcon(QIcon(icon_v_path))
+        button.setIcon(load_icon(icon_v_path))
         button.setToolTip("Creating nodes in a vertical stack")
