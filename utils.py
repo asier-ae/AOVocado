@@ -18,7 +18,7 @@ from ._vendor.Qt.QtWidgets import QApplication
 # call site picking its own number, is what keeps every icon the same
 # visual size; the icons themselves also all have consistent padding
 # baked in for the same reason (see icons/ generation notes).
-STANDARD_ICON_SIZE = 25
+STANDARD_ICON_SIZE = 30
 
 # 85% white - every icon in this app is tinted to this via load_icon()
 # rather than baked into the PNG files, so the source assets stay pure
@@ -54,6 +54,7 @@ def load_icon(icon_path, tint=STANDARD_ICON_TINT):
     painter.end()
 
     return QIcon(tinted)
+
 
 # Nuke writes each top-level node in a .nk file as an unindented
 # "SomeClass {" block; nested/internal nodes (e.g. inside a Group) are
@@ -201,7 +202,9 @@ def validate_toolset_path(path):
     return None
 
 
-def update_mode_button_visuals(button, icon_h_path, icon_v_path, size=STANDARD_ICON_SIZE):
+def update_mode_button_visuals(
+    button, icon_h_path, icon_v_path, size=STANDARD_ICON_SIZE
+):
     """Sets a checkable mode button's icon/tooltip to match its checked state.
 
     Shared between `AOVocado.py`'s per-button mode toggles (b1_mode..b4_mode)
