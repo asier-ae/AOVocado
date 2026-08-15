@@ -130,11 +130,11 @@ def set_button_icon(button, icon_path, size=None, tooltip=None):
 def validate_toolset_path(path):
     """Checks whether `path` is a usable single-node toolset/group file.
 
-    A toolset must resolve to exactly one top-level node when pasted
-    (via `nuke.nodePaste()`), since that's the one node a channel's knob
+    A toolset must resolve to exactly one top-level node when loaded
+    (via `nuke.loadToolset()`), since that's the one node a channel's knob
     gets set on - same constraint a single Gizmo/Group already satisfies
     when creating nodes by class. Checked by scanning the file as text
-    rather than pasting it into the live script - see `node_creation.py`.
+    rather than loading it into the live script - see `node_creation.py`.
 
     Args:
         path (str): Path to the .nk file to check.

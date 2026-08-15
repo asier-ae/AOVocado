@@ -147,6 +147,6 @@
         "cfg_rs_spb_v_sep_grade": 40,
         "cfg_sp_sampler_threshold": 0.005,
         "cfg_main_h_sep": 100,
-        "cfg_main_v_sep": 100
+        "cfg_main_v_sep": 50
     }
 }

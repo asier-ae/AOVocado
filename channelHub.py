@@ -606,7 +606,6 @@ class ChannelHub(QMainWindow):
                 node_knob,
                 channel_names,
                 user_settings["cfg_main_h_sep"],
-                user_settings["cfg_main_v_sep"],
                 source=node_source,
             )
         else:

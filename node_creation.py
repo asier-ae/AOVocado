@@ -1,14 +1,18 @@
 """Creates Nuke nodes from selected channels.
 
-Two layouts: a vertical stack (each node chained onto the previous one,
-relying on Nuke's default `createNode()` auto-connect behavior) and a
-horizontal row (each node branching independently off one shared Dot, which
-needs manual positioning/wiring since that's not what auto-connect gives you).
+Two layouts: a vertical stack (each node connected to the previous one via
+Nuke's own auto-connect, with Y position explicitly offset from the
+previous node - see `create_node_vertical()` for why) and a horizontal row
+(each node branching independently off one shared Dot, which needs manual
+positioning/wiring since that's not what auto-connect gives you).
 
 Each node can come from either a registered node class (`SOURCE_CLASS`,
-e.g. "Shuffle2") or a standalone toolset/group `.nk` file pasted in via
-`nuke.nodePaste()` (`SOURCE_TOOLSET`) - see `utils.validate_toolset_path()`
-for the constraint a toolset file must satisfy.
+e.g. "Shuffle2") or a standalone toolset/group `.nk` file loaded via
+`nuke.loadToolset()` (`SOURCE_TOOLSET`) - see `utils.validate_toolset_path()`
+for the constraint a toolset file must satisfy. `loadToolset()` has the
+same auto-connect-to-selection/auto-position/auto-reselect behavior as
+`createNode()` (confirmed empirically - it isn't documented), so toolset
+nodes need no more manual positioning than class-based ones do.
 
 Author: Asier Aparicio
 """
@@ -24,29 +28,40 @@ _log = logger.get_logger(__name__)
 SOURCE_CLASS = "Node class"
 SOURCE_TOOLSET = "Nuke script path"
 
+# Vertical gap between the Dot's actual bottom edge and its row of nodes in
+# create_nodes_horizontal(). Fixed rather than user-configurable - this
+# spacing has never needed to be tunable independently of node-to-node
+# spacing (cfg_main_v_sep, used by create_node_vertical() instead).
+_HORIZONTAL_DOT_V_SEP = 100
 
-def _paste_toolset_node(path, node_knob, channel_name):
-    """Pastes a toolset/group file and configures the resulting node.
+
+def _load_toolset_node(path, node_knob, channel_name):
+    """Loads a toolset/group file and configures the resulting node.
+
+    No manual deselect/reselect around `nuke.loadToolset()` - confirmed by
+    testing in Nuke that it already deselects everything and selects just
+    the node it created, whether or not anything was selected going in
+    (and, if something was, connects/positions the new node below it,
+    same as `nuke.createNode()`'s own auto-connect).
 
     Args:
-        path (str): Path to the .nk file to paste.
-        node_knob (str): The knob on the pasted node to set with the channel name.
+        path (str): Path to the .nk file to load.
+        node_knob (str): The knob on the resulting node to set with the channel name.
         channel_name (str): The channel name to set on `node_knob`.
 
     Returns:
-        nuke.Node: The single node the toolset pasted in.
+        nuke.Node: The single node the toolset created.
 
     Raises:
-        ValueError: If the file didn't paste in exactly one top-level node
+        ValueError: If the file didn't create exactly one top-level node
             - a defensive re-check, since `utils.validate_toolset_path()`
             should already have caught this before this is ever called.
     """
-    utils.deselect_all_nodes()
-    nuke.nodePaste(path)
+    nuke.loadToolset(path)
     pasted_nodes = nuke.selectedNodes()
     if len(pasted_nodes) != 1:
         raise ValueError(
-            f"Toolset pasted {len(pasted_nodes)} top-level nodes (expected 1): {path}"
+            f"Toolset created {len(pasted_nodes)} top-level nodes (expected 1): {path}"
         )
     node = pasted_nodes[0]
     node[node_knob].setValue(channel_name)
@@ -67,40 +82,39 @@ def _create_one_node(source, node_class_or_path, node_knob, channel_name):
         nuke.Node: The created/pasted node.
     """
     if source == SOURCE_TOOLSET:
-        return _paste_toolset_node(node_class_or_path, node_knob, channel_name)
+        return _load_toolset_node(node_class_or_path, node_knob, channel_name)
     node = nuke.createNode(node_class_or_path, inpanel=False)
     node[node_knob].setValue(channel_name)
     return node
 
 
 @utils.undo_block
-def create_node_vertical(
-    node_class, node_knob, channel_names, source=SOURCE_CLASS, v_sep=None
-):
-    """Creates one node per channel, each chained below the previous one.
+def create_node_vertical(node_class, node_knob, channel_names, source=SOURCE_CLASS, v_sep=0):
+    """Creates one node per channel, each positioned below the previous one.
 
-    For SOURCE_CLASS, relies entirely on Nuke's default `createNode()`
-    behavior (auto-connect to the current selection, auto-position below
-    it) rather than setting positions explicitly - that default behavior
-    already produces exactly the vertical stack this is named for, chained
-    onto whatever node was selected in the graph before this was called.
-
-    For SOURCE_TOOLSET, `nuke.nodePaste()` doesn't have that same
-    auto-connect/auto-position behavior, so each pasted node is explicitly
-    connected to and positioned below the previous one instead (starting
-    from whatever was selected before this was called, if exactly one node
-    was) - manual chaining, mirroring the pattern `create_nodes_horizontal()`
-    already uses for its Dot-branch children.
+    Connection and X position still come entirely from Nuke's own
+    auto-connect (`nuke.createNode()` for SOURCE_CLASS, `nuke.loadToolset()`
+    for SOURCE_TOOLSET - both chain onto whatever's selected the same way)
+    - that part was never the problem. Y position is explicitly overridden
+    for every node after the first, as a flat offset from the previous
+    node's own Y: `nuke.loadToolset()`'s auto-position can end up using a
+    node's height from *before* its channel knob (and often a label tied
+    to it) was set, since nothing forces a redraw between one node's
+    creation and the next one's auto-position calculation in a tight
+    Python loop - a Group whose box grows once configured would then
+    overlap the next node, positioned assuming the smaller, pre-configure
+    size. A fixed per-node offset sidesteps this instead of chasing the
+    timing issue - no width/height queries, nothing X-related touched.
 
     Args:
         node_class (str): The Nuke node class to create (SOURCE_CLASS) or
-            the toolset .nk path to paste (SOURCE_TOOLSET).
+            the toolset .nk path to load (SOURCE_TOOLSET).
         node_knob (str): The knob on each created node to set with its channel name.
         channel_names (list[str]): Channel names to create one node per, in order.
         source (str, optional): SOURCE_CLASS or SOURCE_TOOLSET. Defaults to
             SOURCE_CLASS.
-        v_sep (int, optional): Vertical pixel gap between chained toolset
-            nodes. Only used for SOURCE_TOOLSET.
+        v_sep (int, optional): Vertical pixel gap from one node's Y
+            position to the next's. Defaults to 0.
     """
     _log.debug(
         "create_node_vertical: source=%s class=%s channels=%s",
@@ -109,34 +123,21 @@ def create_node_vertical(
         len(channel_names),
     )
     created_nodes = []
-
-    if source == SOURCE_TOOLSET:
-        anchor_nodes = nuke.selectedNodes()
-        anchor = anchor_nodes[0] if len(anchor_nodes) == 1 else None
-        for channel in channel_names:
-            node = _paste_toolset_node(node_class, node_knob, channel)
-            if anchor is not None:
-                anchor_x, anchor_y = int(anchor["xpos"].value()), int(anchor["ypos"].value())
-                node_x = anchor_x + anchor.screenWidth() // 2 - node.screenWidth() // 2
-                node_y = anchor_y + anchor.screenHeight() + v_sep
-                node.setXYpos(node_x, node_y)
-                node.connectInput(0, anchor)
-            anchor = node
-            created_nodes.append(node)
-    else:
-        for channel in channel_names:
-            node = nuke.createNode(node_class, inpanel=False)
-            node[node_knob].setValue(channel)
-            created_nodes.append(node)
+    previous_node = None
+    for channel in channel_names:
+        node = _create_one_node(source, node_class, node_knob, channel)
+        if previous_node is not None:
+            prev_y = int(previous_node["ypos"].value())
+            node["ypos"].setValue(prev_y + v_sep)
+        previous_node = node
+        created_nodes.append(node)
 
     for node in created_nodes:
         node["selected"].setValue(True)
 
 
 @utils.undo_block
-def create_nodes_horizontal(
-    node_class, node_knob, channel_names, h_sep, v_sep, source=SOURCE_CLASS
-):
+def create_nodes_horizontal(node_class, node_knob, channel_names, h_sep, source=SOURCE_CLASS):
     """Creates one node per channel in a horizontal row branching off a Dot.
 
     Args:
@@ -145,8 +146,6 @@ def create_nodes_horizontal(
         node_knob (str): The knob on each created node to set with its channel name.
         channel_names (list[str]): Channel names to create one node per, in order.
         h_sep (int): Horizontal pixel spacing between adjacent nodes in the row.
-        v_sep (int): Vertical pixel gap between the Dot's actual bottom edge
-            and the node row (not from the Dot's xpos/ypos corner).
         source (str, optional): SOURCE_CLASS or SOURCE_TOOLSET. Defaults to
             SOURCE_CLASS. Only the node-creation step itself differs -
             positioning/wiring below already applies to either source.
@@ -176,7 +175,7 @@ def create_nodes_horizontal(
     utils.deselect_all_nodes()
 
     created_nodes = [dot]
-    node_ypos = dot_y + dot_height + v_sep
+    node_ypos = dot_y + dot_height + _HORIZONTAL_DOT_V_SEP
     node_xpos = None
     for channel in channel_names:
         node = _create_one_node(source, node_class, node_knob, channel)

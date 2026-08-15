@@ -8,7 +8,7 @@ node-creation buttons/spacing, the live sampler threshold
 Author: Asier Aparicio
 """
 
-from . import config, logger, node_creation, preferences, utils
+from . import config, logger, node_creation, preferences, tooltips, utils
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import Qt
 from ._vendor.Qt.QtGui import QKeySequence
@@ -57,6 +57,7 @@ class SettingsWindow(QMainWindow):
         self.setWindowTitle("channelHub Settings")
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_DeleteOnClose)
+        tooltips.apply_tooltips(self)
 
     def _setup_mode_buttons(self):
         """Configures the 4 mode-toggle buttons' icon and text."""
