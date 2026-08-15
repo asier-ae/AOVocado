@@ -89,7 +89,9 @@ def _create_one_node(source, node_class_or_path, node_knob, channel_name):
 
 
 @utils.undo_block
-def create_node_vertical(node_class, node_knob, channel_names, source=SOURCE_CLASS, v_sep=0):
+def create_node_vertical(
+    node_class, node_knob, channel_names, source=SOURCE_CLASS, v_sep=0
+):
     """Creates one node per channel, each positioned below the previous one.
 
     Connection and X position still come entirely from Nuke's own
@@ -128,7 +130,8 @@ def create_node_vertical(node_class, node_knob, channel_names, source=SOURCE_CLA
         node = _create_one_node(source, node_class, node_knob, channel)
         if previous_node is not None:
             prev_y = int(previous_node["ypos"].value())
-            node["ypos"].setValue(prev_y + v_sep)
+            # node["ypos"].setValue(prev_y + v_sep)
+            node.setXYpos(int(previous_node.xpos()), int(prev_y + v_sep))
         previous_node = node
         created_nodes.append(node)
 
@@ -137,7 +140,9 @@ def create_node_vertical(node_class, node_knob, channel_names, source=SOURCE_CLA
 
 
 @utils.undo_block
-def create_nodes_horizontal(node_class, node_knob, channel_names, h_sep, source=SOURCE_CLASS):
+def create_nodes_horizontal(
+    node_class, node_knob, channel_names, h_sep, source=SOURCE_CLASS
+):
     """Creates one node per channel in a horizontal row branching off a Dot.
 
     Args:
