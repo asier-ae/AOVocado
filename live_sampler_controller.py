@@ -1,9 +1,9 @@
-"""Wires a ChannelHub panel to a LiveSampler instance.
+"""Wires an AOVocado panel to a LiveSampler instance.
 
 Owns the LiveSampler, sets up the sampler button and threshold spinbox on
 the panel, and reacts to the sampler's signals to update the panel's
 widgets (filtering the channel lists to detected channels, restoring state
-when sampling stops). Kept separate from channelHub.py since this is a
+when sampling stops). Kept separate from AOVocado.py since this is a
 self-contained feature with a fair amount of UI-reaction logic of its own.
 
 Author: Asier Aparicio
@@ -17,10 +17,10 @@ _log = logger.get_logger(__name__)
 
 
 class SamplerController:
-    """Connects a ChannelHub panel's sampler UI to a LiveSampler.
+    """Connects an AOVocado panel's sampler UI to a LiveSampler.
 
     Attributes:
-        panel (channelHub.ChannelHub): The panel this is wired to.
+        panel (AOVocado.AOVocado): The panel this is wired to.
         live_sampler (live_sampler.LiveSampler): The sampling state machine.
     """
 
@@ -28,7 +28,7 @@ class SamplerController:
         """Builds the LiveSampler and wires up the panel's sampler widgets.
 
         Args:
-            panel (channelHub.ChannelHub): The panel to control. Must expose
+            panel (AOVocado.AOVocado): The panel to control. Must expose
                 `b_live_sampler`, `sp_sampler_thresh`, `lineFilter`,
                 `list_widgets`, `channel_groups`, `all_selected_items`,
                 `viewer_manager`, and `settings`.

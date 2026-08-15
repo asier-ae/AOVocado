@@ -1,6 +1,6 @@
-"""Application settings for channelHub.
+"""Application settings for AOVocado.
 
-Loads `channelHub_global_settings.json` (plus an optional user-override
+Loads `AOVocado_global_settings.json` (plus an optional user-override
 file) and exposes its values as attributes on a single `Settings` object,
 along with a couple of derived display strings.
 
@@ -19,16 +19,16 @@ MAIN_FOLDER_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 class Settings:
-    """Loads and exposes channelHub's configuration.
+    """Loads and exposes AOVocado's configuration.
 
     Settings come from two layered JSON files:
 
-    - The base file, `channelHub_global_settings.json`, ships with the tool
+    - The base file, `AOVocado_global_settings.json`, ships with the tool
       (next to this module) and is never written to by the tool itself.
-    - An optional user-override file, `~/.nuke/channelHub_user_settings.json`
+    - An optional user-override file, `~/.nuke/AOVocado_user_settings.json`
       (deliberately outside this repo, directly under the Nuke prefs root -
-      not `~/.nuke/python/channelHub/`, so it survives a reinstall of the
-      tool itself, and is prefixed `channelHub_` since `~/.nuke/` is shared
+      not `~/.nuke/python/AOVocado/`, so it survives a reinstall of the
+      tool itself, and is prefixed `AOVocado_` since `~/.nuke/` is shared
       with the user's other tools). If present, its `user_settings` keys are
       shallow-merged on top of the base file's `user_settings` block - keys
       it doesn't mention keep falling back to the base file's values. Only
@@ -45,7 +45,7 @@ class Settings:
         USER_SETTINGS_PATH (str): Path to the user-override JSON file (see above).
         my_settings (dict): The parsed base settings, with any user-override
             `user_settings` values merged in.
-        CHANNELHUB_VERSION (str): Current tool version, shown in the panel.
+        AOVOCADO_VERSION (str): Current tool version, shown in the panel.
         AUTHOR (str): Tool author, shown in the panel.
         HOTKEY (str): Keyboard shortcut that opens/closes the panel.
             Editable via the Settings window's `cfg_hotkey` key-capture
@@ -93,17 +93,17 @@ class Settings:
                 users won't have customized anything yet) and its absence is
                 not an error.
         """
-        self.CHANNELHUB_VERSION = "0.5"
+        self.AOVOCADO_VERSION = "0.5"
         self.AUTHOR = "Asier Aparicio"
         base_filepath = os.path.join(
-            MAIN_FOLDER_PATH, "channelHub_global_settings.json"
+            MAIN_FOLDER_PATH, "AOVocado_global_settings.json"
         )
-        self.UI_PATH = os.path.join(MAIN_FOLDER_PATH, "ui_files", "channelHubUI.ui")
+        self.UI_PATH = os.path.join(MAIN_FOLDER_PATH, "ui_files", "AOVocadoUI.ui")
         self.PREFERENCES_UI_PATH = os.path.join(
             MAIN_FOLDER_PATH, "ui_files", "preferencesUI.ui"
         )
         self.USER_SETTINGS_PATH = os.path.join(
-            os.path.expanduser("~"), ".nuke", "channelHub_user_settings.json"
+            os.path.expanduser("~"), ".nuke", "AOVocado_user_settings.json"
         )
 
         self.my_settings = self.load_settings(base_filepath)
@@ -160,7 +160,7 @@ class Settings:
 
         Base keys (not `user_settings`) - no Settings-window widget backs
         these, see the `BACKDROP_*_COMMENT` entries in
-        `channelHub_global_settings.json` for what each one controls.
+        `AOVocado_global_settings.json` for what each one controls.
         """
         self.BACKDROP_TILE_COLOR = self.my_settings["BACKDROP_TILE_COLOR"]
         self.BACKDROP_APPEARANCE = self.my_settings["BACKDROP_APPEARANCE"]
@@ -206,9 +206,9 @@ class Settings:
         """Builds the version/author line shown in the panel's bottom bar.
 
         Returns:
-            str: e.g. "channelHub v0.5, Asier Aparicio".
+            str: e.g. "AOVocado v0.5, Asier Aparicio".
         """
-        return f"channelHub v{self.CHANNELHUB_VERSION}, {self.AUTHOR}"
+        return f"AOVocado v{self.AOVOCADO_VERSION}, {self.AUTHOR}"
 
     def get_hotkey_line(self):
         """Builds the hotkey hint line shown in the panel's bottom bar.

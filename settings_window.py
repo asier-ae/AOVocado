@@ -1,4 +1,4 @@
-"""The Settings window for channelHub.
+"""The Settings window for AOVocado.
 
 Loads `ui_files/preferencesUI.ui` and wires it to the generic load/save/
 restore functions in `settings_io.py`. Every field here is functional -
@@ -18,9 +18,9 @@ _log = logger.get_logger(__name__)
 
 
 class SettingsWindow(QMainWindow):
-    """A standalone window for editing and persisting channelHub's preferences.
+    """A standalone window for editing and persisting AOVocado's preferences.
 
-    `channelHub.py`'s `_on_show_settings` closes the main panel when opening
+    `AOVocado.py`'s `_on_show_settings` closes the main panel when opening
     this window, rather than leaving both open - the main panel reads
     settings once at construction, so it wouldn't reflect any changes made
     here until reopened anyway.
@@ -30,7 +30,7 @@ class SettingsWindow(QMainWindow):
     """
 
     # Object names of the 4 node-creation mode toggle buttons in
-    # preferencesUI.ui - the settings-window equivalent of channelHub.py's
+    # preferencesUI.ui - the settings-window equivalent of AOVocado.py's
     # b1_mode..b4_mode, but these set the *persisted default* rather than
     # the live in-session mode.
     MODE_BUTTONS = [
@@ -54,7 +54,7 @@ class SettingsWindow(QMainWindow):
     def _setup_window(self):
         """Loads the UI file and configures the window's properties."""
         loadUi(self.settings.PREFERENCES_UI_PATH, self)
-        self.setWindowTitle("channelHub Settings")
+        self.setWindowTitle("AOVocado Settings")
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_DeleteOnClose)
         settings_tooltips.apply_tooltips(self)
@@ -95,7 +95,7 @@ class SettingsWindow(QMainWindow):
         """Keeps the hotkey field to a single key combo, not a multi-chord sequence.
 
         QKeySequenceEdit accepts up to 4 chained key presses by default
-        (e.g. "Ctrl+K, Ctrl+D") - channelHub/Nuke hotkeys are always a
+        (e.g. "Ctrl+K, Ctrl+D") - AOVocado/Nuke hotkeys are always a
         single combo, so anything past the first chord is dropped
         immediately. String-based rather than indexing into the
         QKeySequence, since that API differs between the Qt5/Qt6 bindings

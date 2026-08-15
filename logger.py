@@ -1,14 +1,14 @@
-"""Debug logging for channelHub.
+"""Debug logging for AOVocado.
 
 Silent by default (WARNING and above only, to the terminal). Set the
-CHANNELHUB_DEBUG environment variable to any non-empty value *before*
+AOVOCADO_DEBUG environment variable to any non-empty value *before*
 launching Nuke to enable DEBUG-level output - printed to the
 terminal/Script Editor, and also written to
-~/.nuke/channelHub_debug.log so it's still available if the terminal
+~/.nuke/AOVocado_debug.log so it's still available if the terminal
 that launched Nuke isn't visible/accessible (e.g. launched from a
 pipeline tool or desktop shortcut).
 
-    export CHANNELHUB_DEBUG=1
+    export AOVOCADO_DEBUG=1
     nuke
 
 Author: Asier Aparicio
@@ -17,19 +17,19 @@ Author: Asier Aparicio
 import logging
 import os
 
-_DEBUG_ENV_VAR = "CHANNELHUB_DEBUG"
+_DEBUG_ENV_VAR = "AOVOCADO_DEBUG"
 _LOG_FILE_PATH = os.path.join(
-    os.path.expanduser("~"), ".nuke", "channelHub_debug.log"
+    os.path.expanduser("~"), ".nuke", "AOVocado_debug.log"
 )
 
 _debug_enabled = bool(os.environ.get(_DEBUG_ENV_VAR))
 
-_logger = logging.getLogger("channelHub")
+_logger = logging.getLogger("AOVocado")
 _logger.setLevel(logging.DEBUG if _debug_enabled else logging.WARNING)
 _logger.propagate = False
 
 _formatter = logging.Formatter(
-    "[channelHub] %(asctime)s %(levelname)s %(name)s: %(message)s",
+    "[AOVocado] %(asctime)s %(levelname)s %(name)s: %(message)s",
     datefmt="%H:%M:%S",
 )
 
@@ -45,14 +45,14 @@ if _debug_enabled:
 
 
 def get_logger(name):
-    """Returns a channelHub logger for the given module.
+    """Returns an AOVocado logger for the given module.
 
     Args:
         name (str): The calling module's `__name__`.
 
     Returns:
-        logging.Logger: A logger under the shared "channelHub" hierarchy -
-            active at DEBUG level if CHANNELHUB_DEBUG was set in the
+        logging.Logger: A logger under the shared "AOVocado" hierarchy -
+            active at DEBUG level if AOVOCADO_DEBUG was set in the
             environment when Nuke started, WARNING level otherwise.
     """
     return logging.getLogger(name)

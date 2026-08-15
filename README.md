@@ -1,4 +1,4 @@
-# channelHub
+# AOVocado
 
 A Nuke panel for browsing, categorizing, and viewing render channels/AOVs
 in the Viewer.
@@ -25,14 +25,14 @@ in the Viewer.
 ## Installation
 
 Copy this folder into a location on your `NUKE_PATH` (e.g.
-`~/.nuke/python/channelHub`), then add to your `menu.py`:
+`~/.nuke/python/AOVocado`), then add to your `menu.py`:
 
 ```python
-import channelHub
+import AOVocado
 ```
 
-That's it — on import, channelHub registers itself under
-**Edit > channelHub > Open ChannelHub**, with a hotkey (default `` Ctrl+` ``).
+That's it — on import, AOVocado registers itself under
+**Edit > AOVocado > Open AOVocado**, with a hotkey (default `` Ctrl+` ``).
 
 ## Usage
 
@@ -44,23 +44,23 @@ the hotkey or the menu entry. The same hotkey closes it again.
 Open the Settings window (gear icon in the panel) to configure the
 node-creation buttons, node spacing, and the live sampler's threshold.
 Channel grouping rules and the hotkey are set in
-`channelHub_global_settings.json`.
+`AOVocado_global_settings.json`.
 
 ## Debug logging
 
 Debug logging is silent by default. To enable it, set the
-`CHANNELHUB_DEBUG` environment variable to any non-empty value *before*
+`AOVOCADO_DEBUG` environment variable to any non-empty value *before*
 launching Nuke:
 
 ```bash
-export CHANNELHUB_DEBUG=1
+export AOVOCADO_DEBUG=1
 nuke
 ```
 
 With it enabled, DEBUG-level trace for panel lifecycle, settings, channel
 population, node/rebuild creation, viewer reloads, and the live sampler is
 printed to the terminal/Script Editor, and also written to
-`~/.nuke/channelHub_debug.log` (useful if Nuke was launched from somewhere
+`~/.nuke/AOVocado_debug.log` (useful if Nuke was launched from somewhere
 without a visible terminal, e.g. a pipeline tool or desktop shortcut).
 
 ## Author

@@ -1,4 +1,4 @@
-"""Small standalone helpers shared across channelHub's UI modules.
+"""Small standalone helpers shared across AOVocado's UI modules.
 
 Author: Asier Aparicio
 """
@@ -107,7 +107,7 @@ def undo_block(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        nuke.Undo.begin("channelHub function undo")
+        nuke.Undo.begin("AOVocado function undo")
         try:
             return func(*args, **kwargs)
         finally:
@@ -204,7 +204,7 @@ def validate_toolset_path(path):
 def update_mode_button_visuals(button, icon_h_path, icon_v_path, size=STANDARD_ICON_SIZE):
     """Sets a checkable mode button's icon/tooltip to match its checked state.
 
-    Shared between `channelHub.py`'s per-button mode toggles (b1_mode..b4_mode)
+    Shared between `AOVocado.py`'s per-button mode toggles (b1_mode..b4_mode)
     and `settings_window.py`'s equivalents (BUTTON1_ICONMODE..BUTTON4_ICONMODE)
     - both use the same checked-means-horizontal convention.
 

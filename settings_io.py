@@ -5,7 +5,7 @@ in `preferencesUI.ui` is assumed to correspond to the JSON key
 "cfg_main_h_sep" in `user_settings`, with no per-field mapping code needed.
 This is deliberate: it means adding a new preference is just adding a widget
 to the .ui with a matching object name and a default value in
-`channelHub_global_settings.json` - nothing in this file needs to change.
+`AOVocado_global_settings.json` - nothing in this file needs to change.
 
 Author: Asier Aparicio
 """

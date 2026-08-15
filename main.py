@@ -1,4 +1,4 @@
-"""Entry point for opening/closing the channelHub panel.
+"""Entry point for opening/closing the AOVocado panel.
 
 Author: Asier Aparicio
 """
@@ -6,19 +6,19 @@ Author: Asier Aparicio
 import nuke
 
 from . import constants, logger, utils
-from .channelHub import ChannelHub
+from .AOVocado import AOVocado
 
 _log = logger.get_logger(__name__)
 
 
 def run():
-    """Opens the channelHub panel, or closes it if already open.
+    """Opens the AOVocado panel, or closes it if already open.
 
     Intended to be called from a Nuke menu command/hotkey. Guards on having
     a Viewer with a connected input, since ChannelManager needs a valid
     viewer input node to collect channels from.
 
-    channelHub isn't a native Nuke panel/pane, so there's no built-in
+    AOVocado isn't a native Nuke panel/pane, so there's no built-in
     open/closed state to query. Instead, "is it open" is tracked via a
     dynamic `nuke.<NUKE_PANEL_NAME>` attribute, and closing is done via
     `utils.find_window_by_title()` - there's no persistent Python reference
@@ -34,7 +34,7 @@ def run():
             constants.MIN_NUKE_VERSION,
         )
         nuke.message(
-            f"channelHub requires Nuke {constants.MIN_NUKE_VERSION}+ "
+            f"AOVocado requires Nuke {constants.MIN_NUKE_VERSION}+ "
             f"(this is Nuke {nuke.NUKE_VERSION_MAJOR})."
         )
         return
@@ -58,6 +58,6 @@ def run():
     else:
         _log.debug("panel not open - creating")
         setattr(nuke, constants.NUKE_PANEL_NAME, True)
-        panel_instance = ChannelHub()
+        panel_instance = AOVocado()
         constants.GC_PROTECT.append(panel_instance)
         panel_instance.show()

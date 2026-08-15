@@ -850,7 +850,7 @@
          <string notr="true">color: rgb(94, 94, 94);</string>
         </property>
         <property name="text">
-         <string>channelHub, Asier Aparicio</string>
+         <string>AOVocado, Asier Aparicio</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

@@ -1,6 +1,6 @@
-"""The main panel window for channelHub.
+"""The main panel window for AOVocado.
 
-Defines `ChannelHub`, the floating Qt window that lists a viewer's channels
+Defines `AOVocado`, the floating Qt window that lists a viewer's channels
 across 4 configurable groups and lets an artist browse/select/view them.
 
 Author: Asier Aparicio
@@ -35,10 +35,10 @@ from .settings_window import SettingsWindow
 _log = logger.get_logger(__name__)
 
 
-class ChannelHub(QMainWindow):
-    """The channelHub panel window.
+class AOVocado(QMainWindow):
+    """The AOVocado panel window.
 
-    Loads its UI from `ui_files/channelHubUI.ui` and wires up channel
+    Loads its UI from `ui_files/AOVocadoUI.ui` and wires up channel
     population, selection/viewing, multi-select, and search filtering
     across the 4 channel-group list widgets, plus the 4 node-creation
     buttons and the settings button that opens `SettingsWindow`.
@@ -72,7 +72,7 @@ class ChannelHub(QMainWindow):
 
     def __init__(self):
         """Builds core components, loads the UI, and populates the panel."""
-        _log.debug("ChannelHub.__init__ starting")
+        _log.debug("AOVocado.__init__ starting")
         super().__init__()
         self.settings = config.Settings()
 
@@ -109,7 +109,7 @@ class ChannelHub(QMainWindow):
         self._select_current_viewer_channel()
 
         self.lineFilter.setFocus()
-        _log.debug("ChannelHub.__init__ complete")
+        _log.debug("AOVocado.__init__ complete")
 
     # --- Window setup ---
 
@@ -141,7 +141,7 @@ class ChannelHub(QMainWindow):
     def _setup_group_titles(self):
         """Sets the 4 group box titles from settings, not the .ui defaults.
 
-        channelHub_global_settings.json is the runtime source of truth for these
+        AOVocado_global_settings.json is the runtime source of truth for these
         titles - whatever text is baked into the .ui file is just a
         Designer placeholder.
         """

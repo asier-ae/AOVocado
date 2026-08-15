@@ -14,7 +14,7 @@ _log = logger.get_logger(__name__)
 # absolute import since Nuke runs this in its own scope, not as part of
 # this package. See ViewerManager.enable_reload_callback() and
 # viewer_updated() below.
-_RELOAD_CALLBACK_CODE = "from channelHub import viewer; viewer.viewer_updated()"
+_RELOAD_CALLBACK_CODE = "from AOVocado import viewer; viewer.viewer_updated()"
 
 
 class ViewerManager:
@@ -88,7 +88,7 @@ class ViewerManager:
     def enable_reload_callback():
         """Sets `viewer_updated()` as the active viewer's knobChanged callback.
 
-        Called by `ChannelHub._setup_viewer_callback()` so the panel reloads
+        Called by `AOVocado._setup_viewer_callback()` so the panel reloads
         when the viewer's connected input changes.
         """
         ViewerManager.add_callback(_RELOAD_CALLBACK_CODE)
