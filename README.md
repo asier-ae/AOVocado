@@ -66,3 +66,8 @@ without a visible terminal, e.g. a pipeline tool or desktop shortcut).
 ## Author
 
 Asier Aparicio
+
+## Third-party software
+
+This project includes Qt.py, which is licensed under the MIT License.
+See qt.py for its original copyright and license information.
