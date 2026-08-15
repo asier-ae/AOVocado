@@ -8,7 +8,7 @@ node-creation buttons/spacing, the live sampler threshold
 Author: Asier Aparicio
 """
 
-from . import config, logger, preferences, utils
+from . import config, logger, node_creation, preferences, utils
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import Qt
 from ._vendor.Qt.QtGui import QKeySequence
@@ -108,30 +108,78 @@ class SettingsWindow(QMainWindow):
         if first_chord != text:
             self.cfg_hotkey.setKeySequence(QKeySequence(first_chord))
 
+    def _validate_toolset_settings(self):
+        """Checks every button configured to paste a toolset has a usable path.
+
+        Returns:
+            list[str]: One message per BUTTON1..4 whose Source is set to
+                "Nuke script path" but whose path isn't currently a usable
+                single-node toolset (see `utils.validate_toolset_path()`).
+                Empty if everything's fine.
+        """
+        problems = []
+        for i in range(1, 5):
+            source = getattr(self, f"BUTTON{i}_SOURCE").currentText()
+            if source != node_creation.SOURCE_TOOLSET:
+                continue
+            path = getattr(self, f"BUTTON{i}_CLASS").text()
+            reason = utils.validate_toolset_path(path)
+            if reason:
+                title = getattr(self, f"BUTTON{i}_TITLE").text()
+                problems.append(f'BUTTON{i} ("{title}"): {reason}')
+        return problems
+
     def _save_preferences(self):
-        """Writes every preference widget's current value to the user-override file."""
+        """Writes every preference widget's current value to the user-override file.
+
+        Blocked (nothing written) if any button set to "Nuke script path"
+        doesn't currently point at a usable single-node toolset - see
+        `_validate_toolset_settings()`.
+
+        Returns:
+            bool: True if the save went through, False if it was blocked.
+        """
+        problems = self._validate_toolset_settings()
+        if problems:
+            _log.debug("save blocked: %s", problems)
+            QMessageBox.warning(
+                self,
+                "Invalid Toolset Path",
+                "Fix the following before saving:\n\n" + "\n".join(problems),
+            )
+            return False
+
         preferences.save_preferences(self, self.settings.USER_SETTINGS_PATH)
+        return True
 
     def _on_save_preferences(self):
-        """Saves preferences and confirms, without closing the window."""
+        """Saves preferences and confirms, without closing the window.
+
+        Returns:
+            bool: True if the save went through, False if it was blocked.
+        """
         _log.debug("Save Settings clicked")
-        self._save_preferences()
+        if not self._save_preferences():
+            return False
         QMessageBox.information(
             self,
             "Save Settings",
             f"Settings saved to:\n{self.settings.USER_SETTINGS_PATH}\n\n"
             "Changes will apply the next time the main panel is opened.",
         )
+        return True
 
     def _on_save_and_close(self):
-        """Saves preferences and closes the window.
+        """Saves preferences and closes the window, unless the save was blocked.
 
         No confirmation dialog here (unlike `_on_save_preferences`) - the
         window closing is itself the feedback that the save went through.
+        Stays open if the save was blocked, so an invalid toolset path can
+        be fixed and retried.
         """
         _log.debug("Save & Close clicked")
-        self._on_save_preferences()
-        self.close()
+        if self._on_save_preferences():
+            self.close()
 
     def _on_restore_preferences(self):
         """Deletes the user-override file and reloads defaults, after confirming."""

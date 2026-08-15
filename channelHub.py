@@ -23,7 +23,7 @@ from . import (
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import QEvent, Qt
 from ._vendor.Qt.QtGui import QKeySequence
-from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow
+from ._vendor.Qt.QtWidgets import QAbstractItemView, QMainWindow, QMessageBox
 from .settings_window import SettingsWindow
 
 _log = logger.get_logger(__name__)
@@ -558,7 +558,12 @@ class ChannelHub(QMainWindow):
         Reads the node class/knob and the corresponding mode toggle's
         checked state (horizontal vs vertical) from settings, keyed off
         which button (b1..b4) was clicked - e.g. clicking `b2` uses
-        `BUTTON2_CLASS`/`BUTTON2_KNOB`/`b2_mode`.
+        `BUTTON2_CLASS`/`BUTTON2_KNOB`/`b2_mode`. If the button's source is
+        a toolset path rather than a node class, the path is re-validated
+        here before creating anything - `settings_window.py` already
+        blocks saving an invalid one, but this catches the file having
+        changed on disk since it was saved, without partially creating
+        nodes for some channels and not others.
         """
         if not self.all_selected_items:
             return
@@ -570,6 +575,14 @@ class ChannelHub(QMainWindow):
         user_settings = self.settings.my_settings["user_settings"]
         node_class = user_settings[f"{prefix}_CLASS"]
         node_knob = user_settings[f"{prefix}_KNOB"]
+        node_source = user_settings[f"{prefix}_SOURCE"]
+
+        if node_source == node_creation.SOURCE_TOOLSET:
+            problem = utils.validate_toolset_path(node_class)
+            if problem:
+                _log.debug("_on_create_node_clicked: blocked - %s", problem)
+                QMessageBox.warning(self, "Invalid Toolset Path", problem)
+                return
 
         # Deduplicated, order preserved - all_selected_items can contain the
         # same channel twice if it somehow got selected in more than one list.
@@ -579,9 +592,10 @@ class ChannelHub(QMainWindow):
 
         mode = "horizontal" if mode_button.isChecked() else "vertical"
         _log.debug(
-            "_on_create_node_clicked: button=%s class=%s mode=%s channels=%s",
+            "_on_create_node_clicked: button=%s class=%s source=%s mode=%s channels=%s",
             sender_name,
             node_class,
+            node_source,
             mode,
             len(channel_names),
         )
@@ -593,9 +607,16 @@ class ChannelHub(QMainWindow):
                 channel_names,
                 user_settings["cfg_main_h_sep"],
                 user_settings["cfg_main_v_sep"],
+                source=node_source,
             )
         else:
-            node_creation.create_node_vertical(node_class, node_knob, channel_names)
+            node_creation.create_node_vertical(
+                node_class,
+                node_knob,
+                channel_names,
+                source=node_source,
+                v_sep=user_settings["cfg_main_v_sep"],
+            )
 
     def _on_split_subtractive_clicked(self):
         """Builds a subtractive rebuild network from the selected channels."""

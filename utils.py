@@ -3,6 +3,8 @@
 Author: Asier Aparicio
 """
 
+import os
+import re
 from functools import wraps
 
 import nuke
@@ -10,6 +12,12 @@ import nuke
 from ._vendor.Qt.QtCore import QSize
 from ._vendor.Qt.QtGui import QCursor, QIcon
 from ._vendor.Qt.QtWidgets import QApplication
+
+# Nuke writes each top-level node in a .nk file as an unindented
+# "SomeClass {" block; nested/internal nodes (e.g. inside a Group) are
+# indented. Matching only unindented lines counts top-level nodes without
+# needing to actually paste the file into the live script.
+_TOP_LEVEL_NODE_PATTERN = re.compile(r"^[A-Za-z_]\w*\s*\{")
 
 
 def _move_to_cursor(main_window):
@@ -117,6 +125,37 @@ def set_button_icon(button, icon_path, size=None, tooltip=None):
         button.setIconSize(QSize(size, size))
     if tooltip is not None:
         button.setToolTip(tooltip)
+
+
+def validate_toolset_path(path):
+    """Checks whether `path` is a usable single-node toolset/group file.
+
+    A toolset must resolve to exactly one top-level node when pasted
+    (via `nuke.nodePaste()`), since that's the one node a channel's knob
+    gets set on - same constraint a single Gizmo/Group already satisfies
+    when creating nodes by class. Checked by scanning the file as text
+    rather than pasting it into the live script - see `node_creation.py`.
+
+    Args:
+        path (str): Path to the .nk file to check.
+
+    Returns:
+        str or None: None if `path` is a usable single-node toolset,
+            otherwise a short human-readable reason it isn't.
+    """
+    if not path:
+        return "No path given."
+    if not os.path.isfile(path):
+        return f"File not found: {path}"
+
+    with open(path, "r", encoding="utf-8") as f:
+        top_level_count = sum(1 for line in f if _TOP_LEVEL_NODE_PATTERN.match(line))
+
+    if top_level_count == 0:
+        return f"No nodes found in: {path}"
+    if top_level_count > 1:
+        return f"Contains {top_level_count} nodes (expected exactly 1): {path}"
+    return None
 
 
 def update_mode_button_visuals(button, icon_h_path, icon_v_path):
