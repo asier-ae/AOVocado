@@ -1,8 +1,7 @@
 # Copyright (c) 2026 Asier Aparicio
 # Licensed under the MIT License.
 
-"""Small standalone helpers shared across AOVocado's UI modules.
-"""
+"""Small standalone helpers shared across AOVocado's UI modules."""
 
 import os
 import re
@@ -25,6 +24,10 @@ STANDARD_ICON_SIZE = 30
 # rather than baked into the PNG files, so the source assets stay pure
 # white/full quality and this stays one tunable value.
 STANDARD_ICON_TINT = QColor(217, 217, 217)
+
+# Green tint reserved for the avocado settings-button icon specifically -
+# every other icon uses STANDARD_ICON_TINT above.
+AVOCADO_ICON_TINT = QColor(217, 217, 217)
 
 
 def load_icon(icon_path, tint=STANDARD_ICON_TINT):
@@ -147,7 +150,9 @@ def copy_to_clipboard(text):
     QApplication.clipboard().setText(text)
 
 
-def set_button_icon(button, icon_path, size=STANDARD_ICON_SIZE, tooltip=None):
+def set_button_icon(
+    button, icon_path, size=STANDARD_ICON_SIZE, tooltip=None, tint=STANDARD_ICON_TINT
+):
     """Configures a button's static icon, clearing its placeholder text.
 
     Shared by every icon-only button's one-time setup (settings, copy,
@@ -164,9 +169,12 @@ def set_button_icon(button, icon_path, size=STANDARD_ICON_SIZE, tooltip=None):
             deliberately a different size than the rest.
         tooltip (str, optional): Tooltip text. Omit to leave the button's
             existing tooltip (e.g. one already set in the `.ui` file).
+        tint (QColor, optional): Color to recolor the icon to. Defaults to
+            `STANDARD_ICON_TINT`; pass e.g. `AVOCADO_ICON_TINT` for a
+            button that deliberately breaks from the standard grey.
     """
     button.setText("")
-    button.setIcon(load_icon(icon_path))
+    button.setIcon(load_icon(icon_path, tint=tint))
     button.setIconSize(QSize(size, size))
     if tooltip is not None:
         button.setToolTip(tooltip)

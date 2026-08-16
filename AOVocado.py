@@ -204,7 +204,9 @@ class AOVocado(QMainWindow):
 
     def _setup_settings_button(self):
         """Configures the settings button's icon and click handler."""
-        utils.set_button_icon(self.b_show_settings, self.settings.ICON_AVOCADO)
+        utils.set_button_icon(
+            self.b_show_settings, self.settings.ICON_AVOCADO, tint=utils.AVOCADO_ICON_TINT
+        )
         self.b_show_settings.clicked.connect(self._on_show_settings)
 
     def _setup_copy_button(self):
