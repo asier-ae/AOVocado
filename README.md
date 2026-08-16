@@ -24,8 +24,9 @@ in the Viewer.
 
 ## Installation
 
-Copy this folder into a location on your Nuke plugin path (e.g.
-`~/.nuke/AOVocado`), then add to your `menu.py`:
+Copy the inner `AOVocado/` folder (the one containing `__init__.py`) into a
+location on your Nuke plugin path (e.g. `~/.nuke/AOVocado`), then add to
+your `menu.py`:
 
 ```python
 import AOVocado
@@ -33,6 +34,15 @@ import AOVocado
 
 That's it — on import, AOVocado registers itself under
 **Edit > AOVocado > Open AOVocado**, with a hotkey (default `` Ctrl+` ``).
+
+If you're developing directly out of a cloned copy of this repo instead of
+copying the inner folder out, add the repo root itself to the plugin path
+before importing, since it now sits one level above the actual package:
+
+```python
+nuke.pluginAddPath("/path/to/cloned/AOVocado")
+import AOVocado
+```
 
 ## Usage
 
