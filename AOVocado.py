@@ -205,7 +205,9 @@ class AOVocado(QMainWindow):
     def _setup_settings_button(self):
         """Configures the settings button's icon and click handler."""
         utils.set_button_icon(
-            self.b_show_settings, self.settings.ICON_AVOCADO, tint=utils.AVOCADO_ICON_TINT
+            self.b_show_settings,
+            self.settings.ICON_AVOCADO,
+            tint=utils.AVOCADO_ICON_TINT,
         )
         self.b_show_settings.clicked.connect(self._on_show_settings)
 
@@ -220,7 +222,9 @@ class AOVocado(QMainWindow):
 
     def _setup_split_subtractive_button(self):
         """Configures the subtractive-rebuild button's icon and click handler."""
-        utils.set_button_icon(self.b_split_subtractive, self.settings.ICON_SPLIT_SUBTRACTIVE)
+        utils.set_button_icon(
+            self.b_split_subtractive, self.settings.ICON_SPLIT_SUBTRACTIVE
+        )
         self.b_split_subtractive.clicked.connect(self._on_split_subtractive_clicked)
 
     def _setup_sampler(self):
