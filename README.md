@@ -2,14 +2,12 @@
   <img src="icon.png" width="96" alt="AOVocado icon">
 </p>
 
-# AOVocado
+## AOVocado
 
 A Nuke panel for browsing, categorizing, and viewing render channels/AOVs
 in the Viewer.
 
-<p align="center">
-  <img width="648" height="732" alt="Screenshot 2026-08-16 at 1 35 53 pm" src="https://github.com/user-attachments/assets/9ac65a98-00aa-4866-97f8-409c9c4c5ec6" />
-</p>
+<img width="648" height="732" alt="Screenshot 2026-08-16 at 1 35 53 pm" src="https://github.com/user-attachments/assets/9ac65a98-00aa-4866-97f8-409c9c4c5ec6" />
 
 ## Features
 
