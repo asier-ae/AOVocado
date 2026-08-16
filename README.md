@@ -24,8 +24,8 @@ in the Viewer.
 
 ## Installation
 
-Copy this folder into a location on your `NUKE_PATH` (e.g.
-`~/.nuke/python/AOVocado`), then add to your `menu.py`:
+Copy this folder into a location on your Nuke plugin path (e.g.
+`~/.nuke/AOVocado`), then add to your `menu.py`:
 
 ```python
 import AOVocado
@@ -41,10 +41,10 @@ the hotkey or the menu entry. The same hotkey closes it again.
 
 ## Configuration
 
-Open the Settings window (gear icon in the panel) to configure the
-node-creation buttons, node spacing, and the live sampler's threshold.
-Channel grouping rules and the hotkey are set in
-`AOVocado_global_settings.json`.
+Open the Settings window (avocado icon in the panel) to configure the
+node-creation buttons, node spacing, the live sampler's threshold, and the
+subtractive rebuild's layout. Channel grouping rules and the hotkey are set
+in `AOVocado_global_settings.json`.
 
 ## Debug logging
 
@@ -67,7 +67,12 @@ without a visible terminal, e.g. a pipeline tool or desktop shortcut).
 
 Asier Aparicio
 
+## License
+
+MIT — see [LICENSE](LICENSE).
+
 ## Third-party software
 
 This project includes Qt.py, which is licensed under the MIT License.
-See qt.py for its original copyright and license information.
+See [`_vendor/Qt.py`](_vendor/Qt.py) for its original copyright and license
+information.
