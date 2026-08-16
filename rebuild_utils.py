@@ -1,10 +1,11 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Shared node-graph helpers for the Rebuild Beauty features.
 
 Backdrop creation/sizing/z-ordering and node re-centering, used by the
 subtractive rebuild (`rebuild_subtractive.py`) and meant to be reused by its
 additive counterpart once that gets built.
-
-Author: Asier Aparicio
 """
 
 import random

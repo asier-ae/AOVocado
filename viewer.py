@@ -1,7 +1,8 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Everything related to the Nuke viewer: the ViewerManager interface, and
 reacting to the active viewer's connected input changing.
-
-Author: Asier Aparicio
 """
 
 import nuke

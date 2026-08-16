@@ -1,10 +1,11 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Builds a subtractive layer-reconstruction node network.
 
 For each given channel, subtracts it from the beauty pass and shuffles it
 back out as its own explicit output layer, wrapping each channel's group of
 nodes in a styled backdrop.
-
-Author: Asier Aparicio
 """
 
 from dataclasses import dataclass

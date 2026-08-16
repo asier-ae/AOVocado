@@ -1,10 +1,11 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Channel data models and categorization logic for AOVocado.
 
 Contains the plain data container for categorized channels
 (`ChannelGroups`) and the logic that collects and categorizes viewer
 channels into it (`ChannelManager`).
-
-Author: Asier Aparicio
 """
 
 from . import logger

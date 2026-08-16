@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Wires an AOVocado panel to a LiveSampler instance.
 
 Owns the LiveSampler, sets up the sampler button and threshold spinbox on
@@ -5,8 +8,6 @@ the panel, and reacts to the sampler's signals to update the panel's
 widgets (filtering the channel lists to detected channels, restoring state
 when sampling stops). Kept separate from AOVocado.py since this is a
 self-contained feature with a fair amount of UI-reaction logic of its own.
-
-Author: Asier Aparicio
 """
 
 from . import live_sampler, logger, utils

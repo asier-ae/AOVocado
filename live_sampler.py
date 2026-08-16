@@ -1,6 +1,7 @@
-"""The live channel sampler's state machine.
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
 
-Author: Asier Aparicio
+"""The live channel sampler's state machine.
 """
 
 import nuke

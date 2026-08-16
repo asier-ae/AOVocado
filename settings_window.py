@@ -1,11 +1,12 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """The Settings window for AOVocado.
 
 Loads `ui_files/preferencesUI.ui` and wires it to the generic load/save/
 restore functions in `settings_io.py`. Every field here is functional -
 node-creation buttons/spacing, the live sampler threshold
 (`live_sampler.py`), and the "Rebuild Substractive" tab (`rebuild_subtractive.py`).
-
-Author: Asier Aparicio
 """
 
 from . import config, logger, node_creation, settings_io, settings_tooltips, utils

@@ -1,11 +1,12 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Samples pixel values from every channel at the viewer's mouse position.
 
 The math in `_get_sample_position()` and `_get_effective_image_dimensions()`
 converts the viewer's normalized sample-bbox coordinates into absolute
 pixel coordinates, correctly accounting for proxy mode, viewer downrez,
 and anamorphic pixel aspect ratio.
-
-Author: Asier Aparicio
 """
 
 import logging

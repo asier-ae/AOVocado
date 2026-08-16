@@ -1,6 +1,7 @@
-"""Tracks Ctrl/Shift modifier state to drive multi-select mode.
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
 
-Author: Asier Aparicio
+"""Tracks Ctrl/Shift modifier state to drive multi-select mode.
 """
 
 from ._vendor.Qt.QtCore import Qt

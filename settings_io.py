@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Generic, widget-driven save/load for the Settings window.
 
 Works purely by widget type and object name - a widget named "cfg_main_h_sep"
@@ -6,8 +9,6 @@ in `preferencesUI.ui` is assumed to correspond to the JSON key
 This is deliberate: it means adding a new preference is just adding a widget
 to the .ui with a matching object name and a default value in
 `AOVocado_global_settings.json` - nothing in this file needs to change.
-
-Author: Asier Aparicio
 """
 
 import json

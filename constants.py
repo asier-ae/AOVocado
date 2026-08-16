@@ -1,6 +1,7 @@
-"""Small shared constants for AOVocado.
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
 
-Author: Asier Aparicio
+"""Small shared constants for AOVocado.
 """
 
 # Name of the dynamic nuke.<attr> flag used to track whether the panel is

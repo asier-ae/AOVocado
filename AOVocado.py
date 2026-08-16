@@ -1,9 +1,10 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """The main panel window for AOVocado.
 
 Defines `AOVocado`, the floating Qt window that lists a viewer's channels
 across 4 configurable groups and lets an artist browse/select/view them.
-
-Author: Asier Aparicio
 """
 
 import nuke
@@ -119,6 +120,7 @@ class AOVocado(QMainWindow):
         # attribute on self (e.g. self.list_ch1, self.gb1, self.lineFilter)
         # - that's why this file never needs findChild() to reach them.
         loadUi(self.settings.UI_PATH, self)
+        self.resize(644, 703)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowTitle(constants.QWINDOW_TITLE)
@@ -202,7 +204,7 @@ class AOVocado(QMainWindow):
 
     def _setup_settings_button(self):
         """Configures the settings button's icon and click handler."""
-        utils.set_button_icon(self.b_show_settings, self.settings.ICON_SETTINGS)
+        utils.set_button_icon(self.b_show_settings, self.settings.ICON_AVOCADO)
         self.b_show_settings.clicked.connect(self._on_show_settings)
 
     def _setup_copy_button(self):

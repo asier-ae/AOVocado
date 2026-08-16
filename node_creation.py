@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Creates Nuke nodes from selected channels.
 
 Two layouts: a vertical stack (each node connected to the previous one via
@@ -13,8 +16,6 @@ for the constraint a toolset file must satisfy. `loadToolset()` has the
 same auto-connect-to-selection/auto-position/auto-reselect behavior as
 `createNode()` (confirmed empirically - it isn't documented), so toolset
 nodes need no more manual positioning than class-based ones do.
-
-Author: Asier Aparicio
 """
 
 import nuke

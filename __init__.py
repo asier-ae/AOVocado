@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """AOVocado - a Nuke panel for browsing/categorizing/viewing render
 channels/AOVs in the Viewer.
 
@@ -5,8 +8,6 @@ Registers itself under Nuke's built-in Edit menu (with its configured
 hotkey) as soon as this package is imported, if running inside Nuke's GUI
 on a supported version - add `import AOVocado` to your own
 `~/.nuke/menu.py`, no further setup call needed.
-
-Author: Asier Aparicio
 """
 
 import nuke
@@ -27,3 +28,4 @@ if nuke.env.get("gui") and nuke.NUKE_VERSION_MAJOR >= constants.MIN_NUKE_VERSION
     nuke.menu("Nuke").addCommand(
         "Edit/AOVocado/Open AOVocado", main.run, _settings.HOTKEY
     )
+    print(_settings.get_copyright_line())

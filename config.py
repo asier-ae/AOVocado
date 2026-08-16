@@ -1,10 +1,11 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Application settings for AOVocado.
 
 Loads `AOVocado_global_settings.json` (plus an optional user-override
 file) and exposes its values as attributes on a single `Settings` object,
 along with a couple of derived display strings.
-
-Author: Asier Aparicio
 """
 
 import json
@@ -46,6 +47,8 @@ class Settings:
         my_settings (dict): The parsed base settings, with any user-override
             `user_settings` values merged in.
         AOVOCADO_VERSION (str): Current tool version, shown in the panel.
+        AOVOCADO_RELEASE_DATE (str): Release month/year (e.g. "08-2026"),
+            shown in the panel and the on-import copyright banner.
         AUTHOR (str): Tool author, shown in the panel.
         HOTKEY (str): Keyboard shortcut that opens/closes the panel.
             Editable via the Settings window's `cfg_hotkey` key-capture
@@ -66,7 +69,10 @@ class Settings:
             anywhere in the panel (e.g. "crypto_").
         ICON_H_MODE (str): Path to the horizontal node-creation-mode icon.
         ICON_V_MODE (str): Path to the vertical node-creation-mode icon.
-        ICON_SETTINGS (str): Path to the settings-button icon.
+        ICON_SETTINGS (str): Path to the gear icon (unused by the settings
+            button since `ICON_AVOCADO` replaced it - kept for reference).
+        ICON_AVOCADO (str): Path to the avocado icon shown on the settings
+            button.
         ICON_COPY (str): Path to the copy-to-clipboard button icon.
         ICON_SAMPLE (str): Path to the live-sampler button icon (idle state).
         ICON_SAMPLE_WHITE (str): Path to the live-sampler button icon
@@ -94,10 +100,9 @@ class Settings:
                 not an error.
         """
         self.AOVOCADO_VERSION = "0.5"
+        self.AOVOCADO_RELEASE_DATE = "Aug 2026"
         self.AUTHOR = "Asier Aparicio"
-        base_filepath = os.path.join(
-            MAIN_FOLDER_PATH, "AOVocado_global_settings.json"
-        )
+        base_filepath = os.path.join(MAIN_FOLDER_PATH, "AOVocado_global_settings.json")
         self.UI_PATH = os.path.join(MAIN_FOLDER_PATH, "ui_files", "AOVocadoUI.ui")
         self.PREFERENCES_UI_PATH = os.path.join(
             MAIN_FOLDER_PATH, "ui_files", "preferencesUI.ui"
@@ -145,6 +150,7 @@ class Settings:
         self.ICON_H_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "h_mode.png")
         self.ICON_V_MODE = os.path.join(MAIN_FOLDER_PATH, "icons", "v_mode.png")
         self.ICON_SETTINGS = os.path.join(MAIN_FOLDER_PATH, "icons", "cogs.png")
+        self.ICON_AVOCADO = os.path.join(MAIN_FOLDER_PATH, "icons", "avocado.png")
         self.ICON_COPY = os.path.join(MAIN_FOLDER_PATH, "icons", "copy.png")
         self.ICON_SAMPLE = os.path.join(MAIN_FOLDER_PATH, "icons", "sample.png")
         self.ICON_SAMPLE_WHITE = os.path.join(
@@ -194,7 +200,10 @@ class Settings:
         or doesn't contain a `user_settings` block.
         """
         if not os.path.exists(self.USER_SETTINGS_PATH):
-            _log.debug("no user-override file at %s - using base defaults", self.USER_SETTINGS_PATH)
+            _log.debug(
+                "no user-override file at %s - using base defaults",
+                self.USER_SETTINGS_PATH,
+            )
             return
         user_overrides = self.load_settings(self.USER_SETTINGS_PATH)
         self.my_settings.setdefault("user_settings", {}).update(
@@ -217,3 +226,14 @@ class Settings:
             str: e.g. "Ctrl+`: open and close panel".
         """
         return f"{self.HOTKEY}: open and close panel"
+
+    def get_copyright_line(self):
+        """Builds the one-line version/copyright banner printed on import.
+
+        Returns:
+            str: e.g. "AOVocado v0.5, Aug s2026, Copyright (c) 2026 Asier Aparicio".
+        """
+        return (
+            f"AOVocado v{self.AOVOCADO_VERSION}, {self.AOVOCADO_RELEASE_DATE}, "
+            f"Copyright (c) 2026 {self.AUTHOR}"
+        )

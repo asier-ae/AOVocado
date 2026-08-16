@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Debug logging for AOVocado.
 
 Silent by default (WARNING and above only, to the terminal). Set the
@@ -10,8 +13,6 @@ pipeline tool or desktop shortcut).
 
     export AOVOCADO_DEBUG=1
     nuke
-
-Author: Asier Aparicio
 """
 
 import logging

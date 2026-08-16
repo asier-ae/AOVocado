@@ -1,6 +1,7 @@
-"""Small standalone helpers shared across AOVocado's UI modules.
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
 
-Author: Asier Aparicio
+"""Small standalone helpers shared across AOVocado's UI modules.
 """
 
 import os

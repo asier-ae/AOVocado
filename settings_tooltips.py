@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Tooltip text for the Settings window's widgets.
 
 Plain `{object_name: tooltip text}` data, applied generically by
@@ -5,8 +8,6 @@ Plain `{object_name: tooltip text}` data, applied generically by
 pattern. Scoped to `settings_window.py`/`preferencesUI.ui` only; the main
 panel sets its own tooltips inline where it has one (`utils.set_button_icon`'s
 `tooltip` param, `live_sampler_controller.py`).
-
-Author: Asier Aparicio
 """
 
 from ._vendor.Qt.QtWidgets import QWidget

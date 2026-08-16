@@ -1,10 +1,11 @@
+# Copyright (c) 2026 Asier Aparicio
+# Licensed under the MIT License.
+
 """Registers AOVocado under Nuke's Viewer menu.
 
 This module's `add_menu()` must be called from the user's own
 `~/.nuke/menu.py`, outside this repo - nothing here auto-registers on
 import (this package's `__init__.py` is empty).
-
-Author: Asier Aparicio
 """
 
 #### NOT BEING USED RIGHT NOW IN ANY FILE

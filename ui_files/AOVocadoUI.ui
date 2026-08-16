@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>691</width>
+    <width>706</width>
     <height>703</height>
    </rect>
   </property>
@@ -793,7 +793,7 @@
        <widget class="QLabel" name="l_hotkeys">
         <property name="font">
          <font>
-          <pointsize>8</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="styleSheet">
@@ -818,7 +818,7 @@
        <widget class="QLabel" name="l_multiselect_hint">
         <property name="font">
          <font>
-          <pointsize>8</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="styleSheet">
@@ -843,7 +843,7 @@
        <widget class="QLabel" name="author">
         <property name="font">
          <font>
-          <pointsize>8</pointsize>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="styleSheet">
