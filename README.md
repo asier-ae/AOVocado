@@ -25,7 +25,7 @@ in the Viewer.
 ## Installation
 
 Copy the inner `AOVocado/` folder (the one containing `__init__.py`) into a
-location on your Nuke plugin path (e.g. `~/.nuke/AOVocado`), then add to
+location on your Nuke plugin path (e.g. `~/.nuke/`), then add to
 your `menu.py`:
 
 ```python
