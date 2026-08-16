@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icon.png" width="96" alt="AOVocado icon">
+</p>
+
 # AOVocado
 
 A Nuke panel for browsing, categorizing, and viewing render channels/AOVs
