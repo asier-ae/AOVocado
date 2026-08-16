@@ -43,12 +43,17 @@ def load_icon(icon_path, tint=STANDARD_ICON_TINT):
         icon_path (str): Path to the icon image (expected: solid white on
             transparent, like everything in `icons/`).
         tint (QColor, optional): Color to recolor the icon to. Defaults to
-            `STANDARD_ICON_TINT`.
+            `STANDARD_ICON_TINT`. Pass `None` to skip recoloring entirely
+            and use the source image's own colors as-is - for an icon
+            that's already multi-colored rather than a white silhouette.
 
     Returns:
         QIcon: The tinted icon.
     """
     source = QPixmap(icon_path)
+    if tint is None:
+        return QIcon(source)
+
     tinted = QPixmap(source.size())
     tinted.fill(QColor(0, 0, 0, 0))
 
