@@ -1,7 +1,6 @@
 <p align="center">
-  <img src="icon.png" width="96" alt="AOVocado icon">
-</p>
-
+<img width="256" height="256" alt="avocado" src="https://github.com/user-attachments/assets/a95ba29f-bf46-4838-86f5-87af63dcdd82" />
+  </p>
 # AOVocado
 
 A Nuke panel for browsing, categorizing, and viewing render channels/AOVs
