@@ -231,7 +231,7 @@ class Settings:
         """Builds the one-line version/copyright banner printed on import.
 
         Returns:
-            str: e.g. "AOVocado v0.5, Aug s2026, Copyright (c) 2026 Asier Aparicio".
+            str: e.g. "AOVocado v0.5, Aug 2026, Copyright (c) 2026 Asier Aparicio".
         """
         return (
             f"AOVocado v{self.AOVOCADO_VERSION}, {self.AOVOCADO_RELEASE_DATE}, "

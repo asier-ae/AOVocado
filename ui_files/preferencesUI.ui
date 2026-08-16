@@ -1404,7 +1404,7 @@
       </widget>
       <widget class="QWidget" name="tab_8">
        <attribute name="title">
-        <string>Rebuild Substractive</string>
+        <string>Rebuild Subtractive</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_33">
         <item>

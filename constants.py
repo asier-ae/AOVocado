@@ -1,8 +1,7 @@
 # Copyright (c) 2026 Asier Aparicio
 # Licensed under the MIT License.
 
-"""Small shared constants for AOVocado.
-"""
+"""Small shared constants for AOVocado."""
 
 # Name of the dynamic nuke.<attr> flag used to track whether the panel is
 # currently open (see main.run()). Not a real Nuke preference/knob - just a

@@ -25,8 +25,9 @@ STANDARD_ICON_SIZE = 30
 # white/full quality and this stays one tunable value.
 STANDARD_ICON_TINT = QColor(217, 217, 217)
 
-# Green tint reserved for the avocado settings-button icon specifically -
-# every other icon uses STANDARD_ICON_TINT above.
+# Tint for the avocado settings-button icon, kept independent of
+# STANDARD_ICON_TINT so it can be changed without affecting every other
+# icon - currently set to match the standard tint.
 AVOCADO_ICON_TINT = QColor(217, 217, 217)
 
 
@@ -171,7 +172,8 @@ def set_button_icon(
             existing tooltip (e.g. one already set in the `.ui` file).
         tint (QColor, optional): Color to recolor the icon to. Defaults to
             `STANDARD_ICON_TINT`; pass e.g. `AVOCADO_ICON_TINT` for a
-            button that deliberately breaks from the standard grey.
+            button whose tint should be changeable independently of the
+            rest.
     """
     button.setText("")
     button.setIcon(load_icon(icon_path, tint=tint))

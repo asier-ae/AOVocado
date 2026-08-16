@@ -1,8 +1,7 @@
 # Copyright (c) 2026 Asier Aparicio
 # Licensed under the MIT License.
 
-"""Entry point for opening/closing the AOVocado panel.
-"""
+"""Entry point for opening/closing the AOVocado panel."""
 
 import nuke
 

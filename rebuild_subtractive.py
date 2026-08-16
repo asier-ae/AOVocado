@@ -22,6 +22,10 @@ OPERATION_FROM = "from"
 OPERATION_PLUS = "plus"
 OUTPUT_RGB = "rgb"
 INPUT_RGBA = "rgba"
+# Raw fromInput1 array-knob value (Nuke's internal Shuffle2 channel-mapping
+# syntax, not exposed through a normal knob interface) - routes this
+# Shuffle2's B channel through to the output's alpha, so the isolated
+# layer carries a usable alpha channel instead of coming out blank.
 FROM_INPUT_VALUE = "{1} B A"
 
 
