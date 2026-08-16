@@ -664,6 +664,7 @@ class AOVocado(QMainWindow):
     def _on_copy_to_clipboard(self):
         """Copies the selected channel names to the clipboard, one per line."""
         channel_names = dict.fromkeys(item.text() for item in self.all_selected_items)
+        _log.debug("_on_copy_to_clipboard: channels=%s", len(channel_names))
         utils.copy_to_clipboard("\n".join(channel_names))
 
     # --- Filtering ---

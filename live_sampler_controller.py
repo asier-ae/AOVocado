@@ -159,5 +159,6 @@ class SamplerController:
         Args:
             message (str): The error message to display.
         """
+        _log.debug("sampler error shown to user: %s", message)
         self.panel.b_live_sampler.setChecked(False)
         QMessageBox.warning(self.panel, "Live Sampler Error", message)

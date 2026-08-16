@@ -118,7 +118,9 @@ def viewer_updated():
     knob = nuke.thisKnob()
     knob_name = knob.name() if knob else None
     if not knob or knob_name not in ("inputChange", "input_number"):
-        _log.debug("knobChanged fired for %s - ignored", knob_name)
+        # Not logged - the viewer fires knobChanged constantly (zoom, gain,
+        # gamma, etc.), so logging every ignored knob would flood the debug
+        # log during ordinary viewer use.
         return
 
     _log.debug("knobChanged fired for %s - reloading panel", knob_name)
