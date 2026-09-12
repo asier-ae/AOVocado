@@ -22,6 +22,22 @@ QWidget {
 QGroupBox {
     font-weight: bold;
 }
+QPushButton {
+    min-height: 30px;
+}
+QSpinBox, QDoubleSpinBox {
+    min-height: 30px;
+}
+QLineEdit, QComboBox {
+    min-height: 30px;
+}
+/* Deliberately no QKeySequenceEdit rule here. It doesn't paint itself via
+   QStyle subcontrols like QLineEdit/QComboBox do - it's a plain QWidget
+   wrapping an internal child QLineEdit. Styling the outer QKeySequenceEdit
+   directly (even just min-height) puts its own box model at odds with the
+   inner one and clips the rendered text. The inner child already picks up
+   the QLineEdit rule above on its own (it IS a QLineEdit), which is enough
+   - leave the outer widget's height alone. */
 QLabel[class="header"] {
     font-size: 13pt;
     font-weight: bold;

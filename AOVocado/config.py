@@ -100,7 +100,7 @@ class Settings:
                 not an error.
         """
         self.AOVOCADO_VERSION = "0.5"
-        self.AOVOCADO_RELEASE_DATE = "Aug 2026"
+        self.AOVOCADO_RELEASE_DATE = "Sept 2026"
         self.AUTHOR = "Asier Aparicio"
         base_filepath = os.path.join(MAIN_FOLDER_PATH, "AOVocado_global_settings.json")
         self.UI_PATH = os.path.join(MAIN_FOLDER_PATH, "ui_files", "AOVocadoUI.ui")
@@ -231,7 +231,6 @@ class Settings:
         """
         return (
             f"{self.HOTKEY}: open and close the panel\n"
-            "Click: view a channel\n"
             "Ctrl/Shift+Click: multi-select across lists\n"
             "Ctrl+A: select all channels in the active group\n"
             "Ctrl+Click/drag in the Viewer (while holding the sampler "

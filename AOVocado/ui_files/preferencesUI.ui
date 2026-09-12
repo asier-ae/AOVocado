@@ -45,7 +45,7 @@
              <x>0</x>
              <y>0</y>
              <width>512</width>
-             <height>1000</height>
+             <height>1014</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -171,6 +171,12 @@
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="cfg_sp_sampler_threshold">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
                   <property name="decimals">
                    <number>3</number>
                   </property>
