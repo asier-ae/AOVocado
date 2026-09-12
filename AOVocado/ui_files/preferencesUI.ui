@@ -45,7 +45,7 @@
              <x>0</x>
              <y>0</y>
              <width>512</width>
-             <height>1014</height>
+             <height>1000</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1259,7 +1259,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_97">
             <property name="text">
-             <string>Horizontal Node Separation</string>
+             <string>Horizontal</string>
             </property>
            </widget>
           </item>
@@ -1303,7 +1303,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="label_100">
             <property name="text">
-             <string>Vertical Node Separation</string>
+             <string>Vertical</string>
             </property>
            </widget>
           </item>
