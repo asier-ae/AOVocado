@@ -195,7 +195,7 @@
     "EXCLUDE_PREFIX_SEARCH_COMMENT": "Prefix match and case insensitive. Channels starting with any of these are never shown anywhere in the panel, same as EXCLUDE_SEARCH. Default excludes cryptomatte channels.",
     "EXCLUDE_PREFIX_SEARCH": ["crypto_"],
 
-    "BACKDROP_TILE_COLOR_COMMENT": "Backdrop fill color for rebuild backdrops (BackdropNode's tile_color knob, packed RGBA as a decimal int). Default is cyan.",
+    "BACKDROP_TILE_COLOR_COMMENT": "Backdrop fill color for rebuild backdrops (BackdropNode's tile_color knob, packed RGBA as a decimal int). Default is a muted dark blue-grey.",
     "BACKDROP_TILE_COLOR": 1062692607,
 
     "BACKDROP_APPEARANCE_COMMENT": "Backdrop appearance style (BackdropNode's appearance knob).",
@@ -210,7 +210,7 @@
     "BACKDROP_FONT_SIZE_COMMENT": "Backdrop label text size (BackdropNode's note_font_size knob).",
     "BACKDROP_FONT_SIZE": 40,
 
-    "user_settings_COMMENT": "Editable via the Settings window (preferencesUI.ui) - keys match the widget object names they're saved/loaded from. Saving OVERWRITES this whole block with a fresh snapshot of every widget's value (see preferences.py), so don't add hand-written keys here that aren't backed by a widget - they won't survive the first save. BUTTON1-4_* and cfg_main_*_sep (direct pixel values, no hidden multiplier - see node_creation.py) drive node creation; cfg_sp_sampler_threshold seeds the main panel's live sampler (see sampler_controller.py); cfg_rs_* drive the subtractive rebuild (see rebuild_subtractive.py) - these are base units scaled x10 into actual pixel spacing, unlike cfg_main_*_sep.",
+    "user_settings_COMMENT": "Editable via the Settings window (preferencesUI.ui) - keys match the widget object names they're saved/loaded from. Saving OVERWRITES this whole block with a fresh snapshot of every widget's value (see settings_io.py), so don't add hand-written keys here that aren't backed by a widget - they won't survive the first save. BUTTON1-4_* and cfg_main_*_sep (direct pixel values, no hidden multiplier - see node_creation.py) drive node creation; cfg_sp_sampler_threshold seeds the main panel's live sampler (see live_sampler_controller.py); cfg_rs_* drive the subtractive rebuild (see rebuild_subtractive.py) - these are base units scaled x10 into actual pixel spacing, unlike cfg_main_*_sep.",
     "user_settings": {
         "cfg_hotkey": "ctrl+`",
         "BUTTON1_CLASS": "Shuffle2",

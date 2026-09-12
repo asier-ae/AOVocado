@@ -8,8 +8,6 @@ subtractive rebuild (`rebuild_subtractive.py`) and meant to be reused by its
 additive counterpart once that gets built.
 """
 
-import random
-
 import nuke
 
 
@@ -92,8 +90,6 @@ def create_auto_backdrop(margin_left, margin_top, margin_right, margin_bottom):
         ypos=bd_y,
         bdwidth=bd_w,
         bdheight=bd_h,
-        tile_color=int(random.random() * (16 - 10)) + 10,
-        note_font_size=42,
         z_order=calculate_backdrop_z_order(selected_nodes),
     )
 

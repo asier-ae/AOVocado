@@ -104,7 +104,6 @@ class ChannelManager:
             c for c in unique_channels if not self.is_channel_excluded(c)
         ]
 
-        # Categorize channels based on configuration
         for channel in unique_channels:
             channel_lower = channel.lower()
 
