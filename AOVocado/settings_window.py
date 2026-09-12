@@ -9,7 +9,7 @@ node-creation buttons/spacing, the live sampler threshold
 (`live_sampler.py`), and the "Rebuild Subtractive" tab (`rebuild_subtractive.py`).
 """
 
-from . import config, logger, node_creation, settings_io, settings_tooltips, utils
+from . import config, logger, node_creation, settings_io, settings_tooltips, styles, utils
 from ._vendor.Qt.QtCompat import loadUi
 from ._vendor.Qt.QtCore import Qt
 from ._vendor.Qt.QtGui import QKeySequence
@@ -56,6 +56,8 @@ class SettingsWindow(QMainWindow):
     def _setup_window(self):
         """Loads the UI file and configures the window's properties."""
         loadUi(self.settings.PREFERENCES_UI_PATH, self)
+        self.setStyleSheet(styles.STYLESHEET)
+        styles.apply_style_classes(self, styles.SETTINGS_CLASSES)
         self.setWindowTitle("AOVocado Settings")
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_DeleteOnClose)

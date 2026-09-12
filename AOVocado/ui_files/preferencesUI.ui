@@ -45,7 +45,7 @@
              <x>0</x>
              <y>0</y>
              <width>512</width>
-             <height>998</height>
+             <height>1000</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -80,12 +80,6 @@
                   <height>30</height>
                  </size>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>13</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
                 <property name="text">
                  <string>Keyboard Shortcut</string>
                 </property>
@@ -104,21 +98,10 @@
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QLabel" name="label_2">
-                  <property name="font">
-                   <font>
-                    <pointsize>11</pointsize>
-                    <italic>true</italic>
-                   </font>
-                  </property>
                   <property name="text">
                    <string>(restart nuke for this to take effect)</string>
                   </property>
@@ -169,12 +152,6 @@
                   <height>30</height>
                  </size>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>13</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
                 <property name="text">
                  <string>Live Sampling</string>
                 </property>
@@ -187,11 +164,6 @@
                <layout class="QHBoxLayout" name="horizontalLayout_18">
                 <item>
                  <widget class="QLabel" name="label_71">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
                   <property name="text">
                    <string>Min Threshold</string>
                   </property>
@@ -255,12 +227,6 @@
                   <height>30</height>
                  </size>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>13</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
                 <property name="text">
                  <string>Node Creation Spacing</string>
                 </property>
@@ -273,11 +239,6 @@
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
                  <widget class="QLabel" name="label">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
                   <property name="text">
                    <string>Horizontal Spacing</string>
                   </property>
@@ -312,11 +273,6 @@
                <layout class="QHBoxLayout" name="horizontalLayout_3">
                 <item>
                  <widget class="QLabel" name="label_4">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
                   <property name="text">
                    <string>Vertical Spacing</string>
                   </property>
@@ -377,12 +333,6 @@
                   <height>30</height>
                  </size>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>13</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
                 <property name="text">
                  <string>Node Creation Setup</string>
                 </property>
@@ -406,12 +356,6 @@
                     <width>16777215</width>
                     <height>170000</height>
                    </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <bold>true</bold>
-                   </font>
                   </property>
                   <property name="autoFillBackground">
                    <bool>false</bool>
@@ -457,26 +401,13 @@
                          <height>30</height>
                         </size>
                        </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <property name="text">
                         <string>Shown name:</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLineEdit" name="BUTTON1_TITLE">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
-                      </widget>
+                      <widget class="QLineEdit" name="BUTTON1_TITLE"/>
                      </item>
                      <item>
                       <widget class="Line" name="line_17">
@@ -499,12 +430,6 @@
                          <height>30</height>
                         </size>
                        </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <property name="text">
                         <string>Create node from:</string>
                        </property>
@@ -512,12 +437,6 @@
                      </item>
                      <item>
                       <widget class="QComboBox" name="BUTTON1_SOURCE">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <item>
                         <property name="text">
                          <string>Node class</string>
@@ -531,14 +450,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLineEdit" name="BUTTON1_CLASS">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
-                      </widget>
+                      <widget class="QLineEdit" name="BUTTON1_CLASS"/>
                      </item>
                      <item>
                       <widget class="Line" name="line_18">
@@ -561,26 +473,13 @@
                          <height>30</height>
                         </size>
                        </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <property name="text">
                         <string>Channel knob:</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLineEdit" name="BUTTON1_KNOB">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
-                      </widget>
+                      <widget class="QLineEdit" name="BUTTON1_KNOB"/>
                      </item>
                      <item>
                       <widget class="Line" name="line_19">
@@ -598,12 +497,6 @@
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>12</pointsize>
-                           <bold>false</bold>
-                          </font>
                          </property>
                          <property name="text">
                           <string>Creation mode:</string>
@@ -623,12 +516,6 @@
                            <width>30</width>
                            <height>30</height>
                           </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>12</pointsize>
-                           <bold>false</bold>
-                          </font>
                          </property>
                          <property name="text">
                           <string>b1</string>
@@ -672,12 +559,6 @@
                     <height>170000</height>
                    </size>
                   </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
                   <property name="title">
                    <string>BUTTON 2</string>
                   </property>
@@ -716,26 +597,13 @@
                          <height>30</height>
                         </size>
                        </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <property name="text">
                         <string>Shown name:</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLineEdit" name="BUTTON2_TITLE">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
-                      </widget>
+                      <widget class="QLineEdit" name="BUTTON2_TITLE"/>
                      </item>
                      <item>
                       <widget class="Line" name="line_20">
@@ -758,12 +626,6 @@
                          <height>30</height>
                         </size>
                        </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <property name="text">
                         <string>Create node from:</string>
                        </property>
@@ -771,12 +633,6 @@
                      </item>
                      <item>
                       <widget class="QComboBox" name="BUTTON2_SOURCE">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <item>
                         <property name="text">
                          <string>Node class</string>
@@ -790,14 +646,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLineEdit" name="BUTTON2_CLASS">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
-                      </widget>
+                      <widget class="QLineEdit" name="BUTTON2_CLASS"/>
                      </item>
                      <item>
                       <widget class="Line" name="line_21">
@@ -820,26 +669,13 @@
                          <height>30</height>
                         </size>
                        </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
                        <property name="text">
                         <string>Channel knob:</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLineEdit" name="BUTTON2_KNOB">
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
-                       </property>
-                      </widget>
+                      <widget class="QLineEdit" name="BUTTON2_KNOB"/>
                      </item>
                      <item>
                       <widget class="Line" name="line_22">
@@ -857,12 +693,6 @@
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>12</pointsize>
-                           <bold>false</bold>
-                          </font>
                          </property>
                          <property name="text">
                           <string>Creation mode:</string>
@@ -882,12 +712,6 @@
                            <width>30</width>
                            <height>30</height>
                           </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>12</pointsize>
-                           <bold>false</bold>
-                          </font>
                          </property>
                          <property name="text">
                           <string>b2</string>
@@ -953,12 +777,6 @@
                   <height>170000</height>
                  </size>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
                 <property name="title">
                  <string>BUTTON 3</string>
                 </property>
@@ -997,26 +815,13 @@
                        <height>30</height>
                       </size>
                      </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <property name="text">
                       <string>Shown name:</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="BUTTON3_TITLE">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QLineEdit" name="BUTTON3_TITLE"/>
                    </item>
                    <item>
                     <widget class="Line" name="line_35">
@@ -1039,12 +844,6 @@
                        <height>30</height>
                       </size>
                      </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <property name="text">
                       <string>Create node from:</string>
                      </property>
@@ -1052,12 +851,6 @@
                    </item>
                    <item>
                     <widget class="QComboBox" name="BUTTON3_SOURCE">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <item>
                       <property name="text">
                        <string>Node class</string>
@@ -1071,14 +864,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="BUTTON3_CLASS">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QLineEdit" name="BUTTON3_CLASS"/>
                    </item>
                    <item>
                     <widget class="Line" name="line_36">
@@ -1101,26 +887,13 @@
                        <height>30</height>
                       </size>
                      </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <property name="text">
                       <string>Channel knob:</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="BUTTON3_KNOB">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QLineEdit" name="BUTTON3_KNOB"/>
                    </item>
                    <item>
                     <widget class="Line" name="line_37">
@@ -1138,12 +911,6 @@
                          <horstretch>0</horstretch>
                          <verstretch>0</verstretch>
                         </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
                        </property>
                        <property name="text">
                         <string>Creation mode:</string>
@@ -1163,12 +930,6 @@
                          <width>30</width>
                          <height>30</height>
                         </size>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
                        </property>
                        <property name="text">
                         <string>b3</string>
@@ -1212,12 +973,6 @@
                   <height>170000</height>
                  </size>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
                 <property name="title">
                  <string>BUTTON 4</string>
                 </property>
@@ -1256,26 +1011,13 @@
                        <height>170000</height>
                       </size>
                      </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <property name="text">
                       <string>Shown name:</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="BUTTON4_TITLE">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QLineEdit" name="BUTTON4_TITLE"/>
                    </item>
                    <item>
                     <widget class="Line" name="line_38">
@@ -1298,12 +1040,6 @@
                        <height>30</height>
                       </size>
                      </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <property name="text">
                       <string>Create node from:</string>
                      </property>
@@ -1311,12 +1047,6 @@
                    </item>
                    <item>
                     <widget class="QComboBox" name="BUTTON4_SOURCE">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <item>
                       <property name="text">
                        <string>Node class</string>
@@ -1330,14 +1060,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="BUTTON4_CLASS">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QLineEdit" name="BUTTON4_CLASS"/>
                    </item>
                    <item>
                     <widget class="Line" name="line_39">
@@ -1360,26 +1083,13 @@
                        <height>30</height>
                       </size>
                      </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
                      <property name="text">
                       <string>Channel knob:</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="BUTTON4_KNOB">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                    </widget>
+                    <widget class="QLineEdit" name="BUTTON4_KNOB"/>
                    </item>
                    <item>
                     <widget class="Line" name="line_40">
@@ -1397,12 +1107,6 @@
                          <horstretch>0</horstretch>
                          <verstretch>0</verstretch>
                         </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
                        </property>
                        <property name="text">
                         <string>Creation mode:</string>
@@ -1422,12 +1126,6 @@
                          <width>30</width>
                          <height>30</height>
                         </size>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>12</pointsize>
-                         <bold>false</bold>
-                        </font>
                        </property>
                        <property name="text">
                         <string>b4</string>
@@ -1485,12 +1183,6 @@
        <layout class="QVBoxLayout" name="verticalLayout_33">
         <item>
          <widget class="QLabel" name="label_95">
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="text">
            <string>Layout</string>
           </property>
@@ -1500,11 +1192,6 @@
          <layout class="QHBoxLayout" name="horizontalLayout_24">
           <item>
            <widget class="QComboBox" name="cfg_rs_cb_rebuild_layout">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <item>
              <property name="text">
               <string>Left</string>
@@ -1550,12 +1237,6 @@
         </item>
         <item>
          <widget class="QLabel" name="label_96">
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="text">
            <string>Node Spacing</string>
           </property>
@@ -1563,17 +1244,14 @@
         </item>
         <item>
          <layout class="QFormLayout" name="formLayout_7">
+          <property name="labelAlignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
           <property name="formAlignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_97">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-              <bold>true</bold>
-             </font>
-            </property>
             <property name="text">
              <string>Horizontal Node Separation</string>
             </property>
@@ -1588,11 +1266,6 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_99">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Branch Space</string>
             </property>
@@ -1623,12 +1296,6 @@
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_100">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-              <bold>true</bold>
-             </font>
-            </property>
             <property name="text">
              <string>Vertical Node Separation</string>
             </property>
@@ -1643,11 +1310,6 @@
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_102">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Base Separation</string>
             </property>
@@ -1662,11 +1324,6 @@
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_103">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Grading Space</string>
             </property>
@@ -1697,12 +1354,6 @@
           </item>
           <item row="7" column="0">
            <widget class="QLabel" name="label_104">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-              <bold>true</bold>
-             </font>
-            </property>
             <property name="text">
              <string>Backdrop Margins</string>
             </property>
@@ -1720,11 +1371,6 @@
           </item>
           <item row="8" column="0">
            <widget class="QLabel" name="label_106">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Top</string>
             </property>
@@ -1739,11 +1385,6 @@
           </item>
           <item row="9" column="0">
            <widget class="QLabel" name="label_107">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Bottom</string>
             </property>
@@ -1758,11 +1399,6 @@
           </item>
           <item row="10" column="0">
            <widget class="QLabel" name="label_108">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Left</string>
             </property>
@@ -1777,11 +1413,6 @@
           </item>
           <item row="11" column="0">
            <widget class="QLabel" name="label_109">
-            <property name="font">
-             <font>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
             <property name="text">
              <string>Right</string>
             </property>
@@ -1818,12 +1449,6 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QLabel" name="lb_title_version">
-          <property name="font">
-           <font>
-            <pointsize>13</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="text">
            <string>AOVocado v1.0</string>
           </property>
@@ -1831,11 +1456,6 @@
         </item>
         <item>
          <widget class="QLabel" name="label_6">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>Licensed under the MIT License</string>
           </property>
@@ -1859,11 +1479,6 @@
         </item>
         <item>
          <widget class="QLabel" name="label_7">
-          <property name="font">
-           <font>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="text">
            <string>Info</string>
           </property>
@@ -1871,11 +1486,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lb_info_text">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>AOVocado is etc etc</string>
           </property>
@@ -1899,11 +1509,6 @@
         </item>
         <item>
          <widget class="QLabel" name="label_8">
-          <property name="font">
-           <font>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="text">
            <string>Shortcuts</string>
           </property>
@@ -1911,11 +1516,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lb_shortcuts_text">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>AOVocado is etc etc</string>
           </property>

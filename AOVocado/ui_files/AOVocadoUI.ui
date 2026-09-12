@@ -27,11 +27,6 @@
         </property>
         <item>
          <widget class="QGroupBox" name="gb1">
-          <property name="font">
-           <font>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
@@ -62,11 +57,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="font">
-              <font>
-               <bold>false</bold>
-              </font>
-             </property>
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -95,11 +85,6 @@
         </item>
         <item>
          <widget class="QGroupBox" name="gb2">
-          <property name="font">
-           <font>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="title">
            <string>LIGHT GROUPS</string>
           </property>
@@ -127,11 +112,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="font">
-              <font>
-               <bold>false</bold>
-              </font>
-             </property>
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -149,11 +129,6 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QGroupBox" name="gb3">
-          <property name="font">
-           <font>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="title">
            <string>TECH</string>
           </property>
@@ -181,11 +156,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="font">
-              <font>
-               <bold>false</bold>
-              </font>
-             </property>
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -199,11 +169,6 @@
         </item>
         <item>
          <widget class="QGroupBox" name="gb4">
-          <property name="font">
-           <font>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="title">
            <string>OTHER</string>
           </property>
@@ -230,11 +195,6 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <bold>false</bold>
-              </font>
              </property>
              <property name="styleSheet">
               <string notr="true"/>
@@ -469,15 +429,6 @@
             <height>0</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">color: rgb(120, 120, 120);</string>
-          </property>
           <property name="text">
            <string>Create</string>
           </property>
@@ -504,11 +455,6 @@
             <width>0</width>
             <height>35</height>
            </size>
-          </property>
-          <property name="font">
-           <font>
-            <bold>false</bold>
-           </font>
           </property>
           <property name="text">
            <string>Shuffle</string>
@@ -587,11 +533,6 @@
             <height>35</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <bold>false</bold>
-           </font>
-          </property>
           <property name="text">
            <string>GradeAOV</string>
           </property>
@@ -666,11 +607,6 @@
             <height>35</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <bold>false</bold>
-           </font>
-          </property>
           <property name="text">
            <string>CCAOV</string>
           </property>
@@ -744,11 +680,6 @@
             <width>0</width>
             <height>35</height>
            </size>
-          </property>
-          <property name="font">
-           <font>
-            <bold>false</bold>
-           </font>
           </property>
           <property name="text">
            <string>ExpMult</string>
