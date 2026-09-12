@@ -211,21 +211,32 @@ class Settings:
         )
         _log.debug("merged user-override settings from %s", self.USER_SETTINGS_PATH)
 
-    def get_version_line(self):
-        """Builds the version/author line shown in the panel's bottom bar.
+    def get_info_text(self):
+        """Builds the description text for the Settings window's About tab.
 
         Returns:
-            str: e.g. "AOVocado v0.5, Asier Aparicio".
+            str: A brief description of what AOVocado is.
         """
-        return f"AOVocado v{self.AOVOCADO_VERSION}, {self.AUTHOR}"
+        return (
+            "AOVocado is a Nuke panel for browsing, categorizing, and viewing "
+            "render channels/AOVs in the Viewer."
+        )
 
-    def get_hotkey_line(self):
-        """Builds the hotkey hint line shown in the panel's bottom bar.
+    def get_shortcuts_text(self):
+        """Builds the keyboard-shortcuts text for the Settings window's About tab.
 
         Returns:
-            str: e.g. "Ctrl+`: open and close panel".
+            str: Multi-line keyboard shortcut summary, with the current
+                hotkey interpolated in.
         """
-        return f"{self.HOTKEY}: open and close panel"
+        return (
+            f"{self.HOTKEY}: open and close the panel\n"
+            "Click: view a channel\n"
+            "Ctrl/Shift+Click: multi-select across lists\n"
+            "Ctrl+A: select all channels in the active group\n"
+            "Ctrl+Click/drag in the Viewer (while holding the sampler "
+            "button): live-sample channels at that pixel"
+        )
 
     def get_copyright_line(self):
         """Builds the one-line version/copyright banner printed on import.

@@ -48,6 +48,7 @@ class SettingsWindow(QMainWindow):
         self.settings = config.Settings()
 
         self._setup_window()
+        self._setup_about_tab()
         self._setup_mode_buttons()
         self._load_settings_to_ui()
         self._connect_signals()
@@ -59,6 +60,12 @@ class SettingsWindow(QMainWindow):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_DeleteOnClose)
         settings_tooltips.apply_tooltips(self)
+
+    def _setup_about_tab(self):
+        """Populates the About tab's title/version, info, and shortcuts labels."""
+        self.lb_title_version.setText(self.settings.get_copyright_line())
+        self.lb_info_text.setText(self.settings.get_info_text())
+        self.lb_shortcuts_text.setText(self.settings.get_shortcuts_text())
 
     def _setup_mode_buttons(self):
         """Configures the 4 mode-toggle buttons' icon and text."""

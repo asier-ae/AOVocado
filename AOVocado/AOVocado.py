@@ -96,7 +96,6 @@ class AOVocado(QMainWindow):
 
         self._setup_window()
         self._setup_group_titles()
-        self._setup_info_labels()
         self._setup_channel_lists()
         self._setup_filter()
         self._setup_node_creation_buttons()
@@ -151,11 +150,6 @@ class AOVocado(QMainWindow):
         self.gb2.setTitle(self.settings.GROUP2_TITLE)
         self.gb3.setTitle(self.settings.GROUP3_TITLE)
         self.gb4.setTitle(self.settings.GROUP4_TITLE)
-
-    def _setup_info_labels(self):
-        """Sets the version/author and hotkey labels from settings."""
-        self.author.setText(self.settings.get_version_line())
-        self.l_hotkeys.setText(self.settings.get_hotkey_line())
 
     def _setup_channel_lists(self):
         """Connects selection-change handling for all 4 channel lists."""
