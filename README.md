@@ -6,6 +6,11 @@
 
 A Nuke panel for browsing, categorizing, and viewing channels/AOVs in the Viewer.
 
+## Usage
+
+Connect a Viewer to a node with multiple channels, then open the panel via
+the hotkey (default Ctrl/CMD + `  (backtick/tilde)) or the menu entry. The same hotkey closes it again.
+
 <img width="647" height="733" alt="AOVocado" src="https://github.com/user-attachments/assets/72b15689-239b-4e5f-8a23-0a3147fe2a8d" />
 
 ## Features
@@ -40,11 +45,6 @@ import AOVocado
 
 That's it — on import, AOVocado registers itself under
 **Edit > AOVocado > Open AOVocado**, with a hotkey (default `` Ctrl+` ``).
-
-## Usage
-
-Connect a Viewer to a node with multiple channels, then open the panel via
-the hotkey or the menu entry. The same hotkey closes it again.
 
 ## Configuration
 
