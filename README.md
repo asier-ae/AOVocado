@@ -27,6 +27,7 @@ in the Viewer.
 ## Requirements
 
 - Nuke 16 or newer.
+- Currently only tested on macOS. Linux/Windows support is expected but not yet verified.
 
 ## Installation
 
