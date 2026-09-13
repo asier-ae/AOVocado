@@ -686,19 +686,39 @@ class AOVocado(QMainWindow):
         """Stops the sampler, restores the original viewer channel, and
         cleans up panel state.
 
+        Each cleanup step below is independently guarded (logged, non-fatal)
+        so a failure in one - e.g. the viewer or its node no longer existing
+        by the time the panel closes - can't block the others. The
+        NUKE_PANEL_NAME flag reset at the end always runs regardless, since
+        main.run() relies on it to decide whether to open a new panel or try
+        to close this one; leaving it stuck True would make the panel
+        permanently unable to reopen.
+
         Args:
             event (QCloseEvent): The close event.
         """
         _log.debug("closeEvent")
-        # Only if actually active: LiveSampler.stop() unconditionally sets
-        # the viewer channel and emits samplingStopped with its pre-sample
-        # state, which - if sampling was never started - is still the
-        # constructor's (None, []) defaults. That would make
-        # live_sampler_controller's handler try to set the viewer channel to
-        # None. The very next line here would still overwrite it with the
-        # correct value regardless, but there's no reason to risk it.
-        if self.sampler_controller.live_sampler.is_active:
-            self.sampler_controller.live_sampler.stop()
-        self.viewer_manager.set_viewer_channel(self.original_viewer_channel)
-        self.viewer_manager.remove_callback()
+        try:
+            # Only if actually active: LiveSampler.stop() unconditionally sets
+            # the viewer channel and emits samplingStopped with its pre-sample
+            # state, which - if sampling was never started - is still the
+            # constructor's (None, []) defaults. That would make
+            # live_sampler_controller's handler try to set the viewer channel to
+            # None. The very next line here would still overwrite it with the
+            # correct value regardless, but there's no reason to risk it.
+            if self.sampler_controller.live_sampler.is_active:
+                self.sampler_controller.live_sampler.stop()
+        except Exception:
+            _log.exception("closeEvent: failed to stop live sampler")
+
+        try:
+            self.viewer_manager.set_viewer_channel(self.original_viewer_channel)
+        except Exception:
+            _log.exception("closeEvent: failed to restore original viewer channel")
+
+        try:
+            self.viewer_manager.remove_callback()
+        except Exception:
+            _log.exception("closeEvent: failed to remove viewer callback")
+
         setattr(nuke, constants.NUKE_PANEL_NAME, False)

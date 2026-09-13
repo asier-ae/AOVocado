@@ -57,7 +57,7 @@ def run():
             panel.close()
     else:
         _log.debug("panel not open - creating")
-        setattr(nuke, constants.NUKE_PANEL_NAME, True)
         panel_instance = AOVocado()
+        setattr(nuke, constants.NUKE_PANEL_NAME, True)
         constants.GC_PROTECT.append(panel_instance)
         panel_instance.show()
