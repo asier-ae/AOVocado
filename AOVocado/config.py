@@ -99,7 +99,7 @@ class Settings:
                 users won't have customized anything yet) and its absence is
                 not an error.
         """
-        self.AOVOCADO_VERSION = "0.8"
+        self.AOVOCADO_VERSION = "0.8.0"
         self.AOVOCADO_RELEASE_DATE = "Sept 2026"
         self.AUTHOR = "Asier Aparicio"
         base_filepath = os.path.join(MAIN_FOLDER_PATH, "AOVocado_global_settings.json")
