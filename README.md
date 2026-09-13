@@ -4,8 +4,7 @@
 
 # AOVocado
 
-A Nuke panel for browsing, categorizing, and viewing render channels/AOVs
-in the Viewer.
+A Nuke panel for browsing, categorizing, and viewing channels/AOVs in the Viewer.
 
 <img width="647" height="733" alt="AOVocado" src="https://github.com/user-attachments/assets/72b15689-239b-4e5f-8a23-0a3147fe2a8d" />
 
