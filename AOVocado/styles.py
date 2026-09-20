@@ -4,33 +4,81 @@
 """Centralized QSS styling for both AOVocado windows.
 
 Replaces per-widget `pointsize`/`bold` properties scattered across the two
-`.ui` files with one stylesheet applied via `setStyleSheet()`, plus a small
-`class` dynamic property on the few widgets that need to deviate from the
-base look (section headers, sub-headers, the one note, the one muted
-label). No font-family is set anywhere here, deliberately - every widget
-keeps inheriting Nuke's own default Qt font for the current OS, so text
-stays visually consistent with the rest of Nuke's interface rather than
-introducing a font that might not even be installed on a given machine.
+`.ui` files with one stylesheet built by `build_stylesheet()` and applied
+via `setStyleSheet()`, plus a small `class` dynamic property on the few
+widgets that need to deviate from the base look (section headers,
+sub-headers, the one note, the one muted label). No font-family is set
+anywhere here, deliberately - every widget keeps inheriting Nuke's own
+default Qt font for the current OS, so text stays visually consistent with
+the rest of Nuke's interface rather than introducing a font that might not
+even be installed on a given machine. The base font *size* is inherited
+the same way (via `_reference_font_size()` below) rather than hardcoded -
+see that function's docstring for why.
 """
 
-from ._vendor.Qt.QtWidgets import QWidget
+from ._vendor.Qt.QtWidgets import QApplication, QWidget
 
-STYLESHEET = """
-QWidget {
-    font-size: 12pt;
-}
-QGroupBox {
+
+def _reference_font_size():
+    """Reads the size and unit of Nuke's current default application font.
+
+    AOVocado runs inside Nuke's own already-running QApplication, so this
+    reflects exactly what Nuke itself uses as its default UI text size on
+    whatever platform/remote-session it's running on - matching it directly
+    avoids needing to know in advance whether Nuke uses points or pixels,
+    or whether that differs across platforms (this bit AOVocado before: a
+    hardcoded `12pt` base rendered visibly larger over a Linux/PCoIP remote
+    session than on macOS, since point sizes are converted to pixels using
+    the screen's reported logical DPI, which remote-display protocols don't
+    always propagate correctly).
+
+    Returns:
+        tuple[float, str]: (size, unit), unit is "pt" or "px".
+    """
+    font = QApplication.font()
+    point_size = font.pointSizeF()
+    if point_size > 0:
+        return point_size, "pt"
+    return float(font.pixelSize()), "px"
+
+
+def build_stylesheet(multiplier=1.0):
+    """Builds the QSS stylesheet, scaled by a multiplier over Nuke's own font size.
+
+    Args:
+        multiplier (float): Scale factor over Nuke's live default font size
+            (`cfg_sp_font_size` in Settings). 1.0 - the default - renders
+            at exactly Nuke's own size; this is what makes the panel match
+            Nuke's UI out of the box without any per-platform guessing.
+
+    Returns:
+        str: The QSS stylesheet.
+    """
+    ref_size, ref_unit = _reference_font_size()
+    # Rounded to 2 decimals - float multiplication otherwise produces noisy
+    # values like 14.399999999999999, which QSS would parse fine but is
+    # needlessly sloppy to hand a stylesheet.
+    base = round(ref_size * multiplier, 2)
+    header = round(base + 1, 2)
+    note = round(base - 1, 2)
+    muted = round(base - 2, 2)
+
+    return f"""
+QWidget {{
+    font-size: {base}{ref_unit};
+}}
+QGroupBox {{
     font-weight: bold;
-}
-QPushButton {
+}}
+QPushButton {{
     min-height: 30px;
-}
-QSpinBox, QDoubleSpinBox {
+}}
+QSpinBox, QDoubleSpinBox {{
     min-height: 30px;
-}
-QLineEdit, QComboBox {
+}}
+QLineEdit, QComboBox {{
     min-height: 30px;
-}
+}}
 /* Deliberately no QKeySequenceEdit rule here. It doesn't paint itself via
    QStyle subcontrols like QLineEdit/QComboBox do - it's a plain QWidget
    wrapping an internal child QLineEdit. Styling the outer QKeySequenceEdit
@@ -38,21 +86,21 @@ QLineEdit, QComboBox {
    inner one and clips the rendered text. The inner child already picks up
    the QLineEdit rule above on its own (it IS a QLineEdit), which is enough
    - leave the outer widget's height alone. */
-QLabel[class="header"] {
-    font-size: 13pt;
+QLabel[class="header"] {{
+    font-size: {header}{ref_unit};
     font-weight: bold;
-}
-QLabel[class="subheader"] {
+}}
+QLabel[class="subheader"] {{
     font-weight: bold;
-}
-QLabel[class="note"] {
-    font-size: 11pt;
+}}
+QLabel[class="note"] {{
+    font-size: {note}{ref_unit};
     font-style: italic;
-}
-QLabel[class="muted"] {
-    font-size: 10pt;
+}}
+QLabel[class="muted"] {{
+    font-size: {muted}{ref_unit};
     color: rgb(120, 120, 120);
-}
+}}
 """
 
 # Only the outliers need an entry here - everything else matches the
@@ -68,6 +116,7 @@ SETTINGS_CLASSES = {
     "label_74": "header",  # "Live Sampling"
     "label_39": "header",  # "Node Creation Setup"
     "label_35": "header",  # "Node Creation Setup" (Rebuild Subtractive tab)
+    "label_40": "header",  # "Font size"
     "label_95": "header",  # "Layout"
     "label_96": "header",  # "Node Spacing"
     "label_7": "header",  # "Info"

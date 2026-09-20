@@ -56,7 +56,8 @@ class SettingsWindow(QMainWindow):
     def _setup_window(self):
         """Loads the UI file and configures the window's properties."""
         loadUi(self.settings.PREFERENCES_UI_PATH, self)
-        self.setStyleSheet(styles.STYLESHEET)
+        font_multiplier = self.settings.my_settings["user_settings"]["cfg_sp_font_size"]
+        self.setStyleSheet(styles.build_stylesheet(font_multiplier))
         styles.apply_style_classes(self, styles.SETTINGS_CLASSES)
         self.setWindowTitle("AOVocado Settings")
         self.setWindowFlags(Qt.WindowStaysOnTopHint)

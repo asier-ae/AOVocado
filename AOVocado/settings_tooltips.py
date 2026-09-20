@@ -19,6 +19,9 @@ _GENERAL = {
     "to treat a channel as active.",
     "cfg_main_h_sep": "Horizontal pixel spacing between nodes when creating in horizontal mode.",
     "cfg_main_v_sep": "Vertical pixel spacing between nodes when creating in vertical mode.",
+    "cfg_sp_font_size": "Multiplier over Nuke's own base font size. 1.0 matches "
+    "Nuke's UI exactly; increase or decrease if the panel's text looks too "
+    "large or small (e.g. over a remote display connection).",
 }
 
 # Applied to BUTTON1_*..BUTTON4_* via the suffix, same text for every button.

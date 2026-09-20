@@ -120,7 +120,8 @@ class AOVocado(QMainWindow):
         # attribute on self (e.g. self.list_ch1, self.gb1, self.lineFilter)
         # - that's why this file never needs findChild() to reach them.
         loadUi(self.settings.UI_PATH, self)
-        self.setStyleSheet(styles.STYLESHEET)
+        font_multiplier = self.settings.my_settings["user_settings"]["cfg_sp_font_size"]
+        self.setStyleSheet(styles.build_stylesheet(font_multiplier))
         styles.apply_style_classes(self, styles.MAIN_PANEL_CLASSES)
         self.resize(644, 703)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
