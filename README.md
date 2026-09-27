@@ -31,7 +31,7 @@ the hotkey (default Ctrl/CMD + `  (backtick/tilde)) or the menu entry. The same 
 ## Requirements
 
 - Nuke 16 or newer.
-- Currently only tested on macOS. Linux/Windows support is expected but not yet verified.
+- Currently only tested on macOS and Linux. Windows support is expected but not yet verified.
 
 ## Installation
 
