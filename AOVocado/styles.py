@@ -7,78 +7,48 @@ Replaces per-widget `pointsize`/`bold` properties scattered across the two
 `.ui` files with one stylesheet built by `build_stylesheet()` and applied
 via `setStyleSheet()`, plus a small `class` dynamic property on the few
 widgets that need to deviate from the base look (section headers,
-sub-headers, the one note, the one muted label). No font-family is set
-anywhere here, deliberately - every widget keeps inheriting Nuke's own
-default Qt font for the current OS, so text stays visually consistent with
-the rest of Nuke's interface rather than introducing a font that might not
-even be installed on a given machine. The base font *size* is inherited
-the same way (via `_reference_font_size()` below) rather than hardcoded -
-see that function's docstring for why.
+sub-headers, the one note, the one muted label). No font-family or
+font-size is set anywhere in the stylesheet itself, deliberately - every
+widget keeps inheriting Nuke's own default Qt font for the current OS
+(confirmed via testing on both macOS and Linux/PCoIP: this alone matches
+Nuke's own UI correctly, no computation needed), so text stays visually
+consistent with the rest of Nuke's interface. The header/note/muted
+classes still need to be relatively bigger/smaller than that inherited
+base - handled by `apply_relative_font_sizes()` below, not QSS, since a
+QSS `font-size` rule doesn't reliably resolve onto a widget's effective
+font in this Qt/PySide/Nuke combination (confirmed: a `px`-based rule
+sits in a widget's `styleSheet()` text but never actually applies to its
+font - `resolveMask()` stays 0), and a `pt`-based one would reintroduce
+the DPI-dependent cross-platform mismatch this whole mechanism exists to
+avoid (a hardcoded `12pt` base is what caused the original bug: Linux/PCoIP
+remote sessions don't always report the same DPI as macOS, so the same
+point size converts to a visibly different pixel size on each).
 """
 
-from ._vendor.Qt.QtWidgets import QApplication, QWidget
+from ._vendor.Qt.QtWidgets import QWidget
 
 
-def _reference_font_size():
-    """Reads the size and unit of Nuke's current default application font.
-
-    AOVocado runs inside Nuke's own already-running QApplication, so this
-    reflects exactly what Nuke itself uses as its default UI text size on
-    whatever platform/remote-session it's running on - matching it directly
-    avoids needing to know in advance whether Nuke uses points or pixels,
-    or whether that differs across platforms (this bit AOVocado before: a
-    hardcoded `12pt` base rendered visibly larger over a Linux/PCoIP remote
-    session than on macOS, since point sizes are converted to pixels using
-    the screen's reported logical DPI, which remote-display protocols don't
-    always propagate correctly).
-
-    Returns:
-        tuple[float, str]: (size, unit), unit is "pt" or "px".
-    """
-    font = QApplication.font()
-    point_size = font.pointSizeF()
-    if point_size > 0:
-        return point_size, "pt"
-    return float(font.pixelSize()), "px"
-
-
-def build_stylesheet(multiplier=1.0):
-    """Builds the QSS stylesheet, scaled by a multiplier over Nuke's own font size.
-
-    Args:
-        multiplier (float): Scale factor over Nuke's live default font size
-            (`cfg_sp_font_size` in Settings). 1.0 - the default - renders
-            at exactly Nuke's own size; this is what makes the panel match
-            Nuke's UI out of the box without any per-platform guessing.
+def build_stylesheet():
+    """Builds the QSS stylesheet.
 
     Returns:
         str: The QSS stylesheet.
     """
-    ref_size, ref_unit = _reference_font_size()
-    # Rounded to 2 decimals - float multiplication otherwise produces noisy
-    # values like 14.399999999999999, which QSS would parse fine but is
-    # needlessly sloppy to hand a stylesheet.
-    base = round(ref_size * multiplier, 2)
-    header = round(base + 1, 2)
-    note = round(base - 1, 2)
-    muted = round(base - 2, 2)
-
-    return f"""
-QWidget {{
-    font-size: {base}{ref_unit};
-}}
-QGroupBox {{
+    return """
+QWidget {
+}
+QGroupBox {
     font-weight: bold;
-}}
-QPushButton {{
+}
+QPushButton {
     min-height: 30px;
-}}
-QSpinBox, QDoubleSpinBox {{
+}
+QSpinBox, QDoubleSpinBox {
     min-height: 30px;
-}}
-QLineEdit, QComboBox {{
+}
+QLineEdit, QComboBox {
     min-height: 30px;
-}}
+}
 /* Deliberately no QKeySequenceEdit rule here. It doesn't paint itself via
    QStyle subcontrols like QLineEdit/QComboBox do - it's a plain QWidget
    wrapping an internal child QLineEdit. Styling the outer QKeySequenceEdit
@@ -86,22 +56,61 @@ QLineEdit, QComboBox {{
    inner one and clips the rendered text. The inner child already picks up
    the QLineEdit rule above on its own (it IS a QLineEdit), which is enough
    - leave the outer widget's height alone. */
-QLabel[class="header"] {{
-    font-size: {header}{ref_unit};
+QLabel[class="header"] {
     font-weight: bold;
-}}
-QLabel[class="subheader"] {{
+}
+QLabel[class="subheader"] {
     font-weight: bold;
-}}
-QLabel[class="note"] {{
-    font-size: {note}{ref_unit};
+}
+QLabel[class="note"] {
     font-style: italic;
-}}
-QLabel[class="muted"] {{
-    font-size: {muted}{ref_unit};
+}
+QLabel[class="muted"] {
     color: rgb(120, 120, 120);
-}}
+}
 """
+
+
+# Font-size deltas for each class tag, applied directly to each tagged
+# widget's own QFont by apply_relative_font_sizes() below - not through
+# QSS (see the module docstring for why). "subheader" is intentionally
+# absent - it only gets bold weight, no size change.
+_SIZE_OFFSETS = {
+    "header": 1,
+    "note": -1,
+    "muted": 0,
+}
+
+
+def apply_relative_font_sizes(root_widget, widget_classes):
+    """Nudges each tagged label's font size relative to its own current size.
+
+    Deliberately not done via QSS `font-size` - see the module docstring.
+    Reads each widget's own already-correctly-inherited QFont and adjusts
+    it by a small delta in whichever unit (pt or px) that font is already
+    using - no DPI query, no absolute value, so nothing here can diverge
+    across platforms the way a hardcoded pt value did.
+
+    Args:
+        root_widget (QWidget): The window the tagged widgets live on
+            (`self` from `AOVocado.py`/`settings_window.py`).
+        widget_classes (dict[str, str]): `{object_name: class_tag}`, e.g.
+            `MAIN_PANEL_CLASSES` or `SETTINGS_CLASSES`.
+    """
+    for object_name, class_tag in widget_classes.items():
+        offset = _SIZE_OFFSETS.get(class_tag)
+        if not offset:
+            continue
+        widget = getattr(root_widget, object_name, None)
+        if not isinstance(widget, QWidget):
+            continue
+        font = widget.font()
+        if font.pointSizeF() > 0:
+            font.setPointSizeF(font.pointSizeF() + offset)
+        else:
+            font.setPixelSize(font.pixelSize() + offset)
+        widget.setFont(font)
+
 
 # Only the outliers need an entry here - everything else matches the
 # QWidget/QGroupBox base rules above and needs no per-widget tagging at
@@ -116,7 +125,6 @@ SETTINGS_CLASSES = {
     "label_74": "header",  # "Live Sampling"
     "label_39": "header",  # "Node Creation Setup"
     "label_35": "header",  # "Node Creation Setup" (Rebuild Subtractive tab)
-    "label_40": "header",  # "Font size"
     "label_95": "header",  # "Layout"
     "label_96": "header",  # "Node Spacing"
     "label_7": "header",  # "Info"
